@@ -19,9 +19,10 @@ export default function SummaryDisplay({
       <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
         Channel Summary
       </h2>
-      <div className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
-        {summary}
-      </div>
+      <div
+        className="prose dark:prose-invert max-w-none"
+        dangerouslySetInnerHTML={{ __html: summary.replace(/\n/g, "<br />") }}
+      />
 
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">

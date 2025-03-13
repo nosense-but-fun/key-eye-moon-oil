@@ -26,7 +26,24 @@ export async function POST(request: Request) {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey || apiKey === "your_openrouter_api_key_here") {
       return NextResponse.json({
-        summary: "API key not configured - using mock response",
+        summary: `# Channel Analysis: ${channelData.basicInfo.name}
+
+## Channel Overview
+- Subscribers: ${channelData.basicInfo.subscribers.toLocaleString()}
+- Total Videos: ${channelData.basicInfo.totalVideos.toLocaleString()}
+- Total Views: ${channelData.basicInfo.totalViews.toLocaleString()}
+
+## Top Performing Videos
+${channelData.topVideos
+  .slice(0, 10)
+  .map((video: { title: string }, i: number) => `- ${video.title}`)
+  .join("\n")}
+
+## Recent Shorts
+${channelData.recentShorts
+  .slice(0, 10)
+  .map((video: { title: string }, i: number) => `- ${video.title}`)
+  .join("\n")}`,
         analysis: {
           channelName: channelData.basicInfo.name,
           subscriberCount: channelData.basicInfo.subscribers,
@@ -34,6 +51,12 @@ export async function POST(request: Request) {
           totalViews: channelData.basicInfo.totalViews,
           recentVideos: channelData.recentVideos.length,
           topVideos: channelData.topVideos.length,
+          topVideoTitles: channelData.topVideos
+            .slice(0, 10)
+            .map((v: { title: string }) => v.title),
+          recentShortTitles: channelData.recentShorts
+            .slice(0, 10)
+            .map((v: { title: string }) => v.title),
         },
       });
     }
