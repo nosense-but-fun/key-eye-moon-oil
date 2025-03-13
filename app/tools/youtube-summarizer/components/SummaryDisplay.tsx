@@ -1,3 +1,6 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 interface SummaryDisplayProps {
   summary: string;
   analysis: {
@@ -10,6 +13,13 @@ interface SummaryDisplayProps {
   };
 }
 
+type MarkdownComponentProps = {
+  node?: any;
+  inline?: boolean;
+  children?: React.ReactNode;
+  className?: string;
+};
+
 export default function SummaryDisplay({
   summary,
   analysis,
@@ -19,10 +29,66 @@ export default function SummaryDisplay({
       <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
         Channel Summary
       </h2>
-      <div
-        className="prose dark:prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: summary.replace(/\n/g, "<br />") }}
-      />
+      <div className="prose dark:prose-invert max-w-none">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            h1: ({ node, ...props }: MarkdownComponentProps) => (
+              <h1 className="text-3xl font-bold mb-4" {...props} />
+            ),
+            h2: ({ node, ...props }: MarkdownComponentProps) => (
+              <h2 className="text-2xl font-bold mb-3" {...props} />
+            ),
+            h3: ({ node, ...props }: MarkdownComponentProps) => (
+              <h3 className="text-xl font-bold mb-2" {...props} />
+            ),
+            p: ({ node, ...props }: MarkdownComponentProps) => (
+              <p className="mb-4" {...props} />
+            ),
+            ul: ({ node, ...props }: MarkdownComponentProps) => (
+              <ul className="list-disc pl-6 mb-4" {...props} />
+            ),
+            ol: ({ node, ...props }: MarkdownComponentProps) => (
+              <ol className="list-decimal pl-6 mb-4" {...props} />
+            ),
+            li: ({ node, ...props }: MarkdownComponentProps) => (
+              <li className="mb-2" {...props} />
+            ),
+            strong: ({ node, ...props }: MarkdownComponentProps) => (
+              <strong className="font-bold" {...props} />
+            ),
+            em: ({ node, ...props }: MarkdownComponentProps) => (
+              <em className="italic" {...props} />
+            ),
+            hr: ({ node, ...props }: MarkdownComponentProps) => (
+              <hr
+                className="my-6 border-gray-300 dark:border-gray-600"
+                {...props}
+              />
+            ),
+            blockquote: ({ node, ...props }: MarkdownComponentProps) => (
+              <blockquote
+                className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4"
+                {...props}
+              />
+            ),
+            code: ({ node, inline, ...props }: MarkdownComponentProps) =>
+              inline ? (
+                <code
+                  className="bg-gray-100 dark:bg-gray-700 rounded px-1"
+                  {...props}
+                />
+              ) : (
+                <code
+                  className="block bg-gray-100 dark:bg-gray-700 rounded p-4 my-4"
+                  {...props}
+                />
+              ),
+          }}
+        >
+          {summary}
+        </ReactMarkdown>
+      </div>
 
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">

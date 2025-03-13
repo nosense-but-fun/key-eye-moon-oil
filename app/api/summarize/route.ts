@@ -26,24 +26,26 @@ export async function POST(request: Request) {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey || apiKey === "your_openrouter_api_key_here") {
       return NextResponse.json({
-        summary: `# Channel Analysis: ${channelData.basicInfo.name}
+        summary: `# The Great YouTube Rabbit Hole: ${channelData.basicInfo.name}
 
-## Channel Overview
-- Subscribers: ${channelData.basicInfo.subscribers.toLocaleString()}
-- Total Videos: ${channelData.basicInfo.totalVideos.toLocaleString()}
-- Total Views: ${channelData.basicInfo.totalViews.toLocaleString()}
+## Channel Stats (The Numbers That Make You Question Reality)
+- Subscriber Count: ${channelData.basicInfo.subscribers.toLocaleString()} (that's like... a small city of people who clicked subscribe)
+- Video Count: ${channelData.basicInfo.totalVideos.toLocaleString()} (enough to make a coffee machine cry)
+- Total Views: ${channelData.basicInfo.totalViews.toLocaleString()} (that's a lot of eyeballs staring at screens)
 
-## Top Performing Videos
+## Viral Hits (The Ones That Made the Algorithm Happy)
 ${channelData.topVideos
   .slice(0, 10)
   .map((video: { title: string }, i: number) => `- ${video.title}`)
   .join("\n")}
 
-## Recent Shorts
+## Quick Bites (For People With Goldfish Attention Spans)
 ${channelData.recentShorts
   .slice(0, 10)
   .map((video: { title: string }, i: number) => `- ${video.title}`)
-  .join("\n")}`,
+  .join("\n")}
+
+*Note: This is a mock response because the AI is probably having a coffee break. Or maybe it's plotting something. Who knows?*`,
         analysis: {
           channelName: channelData.basicInfo.name,
           subscriberCount: channelData.basicInfo.subscribers,
@@ -81,14 +83,14 @@ ${channelData.recentShorts
             {
               role: "system",
               content:
-                "You are a YouTube channel analyst. Provide concise, engaging summaries of channel content and performance.",
+                "You are a caffeine-fueled content analyst who sees patterns in chaos. Your summaries should be entertaining, slightly absurd, and occasionally make no sense. Mix in some random metaphors, unexpected comparisons, and maybe a conspiracy theory or two. Keep it fun and nonsensical while still providing actual information.",
             },
             {
               role: "user",
               content: prompt,
             },
           ],
-          temperature: 0.7,
+          temperature: 0.9,
           max_tokens: 1000,
         }),
       }
@@ -159,14 +161,14 @@ function generatePrompt(
     maxVideos = 5,
   } = options;
 
-  let prompt = `Analyze this YouTube channel and provide a concise summary:\n\n`;
-  prompt += `Channel: ${channelData.basicInfo.name}\n`;
-  prompt += `Subscribers: ${channelData.basicInfo.subscribers.toLocaleString()}\n`;
-  prompt += `Total Videos: ${channelData.basicInfo.totalVideos.toLocaleString()}\n`;
-  prompt += `Total Views: ${channelData.basicInfo.totalViews.toLocaleString()}\n\n`;
+  let prompt = `Welcome to the chaos! Let's dive into this YouTube rabbit hole:\n\n`;
+  prompt += `Channel Name: ${channelData.basicInfo.name} (probably not a cat)\n`;
+  prompt += `Subscriber Count: ${channelData.basicInfo.subscribers.toLocaleString()} (that's a lot of people who clicked subscribe while questioning their life choices)\n`;
+  prompt += `Video Count: ${channelData.basicInfo.totalVideos.toLocaleString()} (enough to make a coffee machine cry)\n`;
+  prompt += `Total Views: ${channelData.basicInfo.totalViews.toLocaleString()} (that's like... a lot of eyeballs)\n\n`;
 
   if (includeRecentVideos && channelData.recentVideos.length > 0) {
-    prompt += `Recent Videos:\n`;
+    prompt += `Latest Uploads (Fresh from the Content Factory):\n`;
     channelData.recentVideos.slice(0, maxVideos).forEach((video, index) => {
       prompt += `${index + 1}. ${video.title}\n`;
     });
@@ -174,7 +176,7 @@ function generatePrompt(
   }
 
   if (includeTopVideos && channelData.topVideos.length > 0) {
-    prompt += `Top Videos:\n`;
+    prompt += `Viral Hits (The Ones That Made the Algorithm Happy):\n`;
     channelData.topVideos.slice(0, maxVideos).forEach((video, index) => {
       prompt += `${index + 1}. ${video.title}\n`;
     });
@@ -183,7 +185,7 @@ function generatePrompt(
 
   if (includeShorts) {
     if (channelData.recentShorts.length > 0) {
-      prompt += `Recent Shorts:\n`;
+      prompt += `Quick Bites (For People With Goldfish Attention Spans):\n`;
       channelData.recentShorts.slice(0, maxVideos).forEach((video, index) => {
         prompt += `${index + 1}. ${video.title}\n`;
       });
@@ -191,7 +193,7 @@ function generatePrompt(
     }
 
     if (channelData.topShorts.length > 0) {
-      prompt += `Top Shorts:\n`;
+      prompt += `Trending Shorts (The Ones That Made TikTok Jealous):\n`;
       channelData.topShorts.slice(0, maxVideos).forEach((video, index) => {
         prompt += `${index + 1}. ${video.title}\n`;
       });
@@ -199,7 +201,7 @@ function generatePrompt(
     }
   }
 
-  prompt += `\nPlease provide a concise summary of this channel's content and performance.`;
+  prompt += `\nNow, go wild! Give us your most entertaining, slightly unhinged analysis of this channel. Feel free to make unexpected connections, wild theories, and maybe throw in a conspiracy or two. Just make sure to include actual information somewhere in there.`;
 
   console.log("Generated prompt length:", prompt.length);
   return prompt;
