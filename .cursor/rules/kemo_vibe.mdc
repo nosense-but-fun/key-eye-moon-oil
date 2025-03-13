@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: false
 ---
- ---
+---
 name: KEMO Vibe Rules
 description: Rules for maintaining the chaotic, nonsensical, and irreverent tone of the KEMO collection
 globs: ["**/*"]
@@ -60,4 +60,4 @@ function handleError(error: Error) {
 - Taking this project seriously is your first mistake
 - Functionality should exist beneath the chaos
 - When in doubt, add a middle finger emoji
-- Keep it weird, keep it KEMO
+- Keep it weird, keep it KEMO 

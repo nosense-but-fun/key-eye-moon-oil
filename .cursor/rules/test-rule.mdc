@@ -1,10 +1,4 @@
 ---
-description: this is a test rule, it does nothing
-globs: 
-alwaysApply: false
----
----
-name: Test Rule
 description: A test rule that demonstrates the correct format for Cursor rules
 globs: ["**/*"]
 alwaysApply: false

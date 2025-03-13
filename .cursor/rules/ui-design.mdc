@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: false
 ---
- ---
+---
 name: UI Design Rules
 description: Rules for maintaining the chaotic and nonsensical UI design of the KEMO Collection
 globs: ["app/**/*.{tsx,ts,css}"]
@@ -81,4 +81,4 @@ const errorMessages = [
 - If it makes sense, you're doing it wrong
 - The more pointless the feature, the better
 - Embrace the chaos, reject the order
-- Make users question why they're using this
+- Make users question why they're using this 
