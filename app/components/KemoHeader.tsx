@@ -7,6 +7,8 @@ import Link from "next/link";
 export default function KemoHeader() {
   const [randomQuote, setRandomQuote] = useState("");
   const [middleFingerVisible, setMiddleFingerVisible] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const quotes = [
     "Using this app may cause existential dread",
@@ -15,6 +17,10 @@ export default function KemoHeader() {
     "Built by developers who should know better",
     "KEMO: Because someone had to make this monstrosity",
     "Abandon hope, all ye who enter here",
+    "This header is intentionally over-engineered",
+    "Your code is too clean, try making it worse",
+    "Error: Too much sense detected",
+    "Warning: Your UI is too conventional",
   ];
 
   useEffect(() => {
@@ -24,10 +30,24 @@ export default function KemoHeader() {
       setRandomQuote(quotes[randomIndex]);
     };
 
-    getRandomQuote();
-    const interval = setInterval(getRandomQuote, 8000);
+    // Useless loading state that never ends
+    const loadingInterval = setInterval(() => {
+      setIsLoading((prev) => !prev);
+    }, 2000);
 
-    return () => clearInterval(interval);
+    // Pointless rotation animation
+    const rotationInterval = setInterval(() => {
+      setRotation((prev) => (prev + 1) % 360);
+    }, 50);
+
+    getRandomQuote();
+    const quoteInterval = setInterval(getRandomQuote, 8000);
+
+    return () => {
+      clearInterval(quoteInterval);
+      clearInterval(loadingInterval);
+      clearInterval(rotationInterval);
+    };
   }, []);
 
   return (
@@ -39,10 +59,21 @@ export default function KemoHeader() {
           onMouseEnter={() => setMiddleFingerVisible(true)}
           onMouseLeave={() => setMiddleFingerVisible(false)}
         >
-          KEMO{middleFingerVisible && <span className="ml-1">🖕</span>}
+          <span
+            style={{
+              transform: `rotate(${rotation}deg)`,
+              display: "inline-block",
+            }}
+          >
+            KEMO
+          </span>
+          {middleFingerVisible && (
+            <span className="ml-1 animate-bounce">🖕</span>
+          )}
         </Link>
         <span className="hidden md:inline-block ml-4 text-sm text-gray-400 italic">
           {randomQuote}
+          {isLoading && <span className="ml-2 animate-pulse">⚡</span>}
         </span>
       </div>
 
@@ -55,29 +86,16 @@ export default function KemoHeader() {
           </li>
           <li>
             <Link
-              href="/tools/random-picker"
-              className="hover:text-gray-300 transition-colors"
-            >
-              Random Picker
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/tools/cryptic-generator"
-              className="hover:text-gray-300 transition-colors"
-            >
-              Cryptic Generator
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://github.com"
+              href="https://github.com/nosense-but-fun/key-eye-moon-oil"
               className="hover:text-gray-300 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span title="This button does absolutely nothing useful">
-                ???
+              <span
+                title="View source code on GitHub"
+                className="animate-pulse"
+              >
+                {isLoading ? "Loading..." : "GitHub"}
               </span>
             </Link>
           </li>

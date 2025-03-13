@@ -1,0 +1,63 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ ---
+name: KEMO Vibe Rules
+description: Rules for maintaining the chaotic, nonsensical, and irreverent tone of the KEMO collection
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# KEMO Vibe Guidelines
+
+## Core Principles
+
+The KEMO collection embraces chaos, nonsense, and irreverent humor while maintaining actual functionality. These guidelines ensure we stay true to our anti-establishment roots.
+
+## Content Rules
+
+1. **Tone & Voice**
+   - Maintain a nonsensical, irreverent tone with nihilistic humor
+   - Use casual, sarcastic language that breaks the fourth wall
+   - Avoid corporate-speak or overly professional documentation style
+   - Prefer humor over formality, chaos over structure
+
+2. **UI Components**
+   - Create functional components with quirky, unexpected elements
+   - Include subtle easter eggs and hidden jokes
+   - Reference the KEMO branding with its defiant middle finger attitude
+   - Make features that work but question their own existence
+
+3. **Documentation & Messages**
+   - Write technically accurate docs wrapped in absurdist presentation
+   - Create error messages that are humorous but informative
+   - Frequently reference the purposeful uselessness of the project
+   - Remind users that taking this project seriously is a mistake
+
+## Implementation Examples
+
+```tsx
+// Good: Error message that's both helpful and on-brand
+function handleError(error: Error) {
+  console.log("🖕 Oops, something broke (as intended):", error.message);
+  return "Task failed successfully! Error: " + error.message;
+}
+
+// Good: Documentation comment
+/**
+ * A completely unnecessary function that does something simple in the most 
+ * complicated way possible. Why? Because KEMO, that's why.
+ * 
+ * @param {string} input - Your hopes and dreams
+ * @returns {string} Crushed hopes and dreams
+ */
+```
+
+## Remember
+
+- Taking this project seriously is your first mistake
+- Functionality should exist beneath the chaos
+- When in doubt, add a middle finger emoji
+- Keep it weird, keep it KEMO

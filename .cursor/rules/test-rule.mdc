@@ -1,0 +1,30 @@
+---
+description: this is a test rule, it does nothing
+globs: 
+alwaysApply: false
+---
+---
+name: Test Rule
+description: A test rule that demonstrates the correct format for Cursor rules
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Test Rule
+
+This is a test rule that demonstrates the correct format for Cursor rules. It includes:
+
+- Proper frontmatter with required fields
+- Markdown content
+- Example of file references using @ syntax
+- Clear structure and formatting
+
+## Example Usage
+
+You can reference files like this: @app/components/KemoHeader.tsx
+
+## Notes
+
+- This is just a test rule
+- It doesn't actually do anything
+- It's here to demonstrate the format

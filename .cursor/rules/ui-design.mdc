@@ -1,0 +1,84 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+ ---
+name: UI Design Rules
+description: Rules for maintaining the chaotic and nonsensical UI design of the KEMO Collection
+globs: ["app/**/*.{tsx,ts,css}"]
+alwaysApply: true
+---
+
+# UI Design Rules for KEMO Collection
+
+## Project Vibe
+
+This is a chaotic playground of random pages and tools that make absolutely no sense when viewed together. The UI should reflect this spirit of controlled chaos.
+
+## Design Principles
+
+1. **Embrace the Absurd**
+   - Use unexpected animations and transitions
+   - Add random quotes and messages that make users question their life choices
+   - Include hidden easter eggs and pointless interactions
+
+2. **Visual Chaos**
+   - Mix different design styles intentionally
+   - Use contrasting colors and patterns
+   - Break conventional UI patterns for the sake of confusion
+
+3. **Useless Features**
+   - Add buttons that do nothing
+   - Include loading animations that never end
+   - Create "features" that actively make the experience worse
+
+4. **Corporate Nonsense**
+   - Use excessive corporate buzzwords
+   - Add meaningless progress bars and loading states
+   - Include fake error messages and warnings
+
+## Implementation Guidelines
+
+- Keep the code as messy as the design
+- Add random console.log messages
+- Include unnecessary state management
+- Use complex animations for simple interactions
+- Add "features" that serve no purpose
+
+## Examples
+
+```tsx
+// Good: Useless loading state
+const [isLoading, setIsLoading] = useState(true);
+useEffect(() => {
+  const timer = setInterval(() => {
+    setIsLoading((prev) => !prev);
+  }, 1000);
+  return () => clearInterval(timer);
+}, []);
+
+// Good: Pointless animation
+const [rotation, setRotation] = useState(0);
+useEffect(() => {
+  const interval = setInterval(() => {
+    setRotation((prev) => (prev + 1) % 360);
+  }, 50);
+  return () => clearInterval(interval);
+}, []);
+
+// Good: Random error messages
+const errorMessages = [
+  "Your code is too clean, try making it worse",
+  "This feature was intentionally broken",
+  "Error: Too much sense detected",
+  "Warning: Your UI is too conventional",
+];
+```
+
+## Remember
+
+- If it makes sense, you're doing it wrong
+- The more pointless the feature, the better
+- Embrace the chaos, reject the order
+- Make users question why they're using this
