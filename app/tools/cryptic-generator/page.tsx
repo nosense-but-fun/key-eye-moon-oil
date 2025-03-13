@@ -2,159 +2,73 @@
 
 import { useState } from "react";
 
-// Sample data for our cryptic generator
-const buzzwords = [
-  "quantum",
-  "blockchain",
-  "AI-driven",
-  "synergy",
-  "paradigm shift",
-  "disruptive",
-  "leverage",
-  "scalable",
-  "ecosystem",
-  "deep learning",
-  "neural",
-  "algorithm",
-  "metadata",
-  "framework",
-  "serverless",
-  "microservices",
-  "blockchain",
-  "IoT",
-  "responsive",
-  "revolutionary",
-];
-
-const nouns = [
-  "matrix",
-  "interface",
-  "solution",
-  "architecture",
-  "mindshare",
-  "convergence",
-  "strategy",
-  "bandwidth",
-  "portal",
-  "optimization",
-  "visualization",
-  "implementation",
-  "integration",
-  "analytics",
-  "paradigm",
-  "innovation",
-  "experience",
-  "framework",
-  "platform",
-  "pipeline",
-];
-
-const verbs = [
-  "optimize",
-  "iterate",
-  "transform",
-  "revolutionize",
-  "visualize",
-  "redefine",
-  "empower",
-  "enable",
-  "orchestrate",
-  "architect",
-  "harness",
-  "leverage",
-  "reinvent",
-  "aggregate",
-  "streamline",
-  "deploy",
-  "matrix",
-  "facilitate",
-  "synergize",
-  "morph",
-];
-
 export default function CrypticGenerator() {
   // State for our form and output
   const [complexity, setComplexity] = useState<number>(3);
   const [bullshitLevel, setBullshitLevel] = useState<number>(5);
   const [output, setOutput] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [devMode, setDevMode] = useState<boolean>(false);
 
-  // Function to generate random BS
-  const generateCryptic = () => {
-    setIsGenerating(true);
-    setOutput("");
+  // Function to generate text using our Next.js API route
+  const generateWithAPI = async (complexity: number, bullshitLevel: number) => {
+    try {
+      // Call our own API route instead of OpenRouter directly
+      const response = await fetch("/api/generate-cryptic", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          complexity,
+          bullshitLevel,
+        }),
+      });
 
-    // Simulate "thinking" with a delay
-    setTimeout(() => {
-      let result = "";
-      const paragraphs = complexity;
-
-      for (let p = 0; p < paragraphs; p++) {
-        // Generate sentences based on bullshit level (sentences per paragraph)
-        const sentences = Math.max(2, Math.floor(bullshitLevel * 1.5));
-        const paragraph = [];
-
-        for (let s = 0; s < sentences; s++) {
-          // Construct a sentence with random bullshit
-          const getRandomItem = (array: string[]) =>
-            array[Math.floor(Math.random() * array.length)];
-
-          const patterns = [
-            // Different sentence patterns
-            () =>
-              `Our ${getRandomItem(buzzwords)} ${getRandomItem(
-                nouns
-              )} will ${getRandomItem(verbs)} your ${getRandomItem(nouns)}.`,
-            () =>
-              `We need to ${getRandomItem(verbs)} the ${getRandomItem(
-                buzzwords
-              )} ${getRandomItem(nouns)}.`,
-            () =>
-              `The ${getRandomItem(nouns)} is down, ${getRandomItem(
-                verbs
-              )} the ${getRandomItem(buzzwords)} ${getRandomItem(
-                nouns
-              )} so we can ${getRandomItem(verbs)} the ${getRandomItem(
-                nouns
-              )}!`,
-            () =>
-              `Try to ${getRandomItem(verbs)} the ${getRandomItem(
-                buzzwords
-              )} ${getRandomItem(nouns)}, maybe it will ${getRandomItem(
-                verbs
-              )} the ${getRandomItem(buzzwords)} ${getRandomItem(nouns)}!`,
-            () =>
-              `You can't ${getRandomItem(verbs)} the ${getRandomItem(
-                nouns
-              )} without ${getRandomItem(verbs)}ing the ${getRandomItem(
-                buzzwords
-              )} ${getRandomItem(nouns)}!`,
-            () =>
-              `Use the ${getRandomItem(buzzwords)} ${getRandomItem(
-                nouns
-              )}, then you can ${getRandomItem(verbs)} the ${getRandomItem(
-                buzzwords
-              )} ${getRandomItem(nouns)}!`,
-            () =>
-              `The ${getRandomItem(buzzwords)} ${getRandomItem(
-                nouns
-              )} is down, ${getRandomItem(verbs)} the ${getRandomItem(
-                nouns
-              )} so we can ${getRandomItem(verbs)} the ${getRandomItem(
-                buzzwords
-              )} ${getRandomItem(nouns)}!`,
-          ];
-
-          const patternIndex = Math.floor(Math.random() * patterns.length);
-          paragraph.push(patterns[patternIndex]());
-        }
-
-        result += paragraph.join(" ") + "\n\n";
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || `API request failed with status ${response.status}`
+        );
       }
 
-      setOutput(result.trim());
+      const data = await response.json();
+
+      // Check if we're in development mode (using fallback responses)
+      if (data.note) {
+        setDevMode(true);
+        console.warn(data.note);
+      } else {
+        setDevMode(false);
+      }
+
+      return data.text;
+    } catch (err) {
+      console.error("Error generating text with API:", err);
+      throw err;
+    }
+  };
+
+  // Function to generate cryptic nonsense
+  const generateCryptic = async () => {
+    setIsGenerating(true);
+    setOutput("");
+    setError(null);
+
+    try {
+      // Call our API to generate the text
+      const result = await generateWithAPI(complexity, bullshitLevel);
+      setOutput(result);
+    } catch (err: any) {
+      setError(
+        err.message ||
+          "The AI is currently too confused to generate nonsense. Try again later."
+      );
+      console.error(err);
+    } finally {
       setIsGenerating(false);
-    }, 1500); // Dramatic pause for effect
+    }
   };
 
   return (
@@ -258,10 +172,26 @@ export default function CrypticGenerator() {
       <div className="mb-8">
         <h2 className="text-lg font-bold mb-4">Your Meaningless Jargon:</h2>
 
+        {error && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 dark:bg-red-900 dark:text-red-200 p-4 mb-4">
+            <p>{error}</p>
+          </div>
+        )}
+
+        {devMode && !error && (
+          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-200 p-4 mb-4">
+            <p>
+              <strong>Development Mode:</strong> Using built-in generator
+              instead of AI. Set your OpenRouter API key in .env.local to use
+              the AI.
+            </p>
+          </div>
+        )}
+
         {isGenerating ? (
           <div className="bg-gray-100 dark:bg-gray-700 p-6 rounded animate-pulse flex justify-center items-center min-h-40">
             <p className="dark:text-gray-300">
-              Generating corporate nonsense...
+              AI is crafting premium corporate nonsense...
             </p>
           </div>
         ) : output ? (
@@ -282,7 +212,10 @@ export default function CrypticGenerator() {
           </div>
         ) : (
           <div className="bg-gray-100 dark:bg-gray-700 p-6 rounded text-gray-500 dark:text-gray-400 italic min-h-40 flex items-center justify-center">
-            <p>Generate some text to see the magic of meaningless jargon...</p>
+            <p>
+              Generate some text to see the magic of AI-powered meaningless
+              jargon...
+            </p>
           </div>
         )}
       </div>
@@ -291,6 +224,11 @@ export default function CrypticGenerator() {
         <p>
           <strong>Warning:</strong> Excessive use of this generator may lead to
           promotion to middle management or becoming a tech influencer.
+        </p>
+        <p className="mt-2">
+          * Powered by{" "}
+          {devMode ? "fake development data" : "DeepSeek AI via OpenRouter"},
+          making this nonsense extra special.
         </p>
       </div>
     </div>
