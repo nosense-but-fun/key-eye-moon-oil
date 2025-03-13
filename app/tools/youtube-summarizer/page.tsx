@@ -7,10 +7,29 @@ import SummaryDisplay from "./components/SummaryDisplay";
 export default function YouTubeSummarizer() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
   const [error, setError] = useState("");
   const [summary, setSummary] = useState("");
   const [analysis, setAnalysis] = useState<AIResponse["analysis"] | null>(null);
   const [channelData, setChannelData] = useState<ChannelData | null>(null);
+
+  const loadingMessages = [
+    "Stalking their channel... 👀",
+    "Counting their subscribers (one by one)... 🔢",
+    "Watching their videos at 2x speed... ⚡",
+    "Asking the algorithm for tea... ☕",
+    "Calculating their success rate... 📊",
+    "Measuring their content quality... 🎯",
+    "Checking if they're better than PewDiePie... 🤔",
+    "Analyzing their thumbnail game... 🎨",
+    "Calculating their engagement rate... 📈",
+    "Measuring their meme potential... 🐸",
+  ];
+
+  const updateLoadingMessage = () => {
+    const randomIndex = Math.floor(Math.random() * loadingMessages.length);
+    setLoadingMessage(loadingMessages[randomIndex]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +38,9 @@ export default function YouTubeSummarizer() {
     setSummary("");
     setAnalysis(null);
     setChannelData(null);
+    updateLoadingMessage();
+
+    const messageInterval = setInterval(updateLoadingMessage, 3000);
 
     try {
       console.log("Fetching channel data...");
@@ -76,7 +98,9 @@ export default function YouTubeSummarizer() {
       console.error("Error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
+      clearInterval(messageInterval);
       setLoading(false);
+      setLoadingMessage("");
     }
   };
 
@@ -109,6 +133,12 @@ export default function YouTubeSummarizer() {
           </button>
         </div>
       </form>
+
+      {loading && (
+        <div className="max-w-2xl mx-auto mb-8 p-4 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-100 rounded-lg animate-pulse">
+          {loadingMessage}
+        </div>
+      )}
 
       {error && (
         <div className="max-w-2xl mx-auto mb-8 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded-lg">
