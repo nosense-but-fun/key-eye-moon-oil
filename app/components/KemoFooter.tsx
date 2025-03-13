@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function KemoFooter() {
   const [clickCount, setClickCount] = useState(0);
   const [message, setMessage] = useState(
-    "© 2023 KEMO Collection. All wrongs reserved."
+    `© ${new Date().getFullYear()} KEMO Collection. All wrongs reserved.`
   );
 
   const handleClick = () => {
