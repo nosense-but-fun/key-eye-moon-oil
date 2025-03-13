@@ -35,7 +35,6 @@ export default function YouTubeSummarizer() {
   const [channelData, setChannelData] = useState<ChannelData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showDetails, setShowDetails] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +42,6 @@ export default function YouTubeSummarizer() {
     setError("");
     setSummary("");
     setChannelData(null);
-    setShowDetails(false);
 
     try {
       const response = await fetch("/api/summarize-channel", {
@@ -115,159 +113,17 @@ export default function YouTubeSummarizer() {
               <div className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
                 {summary}
               </div>
-              {channelData && (
-                <button
-                  onClick={() => setShowDetails(!showDetails)}
-                  className="mt-4 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                >
-                  {showDetails ? "Hide Details" : "Show Channel Details"}
-                </button>
-              )}
             </div>
           )}
 
-          {showDetails && channelData && (
+          {channelData && (
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-                Channel Details
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+                Channel Data
               </h2>
-
-              {/* Basic Info */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Basic Information
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Channel Name
-                    </p>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {channelData.basicInfo.name}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Subscribers
-                    </p>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {channelData.basicInfo.subscribers.toLocaleString()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Total Videos
-                    </p>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {channelData.basicInfo.totalVideos.toLocaleString()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Total Views
-                    </p>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {channelData.basicInfo.totalViews.toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="col-span-2">
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Description
-                    </p>
-                    <p className="font-medium whitespace-pre-wrap text-gray-900 dark:text-white">
-                      {channelData.basicInfo.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Recent Videos */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Recent Videos
-                </h3>
-                <div className="space-y-2">
-                  {channelData.recentVideos.map((video, index) => (
-                    <div
-                      key={index}
-                      className="p-3 bg-gray-50 dark:bg-gray-700 rounded"
-                    >
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {video.title}
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {new Date(video.publishedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Top Videos */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Top Videos
-                </h3>
-                <div className="space-y-2">
-                  {channelData.topVideos.map((video, index) => (
-                    <div
-                      key={index}
-                      className="p-3 bg-gray-50 dark:bg-gray-700 rounded"
-                    >
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {video.title}
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {new Date(video.publishedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Recent Shorts */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Recent Shorts
-                </h3>
-                <div className="space-y-2">
-                  {channelData.recentShorts.map((video, index) => (
-                    <div
-                      key={index}
-                      className="p-3 bg-gray-50 dark:bg-gray-700 rounded"
-                    >
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {video.title}
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {new Date(video.publishedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Top Shorts */}
-              <div>
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Top Shorts
-                </h3>
-                <div className="space-y-2">
-                  {channelData.topShorts.map((video, index) => (
-                    <div
-                      key={index}
-                      className="p-3 bg-gray-50 dark:bg-gray-700 rounded"
-                    >
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {video.title}
-                      </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {new Date(video.publishedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <pre className="overflow-x-auto p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm text-gray-900 dark:text-gray-100">
+                {JSON.stringify(channelData, null, 2)}
+              </pre>
             </div>
           )}
         </div>
