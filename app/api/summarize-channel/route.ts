@@ -84,26 +84,124 @@ export async function POST(req: Request) {
     }
 
     const channel = channelResponse.data.items[0];
-    console.log("Found channel:", channel.snippet?.title);
+    if (!channel.snippet || !channel.statistics) {
+      console.log("Channel data is missing required fields");
+      return NextResponse.json(
+        { error: "Channel data is incomplete. The AI is confused." },
+        { status: 500 }
+      );
+    }
+
+    console.log("Found channel:", channel.snippet.title);
 
     // Get recent videos
     console.log("Fetching recent videos for channel:", finalChannelId);
-    const videosResponse = await youtube.search.list({
+    const recentVideosResponse = await youtube.search.list({
       part: ["snippet"],
       channelId: finalChannelId,
       order: "date",
-      maxResults: 10,
+      maxResults: 20,
+      type: ["video"],
     });
-    console.log(
-      "Videos API response:",
-      JSON.stringify(videosResponse.data, null, 2)
-    );
+
+    // Get top videos
+    console.log("Fetching top videos for channel:", finalChannelId);
+    const topVideosResponse = await youtube.search.list({
+      part: ["snippet"],
+      channelId: finalChannelId,
+      order: "viewCount",
+      maxResults: 20,
+      type: ["video"],
+    });
+
+    // Get video IDs for both recent and top videos
+    const recentVideoIds =
+      recentVideosResponse.data.items
+        ?.map((item) => item.id?.videoId)
+        .filter((id): id is string => id !== undefined && id !== null) || [];
+    const topVideoIds =
+      topVideosResponse.data.items
+        ?.map((item) => item.id?.videoId)
+        .filter((id): id is string => id !== undefined && id !== null) || [];
+
+    // Get video details for both sets
+    console.log("Fetching video details for recent videos");
+    const recentVideosDetails =
+      recentVideoIds.length > 0
+        ? await youtube.videos.list({
+            part: ["snippet", "contentDetails"],
+            id: recentVideoIds,
+          })
+        : { data: { items: [] } };
+
+    console.log("Fetching video details for top videos");
+    const topVideosDetails =
+      topVideoIds.length > 0
+        ? await youtube.videos.list({
+            part: ["snippet", "contentDetails"],
+            id: topVideoIds,
+          })
+        : { data: { items: [] } };
+
+    // Filter videos into regular videos and shorts
+    const isShort = (video: any) => {
+      const duration = video.contentDetails?.duration;
+      const title = video.snippet?.title?.toLowerCase() || "";
+      return (
+        (duration && duration <= "PT1M") || // Duration less than 1 minute
+        title.includes("#shorts") || // Has #shorts in title
+        title.includes("short") // Has "short" in title
+      );
+    };
+
+    const recentVideos = recentVideosDetails.data?.items || [];
+    const topVideos = topVideosDetails.data?.items || [];
+
+    const recentRegularVideos = recentVideos
+      .filter((video: any) => !isShort(video))
+      .slice(0, 10);
+    const recentShorts = recentVideos
+      .filter((video: any) => isShort(video))
+      .slice(0, 10);
+    const topRegularVideos = topVideos
+      .filter((video: any) => !isShort(video))
+      .slice(0, 10);
+    const topShorts = topVideos
+      .filter((video: any) => isShort(video))
+      .slice(0, 10);
 
     // Generate summary using the channel info and recent videos
-    const summary = generateSummary(channel, videosResponse.data.items || []);
-    console.log("Generated summary length:", summary.length);
+    const summary = generateSummary(channel, recentRegularVideos);
 
-    return NextResponse.json({ summary });
+    // Prepare detailed channel data
+    const channelData = {
+      basicInfo: {
+        name: channel.snippet.title,
+        description: channel.snippet.description,
+        subscribers: parseInt(channel.statistics.subscriberCount || "0"),
+        totalVideos: parseInt(channel.statistics.videoCount || "0"),
+        totalViews: parseInt(channel.statistics.viewCount || "0"),
+        createdAt: channel.snippet.publishedAt,
+      },
+      recentVideos: recentRegularVideos.map((video) => ({
+        title: video.snippet?.title || "Untitled",
+        publishedAt: video.snippet?.publishedAt || new Date().toISOString(),
+      })),
+      topVideos: topRegularVideos.map((video) => ({
+        title: video.snippet?.title || "Untitled",
+        publishedAt: video.snippet?.publishedAt || new Date().toISOString(),
+      })),
+      recentShorts: recentShorts.map((video) => ({
+        title: video.snippet?.title || "Untitled",
+        publishedAt: video.snippet?.publishedAt || new Date().toISOString(),
+      })),
+      topShorts: topShorts.map((video) => ({
+        title: video.snippet?.title || "Untitled",
+        publishedAt: video.snippet?.publishedAt || new Date().toISOString(),
+      })),
+    };
+
+    return NextResponse.json({ summary, channelData });
   } catch (error: any) {
     console.error("Detailed error:", {
       message: error.message,
