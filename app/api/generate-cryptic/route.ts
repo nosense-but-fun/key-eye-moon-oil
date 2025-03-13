@@ -6,6 +6,9 @@ interface RequestBody {
   bullshitLevel: number;
 }
 
+// Extend the Vercel API timeout to 30 seconds
+export const maxDuration = 30; // Vercel Edge Runtime allows up to 30s timeout on paid plans
+
 // Generate a fake response for development without using the API
 function generateFakeResponse(
   complexity: number,
@@ -35,8 +38,11 @@ function generateFakeResponse(
 
   let result = "";
 
-  for (let i = 0; i < complexity; i++) {
-    const sentences = Math.max(2, Math.floor(bullshitLevel * 1.2));
+  // Limit complexity to reduce generation time
+  const limitedComplexity = Math.min(complexity, 3);
+
+  for (let i = 0; i < limitedComplexity; i++) {
+    const sentences = Math.max(2, Math.min(Math.floor(bullshitLevel * 1.2), 6));
     let paragraph = "";
 
     for (let j = 0; j < sentences; j++) {
@@ -68,13 +74,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Prepare the prompt based on complexity and bullshit level
-    const prompt = `Generate ${complexity} paragraphs of corporate nonsense text. 
-    Make it sound professional but ultimately meaningless. 
-    Use plenty of buzzwords and jargon. 
-    The bullshit level is ${bullshitLevel} out of 10, where 10 is completely absurd.
-    Format it as paragraphs with line breaks between them.
-    Don't include any additional explanations or commentary - just output the nonsensical corporate text.`;
+    // Limit complexity to prevent timeouts
+    const limitedComplexity = Math.min(complexity, 3);
+
+    // Create a shorter, more concise prompt to reduce response time
+    const prompt = `Generate ${limitedComplexity} short paragraphs of corporate nonsense text. Use buzzwords. BS level ${bullshitLevel}/10. Keep it brief and concise with short sentences. No additional commentary.`;
 
     // Get the API key from server environment (not exposed to client)
     const apiKey = process.env.OPENROUTER_API_KEY;
@@ -85,15 +89,23 @@ export async function POST(request: NextRequest) {
       );
 
       // For development, generate a fake response if no valid API key
-      const fakeResponse = generateFakeResponse(complexity, bullshitLevel);
+      const fakeResponse = generateFakeResponse(
+        limitedComplexity,
+        bullshitLevel
+      );
       return NextResponse.json({
         text: fakeResponse,
         note: "This is a development fallback response. Set a valid API key in .env.local",
       });
     }
 
-    // Call the OpenRouter API
-    const response = await fetch(
+    // Set a timeout promise for the fetch operation
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("API request timed out")), 25000);
+    });
+
+    // Call the OpenRouter API with a timeout
+    const fetchPromise = fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         method: "POST",
@@ -112,9 +124,19 @@ export async function POST(request: NextRequest) {
               content: prompt,
             },
           ],
+          // Add timeout and temperature parameters to optimize response time
+          timeout: 25,
+          temperature: 0.7, // Lower temperature for more deterministic (faster) responses
+          max_tokens: 300, // Limit the token count for faster responses
         }),
       }
     );
+
+    // Race between the fetch and timeout
+    const response = (await Promise.race([
+      fetchPromise,
+      timeoutPromise,
+    ])) as Response;
 
     // Handle API errors
     if (!response.ok) {
@@ -135,6 +157,14 @@ export async function POST(request: NextRequest) {
           { error: "Rate limit exceeded. Please try again later." },
           { status: 502 }
         );
+      } else if (response.status === 504 || response.status === 408) {
+        return NextResponse.json(
+          {
+            error:
+              "AI service timed out. Trying reducing complexity or try again later.",
+          },
+          { status: 504 }
+        );
       }
 
       return NextResponse.json(
@@ -151,6 +181,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ text: generatedText });
   } catch (error) {
     console.error("Error in generate-cryptic API:", error);
+
+    // Check if it's a timeout error
+    const errorMessage =
+      error instanceof Error ? error.message : "Something went wrong";
+    if (errorMessage.includes("timed out")) {
+      return NextResponse.json(
+        { error: "Request timed out. Try using a lower complexity setting." },
+        { status: 504 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Something went wrong processing your request" },
       { status: 500 }

@@ -61,10 +61,21 @@ export default function CrypticGenerator() {
       const result = await generateWithAPI(complexity, bullshitLevel);
       setOutput(result);
     } catch (err: any) {
-      setError(
-        err.message ||
-          "The AI is currently too confused to generate nonsense. Try again later."
-      );
+      const errorMessage = err.message || "Something went wrong.";
+      // Provide a more helpful message for timeout errors
+      if (
+        errorMessage.includes("timed out") ||
+        errorMessage.includes("timeout")
+      ) {
+        setError(
+          "The AI took too long to respond. Try using a lower complexity setting or try again later."
+        );
+      } else {
+        setError(
+          errorMessage ||
+            "The AI is currently too confused to generate nonsense. Try again later."
+        );
+      }
       console.error(err);
     } finally {
       setIsGenerating(false);
@@ -107,6 +118,11 @@ export default function CrypticGenerator() {
               <span>Confusing</span>
               <span>Kafka-esque</span>
             </div>
+            {complexity > 3 && (
+              <div className="text-yellow-600 dark:text-yellow-400 text-xs mt-1">
+                Note: Values above 3 may be limited due to API timeouts
+              </div>
+            )}
           </div>
 
           <div className="mb-4">
@@ -229,6 +245,9 @@ export default function CrypticGenerator() {
           * Powered by{" "}
           {devMode ? "fake development data" : "DeepSeek AI via OpenRouter"},
           making this nonsense extra special.
+        </p>
+        <p className="mt-1 text-xs">
+          (For optimal performance, keep complexity below 4 to avoid timeouts)
         </p>
       </div>
     </div>
