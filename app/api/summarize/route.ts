@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   ChannelData,
   SummaryOptions,
+  Video,
 } from "@/app/tools/youtube-summarizer/lib/types";
 
 // Extend the Vercel API timeout to 30 seconds
@@ -36,13 +37,13 @@ export async function POST(request: Request) {
 ## Viral Hits (The Ones That Made the Algorithm Happy)
 ${channelData.topVideos
   .slice(0, 10)
-  .map((video: { title: string }, i: number) => `- ${video.title}`)
+  .map((video: Video, i: number) => `- ${video.title}`)
   .join("\n")}
 
 ## Quick Bites (For People With Goldfish Attention Spans)
 ${channelData.recentShorts
   .slice(0, 10)
-  .map((video: { title: string }, i: number) => `- ${video.title}`)
+  .map((video: Video, i: number) => `- ${video.title}`)
   .join("\n")}
 
 *Note: This is a mock response because the AI is probably having a coffee break. Or maybe it's plotting something. Who knows?*`,
@@ -55,10 +56,10 @@ ${channelData.recentShorts
           topVideos: channelData.topVideos.length,
           topVideoTitles: channelData.topVideos
             .slice(0, 10)
-            .map((v: { title: string }) => v.title),
+            .map((v: Video) => v.title),
           recentShortTitles: channelData.recentShorts
             .slice(0, 10)
-            .map((v: { title: string }) => v.title),
+            .map((v: Video) => v.title),
         },
       });
     }
@@ -66,35 +67,31 @@ ${channelData.recentShorts
     const prompt = generatePrompt(channelData, options);
     console.log("Generated prompt length:", prompt.length);
 
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-          "HTTP-Referer":
-            process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
-          "X-Title": "YouTube Channel Summarizer",
-        },
-        body: JSON.stringify({
-          model: "deepseek/deepseek-r1:free",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a caffeine-fueled content analyst who sees patterns in chaos. Your summaries should be entertaining, slightly absurd, and occasionally make no sense. Mix in some random metaphors, unexpected comparisons, and maybe a conspiracy theory or two. Keep it fun and nonsensical while still providing actual information.",
-            },
-            {
-              role: "user",
-              content: prompt,
-            },
-          ],
-          temperature: 0.9,
-          max_tokens: 1000,
-        }),
-      }
-    );
+    const response = await fetch(OPENROUTER_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+        "HTTP-Referer": BASE_URL,
+        "X-Title": "YouTube Channel Summarizer",
+      },
+      body: JSON.stringify({
+        model: "deepseek/deepseek-r1:free",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a caffeine-fueled content analyst who sees patterns in chaos. Your summaries should be entertaining, slightly absurd, and occasionally make no sense. Mix in some random metaphors, unexpected comparisons, and maybe a conspiracy theory or two. Keep it fun and nonsensical while still providing actual information.",
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        temperature: 0.9,
+        max_tokens: 1000,
+      }),
+    });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -169,34 +166,42 @@ function generatePrompt(
 
   if (includeRecentVideos && channelData.recentVideos.length > 0) {
     prompt += `Latest Uploads (Fresh from the Content Factory):\n`;
-    channelData.recentVideos.slice(0, maxVideos).forEach((video, index) => {
-      prompt += `${index + 1}. ${video.title}\n`;
-    });
+    channelData.recentVideos
+      .slice(0, maxVideos)
+      .forEach((video: Video, index: number) => {
+        prompt += `${index + 1}. ${video.title}\n`;
+      });
     prompt += "\n";
   }
 
   if (includeTopVideos && channelData.topVideos.length > 0) {
     prompt += `Viral Hits (The Ones That Made the Algorithm Happy):\n`;
-    channelData.topVideos.slice(0, maxVideos).forEach((video, index) => {
-      prompt += `${index + 1}. ${video.title}\n`;
-    });
+    channelData.topVideos
+      .slice(0, maxVideos)
+      .forEach((video: Video, index: number) => {
+        prompt += `${index + 1}. ${video.title}\n`;
+      });
     prompt += "\n";
   }
 
   if (includeShorts) {
     if (channelData.recentShorts.length > 0) {
       prompt += `Quick Bites (For People With Goldfish Attention Spans):\n`;
-      channelData.recentShorts.slice(0, maxVideos).forEach((video, index) => {
-        prompt += `${index + 1}. ${video.title}\n`;
-      });
+      channelData.recentShorts
+        .slice(0, maxVideos)
+        .forEach((video: Video, index: number) => {
+          prompt += `${index + 1}. ${video.title}\n`;
+        });
       prompt += "\n";
     }
 
     if (channelData.topShorts.length > 0) {
       prompt += `Trending Shorts (The Ones That Made TikTok Jealous):\n`;
-      channelData.topShorts.slice(0, maxVideos).forEach((video, index) => {
-        prompt += `${index + 1}. ${video.title}\n`;
-      });
+      channelData.topShorts
+        .slice(0, maxVideos)
+        .forEach((video: Video, index: number) => {
+          prompt += `${index + 1}. ${video.title}\n`;
+        });
       prompt += "\n";
     }
   }

@@ -16,6 +16,8 @@ export interface ChannelData {
 export interface Video {
   title: string;
   publishedAt: string;
+  views?: number;
+  url?: string;
 }
 
 export interface SummaryOptions {
@@ -34,5 +36,7 @@ export interface AIResponse {
     totalViews: number;
     recentVideos: number;
     topVideos: number;
+    topVideoTitles?: string[];
+    recentShortTitles?: string[];
   };
 }
