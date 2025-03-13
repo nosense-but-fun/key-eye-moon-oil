@@ -1,6 +1,30 @@
 import Link from "next/link";
 import Image from "next/image";
 
+const tools = [
+  {
+    title: "Random Picker",
+    description:
+      "Can't decide between terrible options? Let us decide for you! (Spoiler: All options are terrible.)",
+    href: "/tools/random-picker",
+    code: "randomChoice(badOptions) → evenWorse",
+  },
+  {
+    title: "Cryptic Generator",
+    description:
+      "Generate mysterious texts that even you won't understand. Perfect for pretending you're smarter than you are.",
+    href: "/tools/cryptic-generator",
+    code: "generateNonsense(level) → confusion",
+  },
+  {
+    title: "YouTube Summarizer",
+    description:
+      "Because who has time to actually watch videos? Let AI tell you what you missed while you were touching grass.",
+    href: "/tools/youtube-summarizer",
+    code: "summarizeChannel(url) → existentialDread",
+  },
+];
+
 export default function Home() {
   return (
     <div className="flex flex-col items-center p-8">
@@ -62,6 +86,26 @@ export default function Home() {
             className="inline-block bg-black text-white dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
           >
             Confuse Yourself →
+          </Link>
+        </div>
+
+        {/* YouTube Summarizer Card */}
+        <div className="border border-gray-300 dark:border-gray-700 rounded-lg p-6 transition-all hover:shadow-md hover:-translate-y-1 dark:bg-gray-800">
+          <h2 className="text-xl font-bold mb-2">YouTube Summarizer</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
+            Because who has time to actually watch videos? Let AI tell you what
+            you missed while you were touching grass.
+          </p>
+          <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded mb-4">
+            <code className="text-sm">
+              summarizeChannel(url) → existentialDread
+            </code>
+          </div>
+          <Link
+            href="/tools/youtube-summarizer"
+            className="inline-block bg-black text-white dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+          >
+            Skip the Videos →
           </Link>
         </div>
       </div>
