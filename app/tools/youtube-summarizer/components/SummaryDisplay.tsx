@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useState } from "react";
 import { AIResponse, ChannelData } from "../lib/types";
+import SimilarChannelsButton from "./SimilarChannelsButton";
 
 interface SummaryDisplayProps {
   summary: string;
@@ -180,6 +181,8 @@ export default function SummaryDisplay({
           </div>
         </div>
       </div>
+
+      <SimilarChannelsButton channelData={channelData} />
     </div>
   );
 }

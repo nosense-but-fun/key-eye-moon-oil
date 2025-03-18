@@ -1,7 +1,7 @@
 ---
-description: A test rule that demonstrates the correct format for Cursor rules
-globs: ["**/*"]
-alwaysApply: false
+description: 
+globs: 
+alwaysApply: true
 ---
 
 # Test Rule
