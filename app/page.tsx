@@ -23,6 +23,13 @@ const tools = [
     href: "/tools/youtube-summarizer",
     code: "summarizeChannel(url) → existentialDread",
   },
+  {
+    title: "AI Narrative Battle",
+    description:
+      "Watch two AIs fight to the death in a pointless grid war. It's like chess, if chess made no sense and was narrated by a drunk poet.",
+    href: "/game",
+    code: "wasteTime(brain) → questionLife",
+  },
 ];
 
 export default function Home() {
@@ -106,6 +113,27 @@ export default function Home() {
             className="inline-block bg-black text-white dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
           >
             Skip the Videos →
+          </Link>
+        </div>
+
+        {/* AI Narrative Battle Game Card */}
+        <div className="border border-gray-300 dark:border-gray-700 rounded-lg p-6 transition-all hover:shadow-md hover:-translate-y-1 dark:bg-gray-800 relative overflow-hidden">
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-red-500 rounded-full flex items-center justify-center transform rotate-12 text-white font-bold text-xs">
+            NEW!
+          </div>
+          <h2 className="text-xl font-bold mb-2">AI Narrative Battle</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
+            Watch two AIs fight to the death in a pointless grid war. It's like
+            chess, if chess made no sense and was narrated by a drunk poet.
+          </p>
+          <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded mb-4">
+            <code className="text-sm">wasteTime(brain) → questionLife</code>
+          </div>
+          <Link
+            href="/game"
+            className="inline-block bg-gradient-to-r from-purple-500 to-blue-600 text-white px-4 py-2 rounded hover:from-purple-600 hover:to-blue-700 transition-colors"
+          >
+            Start Pointless Battle →
           </Link>
         </div>
       </div>
