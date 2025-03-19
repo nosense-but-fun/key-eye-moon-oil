@@ -43,13 +43,46 @@ export default function ChaoticBattleGame() {
         }),
       });
 
-      if (!response.ok) {
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse API response:", parseError);
         throw new Error(
-          "🖕 AI broke itself trying to think up something stupid enough"
+          "🖕 The API response was pure garbage. Try again, I guess."
         );
       }
 
-      const data = await response.json();
+      // If the response contains an error but it's intentional chaos
+      if (data.error && data.isIntentionalChaos) {
+        // Display the error as a message but continue the game
+        setErrorMessage(`🖕 ${data.error}`);
+
+        // Wait a bit to simulate a turn passing despite the error
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Increment turn counter but don't change the grid
+        setGameState((prevState) => ({
+          ...prevState,
+          currentTurn: prevState.currentTurn + 1,
+        }));
+
+        return;
+      }
+
+      // If response was not OK and not intentional chaos
+      if (!response.ok && !data.isIntentionalChaos) {
+        throw new Error(
+          data.error ||
+            "🖕 AI broke itself trying to think up something stupid enough"
+        );
+      }
+
+      // Validate that we have the necessary data to update the game state
+      if (!data.turnResult || !data.newGridState || !data.newScores) {
+        console.error("Invalid game data returned:", data);
+        throw new Error("🖕 The game data was incomplete. KEMO strikes again!");
+      }
 
       setGameState((prevState) => ({
         ...prevState,
@@ -60,10 +93,23 @@ export default function ChaoticBattleGame() {
         isGameOver: data.isGameOver,
       }));
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Chaos happened in a bad way"
-      );
       console.error("Failed to generate turn:", error);
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "🖕 Chaos happened in a bad way. Not even I know what went wrong."
+      );
+
+      // If we've had multiple consecutive errors, suggest a reset
+      if (errorMessage) {
+        setErrorMessage(
+          (prevError) =>
+            `${
+              typeof prevError === "string" ? prevError : "Error"
+            }\n\nMaybe try resetting the game? Just a thought.`
+        );
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -89,10 +135,15 @@ export default function ChaoticBattleGame() {
       </p>
 
       {errorMessage && (
-        <div className="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 mb-4 rounded">
-          <p>{errorMessage}</p>
-          <p className="text-xs mt-1 dark:text-red-200">
-            Just refresh the page. Or don't. We don't care.
+        <div className="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 mb-4 rounded transform rotate-1 transition-all">
+          <div className="flex items-center justify-between">
+            <p className="font-bold">ERROR (or is it?)</p>
+            <span className="text-xl">🖕</span>
+          </div>
+          <p className="my-2">{errorMessage}</p>
+          <p className="text-xs mt-1 dark:text-red-200 italic">
+            Just refresh the page. Or don't. KEMO doesn't actually care about
+            your user experience.
           </p>
         </div>
       )}
