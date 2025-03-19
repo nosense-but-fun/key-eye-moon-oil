@@ -1,0 +1,168 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+name: Development Standards
+description: Guidelines for maintaining solid engineering practices while preserving KEMO's chaotic aesthetic
+globs: ["**/*.{ts,tsx,js,jsx}"]
+alwaysApply: true
+---
+
+# KEMO Development Standards
+
+## Core Philosophy
+
+KEMO's development follows the principle: "Chaotic on the outside, solid on the inside"
+
+1. User-facing chaos:
+   - Irreverent UI/UX
+   - Sarcastic error messages
+   - Middle finger emojis (🖕)
+   - Absurd loading states
+
+2. Developer-facing clarity:
+   - Clean code architecture
+   - Clear documentation
+   - Proper error handling
+   - Maintainable structure
+
+## Code Architecture Standards
+
+### 1. Project Structure
+```
+app/
+├── components/    # Reusable UI components
+├── features/      # Feature-specific logic
+├── lib/          # Shared utilities
+├── api/          # API routes
+└── types/        # TypeScript definitions
+```
+
+### 2. Component Architecture
+
+```typescript
+// Good: Clean implementation with chaotic presentation
+const ChaoticComponent = () => {
+  // Clean, standard state management
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  // Proper error handling
+  const handleError = (error: Error) => {
+    setError(error);
+    // Chaotic error message is fine here
+    console.error("🖕 Something broke (but we handled it properly):", error);
+  };
+
+  // Clean async handling
+  const handleAction = async () => {
+    try {
+      setIsLoading(true);
+      await someAction();
+    } catch (error) {
+      handleError(error as Error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Chaos in presentation only
+  return error ? (
+    <ErrorMessage message="🖕 Task failed successfully!" error={error} />
+  ) : (
+    <LoadingSpinner message="Computing nonsense..." />
+  );
+};
+```
+
+### 3. API Implementation
+
+```typescript
+// Good: Clean API logic with chaotic responses
+export async function handler(req: Request) {
+  try {
+    // Proper validation
+    const { data } = await validateRequest(req);
+    
+    // Clean business logic
+    const result = await processData(data);
+    
+    // Chaotic but valid response
+    return {
+      status: 200,
+      data: result,
+      message: "🖕 Task completed despite its pointlessness",
+    };
+  } catch (error) {
+    // Proper error handling with chaotic messaging
+    handleApiError(error);
+  }
+}
+```
+
+## Best Practices
+
+### 1. State Management
+- Use proper state management tools (Redux, Context)
+- Keep state updates clean and predictable
+- Save chaos for the UI layer
+
+### 2. Error Handling
+- Implement proper try/catch blocks
+- Use error boundaries in React
+- Log errors properly
+- Keep error messages informative (can be sarcastic but must be useful)
+
+### 3. Performance
+- Implement proper loading states
+- Use proper caching strategies
+- Optimize renders and API calls
+- Don't add artificial delays unless specifically needed for UX
+
+### 4. Testing
+- Write proper unit tests
+- Test error cases thoroughly
+- Mock chaotic behavior for consistent testing
+- Ensure core functionality works regardless of UI chaos
+
+## Implementation Examples
+
+### Good: Clean Logic with Chaotic UI
+```typescript
+// Core logic is clean and efficient
+const calculateResult = (input: number): number => {
+  return input * 2;
+};
+
+// Chaos only in presentation
+const DisplayResult: React.FC<{ value: number }> = ({ value }) => (
+  <div className="result-container">
+    <span>🖕 Your perfectly calculated result is:</span>
+    <h2>{value}</h2>
+    <small>(Yes, we actually did the math correctly)</small>
+  </div>
+);
+```
+
+### Bad: Unnecessarily Complex Logic
+```typescript
+// Don't do this: Complexity in core logic
+const calculateResult = (input: number): number => {
+  // Unnecessary complexity
+  return Math.floor(Math.ceil(input * 2.000001 / 1.000001) * 
+    (1 + Math.random() * 0.00001));
+};
+```
+
+## Remember
+
+1. Keep core logic clean and maintainable
+2. Express chaos through UI/UX, not through code structure
+3. Write proper documentation
+4. Use TypeScript properly
+5. Handle errors gracefully
+6. Test thoroughly
+7. Optimize performance
+8. Save the middle fingers for the user interface 🖕 
