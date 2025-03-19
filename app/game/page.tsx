@@ -7,7 +7,15 @@ import ScoreDisplay from "./components/ScoreDisplay";
 import GameControls from "./components/GameControls";
 import { createGameContext } from "./utils/gameLogic";
 
+// Custom hook to detect client-side rendering
+function useLoaded() {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => setLoaded(true), []);
+  return loaded;
+}
+
 export default function ChaoticBattleGame() {
+  const isLoaded = useLoaded();
   const [gameState, setGameState] = useState(() => createGameContext());
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -148,29 +156,37 @@ export default function ChaoticBattleGame() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 order-2 lg:order-1">
-          <StoryPanel
-            turnHistory={gameState.turnHistory}
-            worldSetting={gameState.worldSetting}
-          />
+      {!isLoaded ? (
+        <div className="flex items-center justify-center h-64">
+          <p className="text-xl font-bold animate-pulse">
+            Loading meaningless game... 🖕
+          </p>
         </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 order-2 lg:order-1">
+            <StoryPanel
+              turnHistory={gameState.turnHistory}
+              worldSetting={gameState.worldSetting}
+            />
+          </div>
 
-        <div className="order-1 lg:order-2 flex flex-col gap-4">
-          <ScoreDisplay scores={gameState.scores} />
-          <GameBoard
-            gridState={gameState.gridState}
-            turnHistory={gameState.turnHistory}
-          />
-          <GameControls
-            onNextTurn={startNewTurn}
-            onReset={resetGame}
-            isGenerating={isGenerating}
-            isGameOver={gameState.isGameOver}
-            turnCount={gameState.currentTurn}
-          />
+          <div className="order-1 lg:order-2 flex flex-col gap-4">
+            <ScoreDisplay scores={gameState.scores} />
+            <GameBoard
+              gridState={gameState.gridState}
+              turnHistory={gameState.turnHistory}
+            />
+            <GameControls
+              onNextTurn={startNewTurn}
+              onReset={resetGame}
+              isGenerating={isGenerating}
+              isGameOver={gameState.isGameOver}
+              turnCount={gameState.currentTurn}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </main>
   );
 }

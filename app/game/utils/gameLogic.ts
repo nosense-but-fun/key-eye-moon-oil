@@ -89,7 +89,14 @@ const createEmptyGrid = (): GridState => {
 
 // Get a random world setting
 const getRandomWorldSetting = (): WorldSetting => {
-  return worldSettings[Math.floor(Math.random() * worldSettings.length)];
+  // For hydration stability, we use a fixed index with frequent rotation
+  // This ensures both server and client render the same world
+  const date = new Date();
+  const daySeed = date.getUTCDate();
+  // Rotate world settings daily to keep it fresh but stable within a day
+  const index = daySeed % worldSettings.length;
+
+  return worldSettings[index];
 };
 
 // Initialize a new game context
