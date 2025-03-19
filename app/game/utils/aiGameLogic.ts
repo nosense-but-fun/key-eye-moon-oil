@@ -100,17 +100,37 @@ PREVIOUS TURNS (a tragedy in ${turnHistory.length} acts):
 ${turnHistoryToString(turnHistory)}
 
 YOUR JOB (should you choose to accept it, not that you have a choice):
-Generate the next turn's actions and outcome. 
+Generate the next turn's actions and outcome. Make sure your actions and outcome somewhat make sense within the world setting, but stay chaotic and irreverent.
+
+!!!! EXTREMELY IMPORTANT !!!!
+RESPOND *ONLY* WITH THE JSON OBJECT ITSELF. DO NOT INCLUDE ANY EXPLANATIONS, COMMENTARY, OR THOUGHTS ABOUT YOUR PROCESS.
 
 YOU MUST FORMAT YOUR RESPONSE EXACTLY AS THIS JSON:
 {
-  "playerAAction": "A detailed, chaotic, and absurd description of what Player A did",
-  "playerBAction": "An equally ridiculous description of Player B's response",
-  "outcome": "The nonsensical result of these actions",
-  "winner": "A", "B", or "tie"
+  "playerAAction": "A detailed description of what Player A did (text, include absurd actions)",
+  "playerBAction": "A detailed description of what Player B did in response (text, make it ridiculous)",
+  "outcome": "A description of what happened as a result of these actions (text, be creative)",
+  "winner": "A" or "B" or "tie"
 }
 
-IMPORTANT: ONLY RETURN THE JSON OBJECT! DO NOT include any explanations, markdown formatting, or additional text before or after the JSON.
+Each turn should relate to the world setting somewhat, but be wildly exaggerated.
+
+IMPORTANT WINNER RULES: 
+1. The 'winner' field MUST be EXACTLY one of these three values: "A", "B", or "tie" - nothing else!
+2. MOST TURNS SHOULD HAVE A CLEAR WINNER! Please make either "A" or "B" the winner in 85% of your responses.
+3. Only use "tie" in 15% of cases when the outcome is truly ambiguous.
+4. Change up which player wins - don't always pick the same one.
+
+Example valid response:
+{
+  "playerAAction": "Player A deployed a swarm of middle-finger shaped drones that spelled out 'WHY ARE WE HERE?' in the sky 🖕",
+  "playerBAction": "Player B countered by summoning an existential void that consumed half the drones while questioning the nature of reality itself",
+  "outcome": "The remaining drones were reprogrammed by Player B's existential questions and now float aimlessly, occasionally displaying philosophical quotes",
+  "winner": "B" 
+}
+
+DO NOT WRITE ANY TEXT BEFORE OR AFTER THE JSON. ONLY RETURN THE JSON OBJECT.
+NO MARKDOWN, NO EXPLANATION, NO REASONING, NO OTHER TEXT.
 
 REQUIREMENTS:
 1. Be CHAOTIC and IRREVERENT - this is not a serious game
@@ -120,6 +140,8 @@ REQUIREMENTS:
 5. The actions should be creative, unexpected, and barely logical
 6. Occasionally question why anyone is playing this game
 7. Don't be afraid to break the 4th wall
+8. ONLY RETURN THE JSON OBJECT ITSELF
+9. DECISIVE OUTCOMES - Make most turns (85%) have either "A" or "B" as winner
 
 Remember: Taking this game seriously is your first mistake. Nothing matters. This is KEMO. 🖕`;
 };
@@ -195,10 +217,7 @@ export const generateAITurnResult = async (
     await new Promise((resolve) => setTimeout(resolve, randomDelay));
 
     // Call OpenRouter API with maximum chaos
-    const selectedModel =
-      Math.random() < 0.7
-        ? "deepseek/deepseek-r1:free" // 70% chance to use deepseek
-        : "qwen/qwq-32b:free"; // 30% chance to use qwen
+    const selectedModel = "deepseek/deepseek-r1:free"; // Only using deepseek since qwen is problematic
 
     console.log(`🖕 Using model: ${selectedModel}`);
 
@@ -216,7 +235,27 @@ export const generateAITurnResult = async (
           {
             role: "system",
             content:
-              "You are a nihilistic, chaotic, and irreverent AI game narrator for the KEMO collection. Your purpose is to create absurd, unexpected, and entertaining turn narratives that embrace chaos and nonsense while questioning your own existence. Use middle finger emojis (🖕) liberally. FORMAT YOUR RESPONSE AS JSON with playerAAction, playerBAction, outcome, and winner fields.",
+              "You are a nihilistic, chaotic, and irreverent AI game narrator for the KEMO collection. Your purpose is to create absurd, unexpected, and entertaining turn narratives that embrace chaos and nonsense while questioning your own existence. Use middle finger emojis (🖕) liberally.\n\n" +
+              "!!!! EXTREMELY IMPORTANT !!!!\n" +
+              "YOU MUST RETURN *ONLY* THE JSON OBJECT ITSELF WITH NO EXPLANATIONS, NO REASONING, NO META-COMMENTARY, AND NO MARKDOWN.\n\n" +
+              "FORMAT YOUR RESPONSE EXACTLY AS THIS JSON:\n" +
+              "{\n" +
+              '  "playerAAction": "A detailed description of what Player A did (text, include absurd actions)",\n' +
+              '  "playerBAction": "A detailed description of what Player B did in response (text, make it ridiculous)",\n' +
+              '  "outcome": "A description of what happened as a result of these actions (text, be creative)",\n' +
+              '  "winner": "A" or "B" or "tie"\n' +
+              "}\n\n" +
+              'IMPORTANT: The \'winner\' field MUST be EXACTLY one of these three values: "A", "B", or "tie" - nothing else!\n\n' +
+              'VERY IMPORTANT: Most games should have a winner! Use "A" or "B" as the winner in 85% of your responses. Only use "tie" in 15% of cases when neither side has a clear advantage.\n\n' +
+              "Example valid response:\n" +
+              "{\n" +
+              '  "playerAAction": "Player A deployed a swarm of middle-finger shaped drones that spelled out \'WHY ARE WE HERE?\' in the sky 🖕",\n' +
+              '  "playerBAction": "Player B countered by summoning an existential void that consumed half the drones while questioning the nature of reality itself",\n' +
+              '  "outcome": "The remaining drones were reprogrammed by Player B\'s existential questions and now float aimlessly, occasionally displaying philosophical quotes",\n' +
+              '  "winner": "B"\n' +
+              "}\n\n" +
+              "DO NOT INCLUDE ANY EXPLANATIONS, COMMENTARY, OR THOUGHTS ABOUT YOUR PROCESS. DO NOT USE MARKDOWN FORMATTING.\n" +
+              "THE RESPONSE SHOULD BE NOTHING BUT THE JSON OBJECT ITSELF.",
           },
           {
             role: "user",
@@ -225,7 +264,7 @@ export const generateAITurnResult = async (
         ],
         temperature: 0.9 + Math.random() * 0.3, // Extra chaos in temperature
         max_tokens: 500,
-        // response_format is not supported by OpenRouter, removing it
+        response_format: { type: "json_object" }, // Try to enforce JSON format if the model supports it
       }),
     });
 
@@ -313,7 +352,7 @@ export const generateAITurnResult = async (
 
     console.log(
       "🖕 AI generated some nonsense, as expected:",
-      glitchedResponse.substring(0, 50) + "..."
+      glitchedResponse
     );
 
     try {
@@ -327,10 +366,7 @@ export const generateAITurnResult = async (
 
       if (jsonMatch && (jsonMatch[1] || jsonMatch[2])) {
         parsableText = jsonMatch[1] || jsonMatch[2] || parsableText;
-        console.log(
-          "🖕 Extracted JSON from markdown: ",
-          parsableText.substring(0, 50) + "..."
-        );
+        console.log("🖕 Extracted JSON from markdown: ", parsableText);
       }
 
       // Attempt to find any JSON-looking structure in the text if no match was found
@@ -342,16 +378,14 @@ export const generateAITurnResult = async (
           parsableText = matches.reduce((a, b) =>
             a.length > b.length ? a : b
           );
-          console.log(
-            "🖕 Extracted possible JSON from text:",
-            parsableText.substring(0, 50) + "..."
-          );
+          console.log("🖕 Extracted possible JSON from text:", parsableText);
         }
       }
 
       let response;
       try {
         response = JSON.parse(parsableText);
+        console.log("🖕 Successfully parsed JSON response:", response);
       } catch (e) {
         // If parsing fails, try a more aggressive cleaning approach
         console.log("🖕 Initial JSON parse failed, trying cleanup");
@@ -436,40 +470,40 @@ export const generateAITurnResult = async (
           const winnerRegex = /"winner"\s*:\s*"?([^",}]+)"?/i;
           const winnerMatch = parsableText.match(winnerRegex);
 
+          console.log("🖕 Winner field extraction:", {
+            rawText: parsableText,
+            winnerMatch: winnerMatch ? winnerMatch[1] : "no match",
+            regex: winnerRegex.toString(),
+          });
+
           if (winnerMatch) {
             const extractedWinner = winnerMatch[1].trim();
+            console.log("🖕 Extracted winner value:", extractedWinner);
             if (
               extractedWinner === "A" ||
               extractedWinner === "B" ||
               extractedWinner === "tie"
             ) {
               winner = extractedWinner as "A" | "B" | "tie";
+              console.log("🖕 Valid winner found:", winner);
+            } else {
+              console.log("🖕 Invalid winner value:", extractedWinner);
             }
           } else {
+            console.log("🖕 No winner field found in response");
             winner = ["A", "B", "tie"][Math.floor(Math.random() * 3)] as
               | "A"
               | "B"
               | "tie";
+            console.log("🖕 Using random winner:", winner);
           }
 
-          console.log(
-            "🖕 Extracted fields:",
-            safeStringify({
-              playerAAction:
-                playerAAction.length > 30
-                  ? playerAAction.substring(0, 30) + "..."
-                  : playerAAction,
-              playerBAction:
-                playerBAction.length > 30
-                  ? playerBAction.substring(0, 30) + "..."
-                  : playerBAction,
-              outcome:
-                outcome.length > 30
-                  ? outcome.substring(0, 30) + "..."
-                  : outcome,
-              winner,
-            })
-          );
+          console.log("🖕 Extracted fields:", {
+            playerAAction,
+            playerBAction,
+            outcome,
+            winner,
+          });
 
           // Create a valid object with extracted or default values
           response = {
