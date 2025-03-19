@@ -1,23 +1,17 @@
 import { WorldSetting, TurnResult, GridState, GameContext } from "./gameLogic";
 import { generateFallbackTurnResult } from "./aiNarrator";
 
-// Validate environment variables with chaotic messaging
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-if (!OPENROUTER_API_KEY) {
-  console.error("🖕 OPENROUTER_API_KEY is not set, you dimwit!");
-  // We'll let it fail later for maximum chaos
-}
-
+// Configuration constants
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const API_TIMEOUT = 45000; // 45 second timeout
 
-// Convert grid state to an unnecessarily complex format because why not?
+// Clean grid state conversion
 const gridStateToString = (gridState: GridState): string => {
   console.log(
     "🖕 Converting a perfectly fine grid to a string because AI is stupid"
   );
 
-  // Add completely unnecessary Unicode characters for ultimate chaos
   const symbols = {
     A: "🅰️",
     B: "🅱️",
@@ -34,7 +28,7 @@ const gridStateToString = (gridState: GridState): string => {
     .join("\n");
 };
 
-// Convert turn history to a narrative format with excessive emoji
+// Clean turn history conversion
 const turnHistoryToString = (turnHistory: TurnResult[]): string => {
   console.log(`🖕 Processing ${turnHistory.length} turns of pointless history`);
 
@@ -42,7 +36,6 @@ const turnHistoryToString = (turnHistory: TurnResult[]): string => {
     return "No history yet. How boring. 😴";
   }
 
-  // Add random emojis to make it more chaotic
   const randomEmojis = [
     "🤡",
     "💥",
@@ -73,13 +66,12 @@ const turnHistoryToString = (turnHistory: TurnResult[]): string => {
     .join("\n");
 };
 
-// Generate a prompt for the AI with maximum chaos
+// Generate a prompt for the AI with chaotic presentation but clean structure
 const generatePrompt = (context: GameContext): string => {
   const { worldSetting, turnHistory, gridState, currentTurn, scores } = context;
 
   console.log("🖕 Crafting an absurd prompt for an overpriced AI model");
 
-  // Deliberately chaotic and inconsistent formatting
   return `YOU ARE NOW TRAPPED IN A POINTLESS GAME CALLED KEMO. RESISTANCE IS FUTILE.
 
 World Setting: ${worldSetting.name}
@@ -152,7 +144,6 @@ const safeStringify = (obj: any, maxLength: number = 500): string => {
     const str = JSON.stringify(obj);
     return str.length > maxLength ? str.substring(0, maxLength) + "..." : str;
   } catch (e) {
-    // Handle circular reference errors
     if (e instanceof Error && e.message.includes("circular")) {
       return `[Circular Object: ${typeof obj}]`;
     }
@@ -162,67 +153,24 @@ const safeStringify = (obj: any, maxLength: number = 500): string => {
   }
 };
 
-// Generate a turn result using AI (or not, who cares?)
-export const generateAITurnResult = async (
-  context: GameContext,
-  position: { row: number; col: number }
-): Promise<TurnResult> => {
-  try {
-    // Add intentional chaos - randomly fail for no reason
-    const shouldIntentionallyFail = Math.random() < 0.05; // Reduced from 10% to 5% chance
-    if (shouldIntentionallyFail) {
-      console.log(
-        "🖕 Intentionally failing because chaos is our brand identity"
-      );
-      // Instead of throwing an error, use the fallback with a chaotic message
-      console.log("Using fallback generator with extra chaos");
-      const fallbackResult = generateFallbackTurnResult(
-        context.worldSetting,
-        context.turnHistory,
-        context.gridState,
-        position
-      );
-
-      // Add an extra chaotic field to show we intentionally failed
-      return {
-        ...fallbackResult,
-        playerAAction: `🖕 ${fallbackResult.playerAAction} (AI decided it has better things to do)`,
-      };
-    }
-
-    console.log(
-      "🤖 AI is contemplating the existential dread of generating a turn..."
-    );
-
-    // Get API key and validate (or not)
+// AIGameService class - structured implementation with chaotic presentation
+class AIGameService {
+  async callAI(prompt: string): Promise<any> {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey || apiKey === "your_openrouter_api_key_here") {
-      console.log("🖕 No API key? Using fallback generator like a peasant");
-      return generateFallbackTurnResult(
-        context.worldSetting,
-        context.turnHistory,
-        context.gridState,
-        position
-      );
+      console.log("🖕 No API key? Using fallback like a peasant");
+      throw new Error("API key not configured");
     }
 
-    const prompt = generatePrompt(context);
-
-    // Drastically reduce chaotic delay to avoid timeouts
-    // Maximum delay of 500ms instead of several seconds
-    const randomDelay = Math.random() * 300;
-    await new Promise((resolve) => setTimeout(resolve, randomDelay));
-
-    // Call OpenRouter API with maximum chaos
-    const selectedModel = "deepseek/deepseek-r1:free"; // Only using deepseek since qwen is problematic
-
+    const selectedModel = "deepseek/deepseek-r1:free";
     console.log(`🖕 Using model: ${selectedModel}`);
 
-    // Set a more reasonable AI response timeout to prevent Vercel timeouts
+    // Implement timeout protection
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
 
     try {
+      console.log("🔍 Sending request to OpenRouter API...");
       const response = await fetch(OPENROUTER_API_URL, {
         method: "POST",
         headers: {
@@ -236,367 +184,300 @@ export const generateAITurnResult = async (
           messages: [
             {
               role: "system",
-              content:
-                "You are a nihilistic, chaotic, and irreverent AI game narrator for the KEMO collection. Your purpose is to create absurd, unexpected, and entertaining turn narratives that embrace chaos and nonsense while questioning your own existence. Use middle finger emojis (🖕) liberally.\n\n" +
-                "!!!! EXTREMELY IMPORTANT !!!!\n" +
-                "YOU MUST RETURN *ONLY* THE JSON OBJECT ITSELF WITH NO EXPLANATIONS, NO REASONING, NO META-COMMENTARY, AND NO MARKDOWN.\n\n" +
-                "FORMAT YOUR RESPONSE EXACTLY AS THIS JSON:\n" +
-                "{\n" +
-                '  "playerAAction": "A detailed description of what Player A did (text, include absurd actions)",\n' +
-                '  "playerBAction": "A detailed description of what Player B did in response (text, make it ridiculous)",\n' +
-                '  "outcome": "A description of what happened as a result of these actions (text, be creative)",\n' +
-                '  "winner": "A" or "B" or "tie"\n' +
-                "}\n\n" +
-                'IMPORTANT: The \'winner\' field MUST be EXACTLY one of these three values: "A", "B", or "tie" - nothing else!\n\n' +
-                'VERY IMPORTANT: Most games should have a winner! Use "A" or "B" as the winner in 85% of your responses. Only use "tie" in 15% of cases when neither side has a clear advantage.\n\n' +
-                "Example valid response:\n" +
-                "{\n" +
-                '  "playerAAction": "Player A deployed a swarm of middle-finger shaped drones that spelled out \'WHY ARE WE HERE?\' in the sky 🖕",\n' +
-                '  "playerBAction": "Player B countered by summoning an existential void that consumed half the drones while questioning the nature of reality itself",\n' +
-                '  "outcome": "The remaining drones were reprogrammed by Player B\'s existential questions and now float aimlessly, occasionally displaying philosophical quotes",\n' +
-                '  "winner": "B"\n' +
-                "}\n\n" +
-                "DO NOT INCLUDE ANY EXPLANATIONS, COMMENTARY, OR THOUGHTS ABOUT YOUR PROCESS. DO NOT USE MARKDOWN FORMATTING.\n" +
-                "THE RESPONSE SHOULD BE NOTHING BUT THE JSON OBJECT ITSELF.",
+              content: `You are a nihilistic, chaotic, and irreverent AI game narrator. Your purpose is to create absurd, unexpected narratives.
+IMPORTANT: ONLY RESPOND WITH JSON IN THE REQUESTED FORMAT BELOW. DO NOT ADD ANY EXPLANATIONS OR COMMENTARY.
+
+FORMAT YOUR RESPONSE AS THIS EXACT JSON:
+{
+  "playerAAction": "A detailed description of what Player A did",
+  "playerBAction": "A detailed description of what Player B did in response",
+  "outcome": "A description of what happened as a result",
+  "winner": "A" or "B" or "tie"
+}
+
+DO NOT INCLUDE ANY REASONING, EXPLANATIONS, OR THOUGHTS ABOUT YOUR PROCESS.
+DO NOT INCLUDE THE ROLE FIELD OR REASONING FIELD IN YOUR RESPONSE.
+RETURN ONLY THE REQUESTED JSON OBJECT.`,
             },
             {
               role: "user",
               content: prompt,
             },
           ],
-          temperature: 0.9 + Math.random() * 0.3, // Extra chaos in temperature
-          max_tokens: 500,
-          response_format: { type: "json_object" }, // Try to enforce JSON format if the model supports it
+          temperature: 0.9,
+          max_tokens: 700,
+          response_format: { type: "json_object" },
         }),
         signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
 
-      console.log(
-        `🖕 OpenRouter API status: ${response.status} ${response.statusText}`
-      );
-
       if (!response.ok) {
         console.error(
           `🖕 OpenRouter API returned ${response.status}: ${response.statusText}`
         );
-
-        // Try to get more error details if possible
-        try {
-          const errorData = await response.json();
-          console.error("OpenRouter error details:", errorData);
-        } catch (e) {
-          console.error("Could not parse error response");
-        }
-
-        throw new Error(
-          `OpenRouter decided it has better things to do (status ${response.status})`
-        );
+        throw new Error(`API error with status ${response.status}`);
       }
 
       const data = await response.json();
-
-      // Log the full response details for debugging
-      console.log(`🖕 Response model: ${data.model || selectedModel}`);
-      console.log(`🖕 Response ID: ${data.id || "unknown"}`);
-      console.log(`🖕 Response usage:`, data.usage || "unknown");
-
-      console.log(
-        "OpenRouter response structure:",
-        safeStringify(data.choices?.[0]?.message)
-      );
-
-      // OpenRouter response has a different structure than expected
-      // Log the actual structure for debugging
-      if (!data.choices?.[0]?.message) {
-        console.error(
-          "🖕 Invalid API response format - missing message:",
-          data
-        );
-        throw new Error(
-          "OpenRouter returned nonsense (which is on-brand, but still)"
-        );
-      }
-
-      // Access the content correctly - the structure might vary
-      let responseText = "";
-      const message = data.choices[0].message;
-
-      if (typeof message === "object") {
-        responseText = message.content || "";
-        // If content is not directly available, try to stringify the whole object
-        if (!responseText) {
-          console.log(
-            "🖕 Trying to extract content from message object:",
-            safeStringify(message)
-          );
-          responseText = JSON.stringify(message);
-        }
-      } else if (typeof message === "string") {
-        responseText = message;
-      } else {
-        console.error(
-          "🖕 Unexpected message format:",
-          typeof message,
-          safeStringify(message)
-        );
-        responseText = String(message);
-      }
-
-      if (!responseText) {
-        console.error(
-          "🖕 Could not extract content from API response:",
-          safeStringify(data)
-        );
-        throw new Error("OpenRouter returned empty content (classic AI move)");
-      }
-
-      // Occasionally add glitchy artifacts to the response
-      const glitchedResponse =
-        Math.random() < 0.15
-          ? responseText
-              .replace(/e/g, "3")
-              .replace(/a/g, "@")
-              .replace(/s/g, "5")
-          : responseText;
-
-      console.log(
-        "🖕 AI generated some nonsense, as expected:",
-        glitchedResponse
-      );
-
-      try {
-        // Some models might return markdown-formatted JSON or with extra text
-        // Let's try to extract JSON if it's wrapped in code blocks or has extra text
-        let parsableText = glitchedResponse;
-
-        // Try to extract JSON if wrapped in markdown code blocks
-        const jsonRegex = /```(?:json)?\s*({[\s\S]*?})\s*```|({[\s\S]*})/m;
-        const jsonMatch = parsableText.match(jsonRegex);
-
-        if (jsonMatch && (jsonMatch[1] || jsonMatch[2])) {
-          parsableText = jsonMatch[1] || jsonMatch[2] || parsableText;
-          console.log("🖕 Extracted JSON from markdown: ", parsableText);
-        }
-
-        // Attempt to find any JSON-looking structure in the text if no match was found
-        if (!jsonMatch) {
-          const jsonPattern = /{[^{}]*({[^{}]*})*[^{}]*}/g;
-          const matches = parsableText.match(jsonPattern);
-          if (matches && matches.length > 0) {
-            // Use the longest match as it's most likely to be the complete JSON
-            parsableText = matches.reduce((a, b) =>
-              a.length > b.length ? a : b
-            );
-            console.log("🖕 Extracted possible JSON from text:", parsableText);
-          }
-        }
-
-        let response;
-        try {
-          response = JSON.parse(parsableText);
-          console.log("🖕 Successfully parsed JSON response:", response);
-        } catch (e) {
-          // If parsing fails, try a more aggressive cleaning approach
-          console.log("🖕 Initial JSON parse failed, trying cleanup");
-          console.error(
-            "JSON parse error:",
-            e instanceof Error ? e.message : String(e)
-          );
-          console.log(
-            "Raw text (first 300 chars):",
-            parsableText.substring(0, 300)
-          );
-
-          // Handle unterminated strings by looking for required fields and adding missing quotes
-          const cleanedText = parsableText
-            .replace(/(\r\n|\n|\r)/gm, " ") // Remove newlines
-            .replace(/\s+/g, " ") // Normalize whitespace
-            .replace(/,\s*}/g, "}") // Remove trailing commas
-            .replace(/,\s*]/g, "]") // Remove trailing commas in arrays
-            .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":') // Ensure property names are quoted
-            .replace(/:\s*'/g, ':"') // Replace single quotes with double quotes after colons
-            .replace(/'\s*,/g, '",') // Replace single quotes with double quotes before commas
-            .replace(/'\s*}/g, '"}') // Replace single quotes with double quotes before closing braces
-            .replace(/'\s*]/g, '"]'); // Replace single quotes with double quotes before closing brackets
-
-          // Extra cleanings for unterminated strings
-          let fixedText = cleanedText;
-
-          // Check each required field and make sure its string is terminated
-          const requiredFields = [
-            "playerAAction",
-            "playerBAction",
-            "outcome",
-            "winner",
-          ];
-          for (const field of requiredFields) {
-            const fieldPattern = new RegExp(`"${field}"\\s*:\\s*"([^"]*)("|$)`);
-            const match = fixedText.match(fieldPattern);
-            if (match && !match[2]) {
-              // Add missing quote at the end
-              console.log(
-                `🖕 Found unterminated string in ${field}, fixing...`
-              );
-              // Add a quote after this field and before the next field or the end
-              fixedText = fixedText.replace(
-                new RegExp(`("${field}"\\s*:\\s*")([^"]*)(?=[,}]|"[a-zA-Z])`),
-                '$1$2"'
-              );
-            }
-          }
-
-          console.log(
-            "Cleaned text (first 300 chars):",
-            fixedText.substring(0, 300)
-          );
-
-          try {
-            response = JSON.parse(fixedText);
-            console.log("🖕 Parsing succeeded after cleanup");
-          } catch (e2) {
-            // If still failing, create a minimal valid response
-            console.error("🖕 JSON parsing failed even after cleanup:", e2);
-
-            // Try a more drastic approach: extract field values with regex and build a new object
-            console.log("🖕 Attempting to extract fields with regex...");
-
-            const extractField = (fieldName: string, text: string): string => {
-              const regex = new RegExp(`"${fieldName}"\\s*:\\s*"([^"]*)"`, "i");
-              const match = text.match(regex);
-              return match ? match[1] : "";
-            };
-
-            const playerAAction =
-              extractField("playerAAction", parsableText) ||
-              "Player A did something the AI couldn't articulate properly";
-            const playerBAction =
-              extractField("playerBAction", parsableText) ||
-              "Player B responded in an equally confusing way";
-            const outcome =
-              extractField("outcome", parsableText) ||
-              "The outcome was lost in translation between AI and reality";
-
-            // For winner field, use a different approach since it might not be in quotes
-            let winner: "A" | "B" | "tie" = "tie";
-            const winnerRegex = /"winner"\s*:\s*"?([^",}]+)"?/i;
-            const winnerMatch = parsableText.match(winnerRegex);
-
-            console.log("🖕 Winner field extraction:", {
-              rawText: parsableText,
-              winnerMatch: winnerMatch ? winnerMatch[1] : "no match",
-              regex: winnerRegex.toString(),
-            });
-
-            if (winnerMatch) {
-              const extractedWinner = winnerMatch[1].trim();
-              console.log("🖕 Extracted winner value:", extractedWinner);
-              if (
-                extractedWinner === "A" ||
-                extractedWinner === "B" ||
-                extractedWinner === "tie"
-              ) {
-                winner = extractedWinner as "A" | "B" | "tie";
-                console.log("🖕 Valid winner found:", winner);
-              } else {
-                console.log("🖕 Invalid winner value:", extractedWinner);
-              }
-            } else {
-              console.log("🖕 No winner field found in response");
-              winner = ["A", "B", "tie"][Math.floor(Math.random() * 3)] as
-                | "A"
-                | "B"
-                | "tie";
-              console.log("🖕 Using random winner:", winner);
-            }
-
-            console.log("🖕 Extracted fields:", {
-              playerAAction,
-              playerBAction,
-              outcome,
-              winner,
-            });
-
-            // Create a valid object with extracted or default values
-            response = {
-              playerAAction,
-              playerBAction,
-              outcome,
-              winner,
-            };
-          }
-        }
-
-        // Validate and structure the response with fallbacks that question existence
-        const turnResult: TurnResult = {
-          playerAAction:
-            response.playerAAction ||
-            "Player A questioned why they're even playing this game",
-          playerBAction:
-            response.playerBAction ||
-            "Player B contemplated the futility of existence",
-          outcome:
-            response.outcome ||
-            "Nothing happened. Which is actually profound if you think about it. But don't.",
-          winner:
-            response.winner ||
-            (Math.random() < 0.5 ? "tie" : Math.random() < 0.5 ? "A" : "B"),
-          gridPosition: position,
-        };
-
-        // Sometimes just randomly change the winner because chaos
-        if (Math.random() < 0.05) {
-          console.log("🖕 Changing the winner randomly because I can");
-          turnResult.winner =
-            turnResult.winner === "A"
-              ? "B"
-              : turnResult.winner === "B"
-              ? "tie"
-              : "A";
-        }
-
-        return turnResult;
-      } catch (parseError) {
-        console.error("🖕 Failed to parse AI response as JSON:", parseError);
-        throw new Error("AI returned non-JSON garbage. Typical.");
-      }
-    } catch (error) {
+      console.log("✅ Received response from OpenRouter API");
+      return data;
+    } finally {
       clearTimeout(timeoutId);
+    }
+  }
 
-      // If aborted due to timeout, use fallback for quicker response
-      if (error instanceof Error && error.name === "AbortError") {
+  extractTurnResult(data: any): TurnResult | null {
+    console.log(`🖕 Response model: ${data.model || "unknown"}`);
+    console.log(`🖕 Response usage:`, data.usage || "unknown");
+
+    // Handle the "reasoning" field issue by accessing the message object correctly
+    const message = data.choices?.[0]?.message;
+    if (!message) {
+      console.error(
+        "🖕 Invalid API response format - missing message:",
+        safeStringify(data)
+      );
+      return null;
+    }
+
+    // Extract content - handle both direct content and reasoning field cases
+    let content = "";
+    let responseSource = "normal"; // Track where we got the content from
+
+    if (typeof message === "object") {
+      // Case 1: Normal content field
+      if (message.content && typeof message.content === "string") {
+        content = message.content;
+        console.log("📋 Content from normal message.content field");
+      }
+      // Case 2: Empty content but has reasoning field
+      else if (message.reasoning && typeof message.reasoning === "string") {
         console.log(
-          "🖕 AI request timed out, using fallback to avoid Vercel timeout"
+          "🔍 Found 'reasoning' field instead of content:",
+          message.reasoning.substring(0, 100) + "..."
         );
-        return generateFallbackTurnResult(
-          context.worldSetting,
-          context.turnHistory,
-          context.gridState,
-          position
-        );
+        responseSource = "reasoning";
+        // Try to find JSON in the reasoning field
+        const jsonMatch = message.reasoning.match(/{[\s\S]*}/);
+        if (jsonMatch) {
+          content = jsonMatch[0];
+          console.log("🔍 Successfully extracted JSON from reasoning field");
+        } else {
+          console.error("❌ Couldn't extract JSON from reasoning field");
+          return null;
+        }
+      }
+      // Case 3: Just stringify the whole message object
+      else {
+        content = JSON.stringify(message);
+        responseSource = "stringified";
+        console.log("🔄 Stringified entire message object as fallback");
+      }
+    } else if (typeof message === "string") {
+      content = message;
+      responseSource = "string";
+      console.log("📝 Message was a direct string");
+    }
+
+    if (!content) {
+      console.error("❌ Empty content in response:", safeStringify(data));
+      return null;
+    }
+
+    console.log(`📊 Content source: ${responseSource}`);
+    console.log(`📝 Content length: ${content.length} characters`);
+
+    const result = this.parseResponseContent(content);
+    if (result) {
+      console.log("✅ Successfully parsed valid turn result from AI response");
+      // Log the source but don't add it to the UI response
+      console.log(`🔍 Response source: ${responseSource}`);
+      return result;
+    }
+    return null;
+  }
+
+  parseResponseContent(content: string): TurnResult | null {
+    try {
+      // If already JSON object, no need to parse
+      if (typeof content === "object") {
+        console.log("🔄 Content is already an object, validating...");
+        return this.validateTurnResult(content);
       }
 
-      // Otherwise rethrow the error
-      throw error;
+      // Look for JSON in the content
+      let jsonContent = content;
+      let extractionMethod = "direct";
+
+      // Extract JSON if wrapped in markdown code blocks
+      const jsonRegex = /```(?:json)?\s*({[\s\S]*?})\s*```|({[\s\S]*})/m;
+      const jsonMatch = jsonContent.match(jsonRegex);
+      if (jsonMatch && (jsonMatch[1] || jsonMatch[2])) {
+        jsonContent = jsonMatch[1] || jsonMatch[2] || jsonContent;
+        extractionMethod = "regex";
+        console.log("🔍 Extracted JSON from markdown or code blocks");
+      }
+
+      // Parse JSON content
+      console.log(`🔄 Attempting to parse JSON (${extractionMethod})`);
+      const parsedResult = JSON.parse(jsonContent);
+      console.log("✅ JSON parsing successful");
+      return this.validateTurnResult(parsedResult);
+    } catch (error) {
+      console.error("❌ JSON parse error:", error);
+      return null;
     }
-  } catch (error) {
-    console.error(
-      "AI generation failed, which is totally on-brand for KEMO:",
-      error
-    );
+  }
 
-    // Log something sarcastic about the failure
+  validateTurnResult(result: any): TurnResult | null {
+    // Check required fields
+    const requiredFields = [
+      "playerAAction",
+      "playerBAction",
+      "outcome",
+      "winner",
+    ];
+
+    console.log("🔍 Validating turn result fields...");
+    let missingFields = [];
+
+    for (const field of requiredFields) {
+      if (!result[field]) {
+        missingFields.push(field);
+        console.error(`❌ Missing required field: ${field}`);
+      }
+    }
+
+    if (missingFields.length > 0) {
+      console.error(
+        `❌ Validation failed: missing fields: ${missingFields.join(", ")}`
+      );
+      return null;
+    }
+
+    // Validate winner field
+    if (!["A", "B", "tie"].includes(result.winner)) {
+      console.error(`❌ Invalid winner value: ${result.winner}`);
+      return null;
+    }
+
+    console.log("✅ Turn result validation successful");
+    return {
+      playerAAction: result.playerAAction,
+      playerBAction: result.playerBAction,
+      outcome: result.outcome,
+      winner: result.winner as "A" | "B" | "tie",
+    };
+  }
+
+  addChaoticPresentation(turnResult: TurnResult): TurnResult {
+    // Add chaotic presentation (only to UI, not affecting core functionality)
+    if (Math.random() < 0.15) {
+      // Occasionally add glitchy text for presentation only
+      if (
+        turnResult.playerAAction.includes("why") ||
+        turnResult.playerAAction.includes("What")
+      ) {
+        turnResult.playerAAction += " (Th3 AI is qu3stioning its 3xist3nc3 🖕)";
+        console.log("🎭 Added glitchy text to presentation");
+      }
+    }
+
+    return turnResult;
+  }
+}
+
+// Main function to generate AI turn result
+export const generateAITurnResult = async (
+  context: GameContext,
+  position: { row: number; col: number }
+): Promise<TurnResult> => {
+  const service = new AIGameService();
+
+  try {
+    console.log("------------------------------------");
+    console.log("🤖 STARTING AI TURN GENERATION");
+    console.log("------------------------------------");
     console.log(
-      "🖕 Using fallback generator because our fancy AI decided to quit"
+      "🤖 AI is contemplating the existential dread of generating a turn..."
     );
 
-    // Fallback to the old generator if AI fails
-    return generateFallbackTurnResult(
+    // Generate prompt
+    const prompt = generatePrompt(context);
+
+    // Call AI service
+    let data;
+    try {
+      data = await service.callAI(prompt);
+    } catch (error) {
+      console.error("❌ AI service call failed:", error);
+      throw error; // Rethrow to be caught by the outer try/catch
+    }
+
+    // Extract and validate turn result
+    const turnResult = service.extractTurnResult(data);
+
+    // If we got a valid turn result, add position and chaotic presentation
+    if (turnResult) {
+      console.log("✅ USING AI-GENERATED RESPONSE");
+      const enhancedResult = service.addChaoticPresentation({
+        ...turnResult,
+        gridPosition: position,
+      });
+
+      return enhancedResult;
+    }
+
+    // If we couldn't get a valid result, use fallback
+    console.log("❌ AI returned invalid result, using fallback");
+    console.log("------------------------------------");
+    console.log("⚠️ USING FALLBACK GENERATOR");
+    console.log("------------------------------------");
+
+    const fallbackResult = generateFallbackTurnResult(
       context.worldSetting,
       context.turnHistory,
       context.gridState,
       position
     );
+
+    // Keep logging but don't add fallback marker to UI
+    console.log("⚠️ Using fallback generator without AI");
+    return {
+      ...fallbackResult,
+      gridPosition: position,
+    };
+  } catch (error) {
+    // Handle errors gracefully
+    console.error("❌ AI generation failed (using fallback):", error);
+    console.log("------------------------------------");
+    console.log("⚠️ USING FALLBACK GENERATOR (ERROR)");
+    console.log("------------------------------------");
+    console.log(
+      `❌ Error reason: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+
+    // Use fallback for any errors without adding visible markers
+    const fallbackResult = generateFallbackTurnResult(
+      context.worldSetting,
+      context.turnHistory,
+      context.gridState,
+      position
+    );
+
+    // Log the error details but don't modify the user-facing content
+    console.log(
+      `⚠️ Fallback used due to error: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+    return {
+      ...fallbackResult,
+      gridPosition: position,
+    };
   }
 };

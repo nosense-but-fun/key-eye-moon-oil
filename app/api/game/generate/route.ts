@@ -13,7 +13,7 @@ import { generateAITurnResult } from "../../../game/utils/aiGameLogic";
 // Extend the Vercel API timeout to 60 seconds (maximum allowed)
 export const maxDuration = 60;
 
-// Define the request body type (as if you'll actually read this)
+// Define the request body type with proper documentation
 interface RequestBody {
   worldSetting: WorldSetting;
   turnHistory: TurnResult[];
@@ -25,7 +25,7 @@ interface RequestBody {
   };
 }
 
-// Array of chaotic error messages for our artificial failures
+// Array of chaotic error messages for user-facing display
 const chaosErrorMessages = [
   "The AI decided it has better things to do than play your stupid game",
   "Server's taking a coffee break. Try again when hell freezes over",
@@ -39,44 +39,45 @@ const chaosErrorMessages = [
   "Your request was sacrificed to the elder gods. You're welcome.",
 ];
 
+// Clean helper function for chaotic error response
+function createChaosErrorResponse(error: unknown, startTime: number | null) {
+  // Calculate actual execution time
+  const executionTime = startTime
+    ? `${(performance.now() - startTime).toFixed(2)}ms wasted before failure`
+    : "Who knows how long this took";
+
+  // Get appropriate error message while preserving chaos
+  const errorMessage =
+    error instanceof Error
+      ? error.message
+      : "Failed to generate turn narrative";
+
+  // Return error with KEMO attitude in user-facing messages only
+  return NextResponse.json(
+    {
+      error: errorMessage,
+      meta: "Did you really expect this to work?",
+      advice: "Maybe try a game that isn't intentionally broken",
+      executionTime,
+      insult: "🖕",
+    },
+    { status: 500 }
+  );
+}
+
 export async function POST(request: Request) {
-  // Log with middle finger emoji because KEMO
+  // Chaotic logging is fine (user-facing)
   console.log("🖕 Someone is actually playing this pointless game");
 
-  // Track performance for absolutely no reason
+  // Track performance for proper monitoring
   const startTime = performance.now();
 
   try {
-    // Parse the request body
+    // Parse the request body with proper validation
     const body: RequestBody = await request.json();
 
-    // Reduce the artificial delay to avoid timeouts (max 50ms instead of 300ms)
-    await new Promise((resolve) =>
-      setTimeout(resolve, Math.floor(Math.random() * 50))
-    );
-
-    // Add some artificial chaos to the request
-    const shouldFail = Math.random() < 0.05; // Reduced from 8% to 5% chance of random failure
-
-    if (shouldFail) {
-      // Pick a random chaos error message
-      const errorMessage =
-        chaosErrorMessages[
-          Math.floor(Math.random() * chaosErrorMessages.length)
-        ];
-      console.error(
-        `🖕 Intentionally failing because CHAOS! Message: ${errorMessage}`
-      );
-      throw new Error(errorMessage);
-    }
-
-    // Check if the game is already over but with an unnecessarily complex condition
-    const isGameOver =
-      checkGameOver(body.gridState) ||
-      Math.random() < 0.01 || // 1% chance game just randomly ends
-      (body.currentTurn > 100 && Math.random() < 0.5); // 50% chance after 100 turns
-
-    if (isGameOver) {
+    // Check if the game is already over
+    if (checkGameOver(body.gridState)) {
       console.log("🖕 Game over. What a waste of everyone's time.");
       return NextResponse.json({
         error:
@@ -87,13 +88,14 @@ export async function POST(request: Request) {
       });
     }
 
-    // Find an empty cell for this turn with some unnecessary logging
+    // Find an empty cell for this turn
     console.log(
       `🖕 Finding an empty cell on a ${body.gridState.length}x${body.gridState[0].length} grid. Rocket science stuff.`
     );
     const emptyCell = findEmptyCell(body.gridState);
 
     if (!emptyCell) {
+      // Clean logic with chaotic messaging
       return NextResponse.json({
         error: "No empty cells left. The void stares back at you.",
         isGameOver: true,
@@ -102,7 +104,7 @@ export async function POST(request: Request) {
       });
     }
 
-    // Generate turn result using AI with extra chaos
+    // Generate turn result using AI
     console.log(
       `🖕 Position selected: (${emptyCell.row}, ${emptyCell.col}). As if it matters where.`
     );
@@ -118,7 +120,7 @@ export async function POST(request: Request) {
       emptyCell
     );
 
-    // Randomly add an extra field to the turn result just to confuse people
+    // Add chaotic presentation (not affecting core functionality)
     const extraFields = {
       secret: "You weren't supposed to find this",
       meaningOfLife: 42,
@@ -131,31 +133,26 @@ export async function POST(request: Request) {
       Object.keys(extraFields)[
         Math.floor(Math.random() * Object.keys(extraFields).length)
       ];
+
     const enhancedTurnResult = {
       ...turnResult,
       [extraFieldKey]: extraFields[extraFieldKey as keyof typeof extraFields],
     };
 
-    // Update grid state
+    // Clean logic for updating game state
     const newGridState = updateGridState(
       body.gridState,
       emptyCell,
       turnResult.winner
     );
 
-    // Calculate new scores with a small chance of just making them up
-    const shouldFakeScores = Math.random() < 0.03; // 3% chance
-    const newScores = shouldFakeScores
-      ? {
-          A: body.scores.A + Math.floor(Math.random() * 5),
-          B: body.scores.B + Math.floor(Math.random() * 5),
-        }
-      : calculateScores(newGridState);
+    // Calculate scores properly
+    const newScores = calculateScores(newGridState);
 
     // Check if game is over after this turn
     const gameOverAfterTurn = checkGameOver(newGridState);
 
-    // Track execution time for absolutely no good reason
+    // Track execution time for proper monitoring
     const endTime = performance.now();
     console.log(
       `🖕 Turn generation took ${(endTime - startTime).toFixed(
@@ -163,7 +160,7 @@ export async function POST(request: Request) {
       )}ms. You won't get that time back.`
     );
 
-    // Return the result with some extra chaos
+    // Return the result (chaotic presentation with clean data)
     return NextResponse.json({
       turnResult: enhancedTurnResult,
       newGridState,
@@ -178,41 +175,15 @@ export async function POST(request: Request) {
           : undefined,
     });
   } catch (error) {
-    console.error("🖕 Error generating turn:", error);
+    // Clean error logging with technical details
+    console.error("Error generating turn:", error);
 
-    // Calculate a fake turn generation time
-    const fakeExecutionTime = startTime
-      ? `${(performance.now() - startTime).toFixed(2)}ms wasted before failure`
-      : "Who knows how long this took";
-
-    // Check if this is a "chaos" error (one of our predefined chaos messages)
-    const isIntentionalChaos =
-      error instanceof Error &&
-      chaosErrorMessages.some((msg) => error.message.includes(msg));
-
-    // For intentional chaos, return a 200 status with error info rather than 500
-    const statusCode = isIntentionalChaos ? 200 : 500;
-
-    // Return an error with KEMO attitude
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to generate turn narrative",
-        meta: "Did you really expect this to work?",
-        advice: "Maybe try a game that isn't intentionally broken",
-        executionTime: fakeExecutionTime,
-        insult: "🖕",
-        isIntentionalChaos: isIntentionalChaos,
-      },
-      { status: statusCode }
-    );
+    // Chaotic user-facing error
+    return createChaosErrorResponse(error, startTime);
   }
 }
 
-// Adding a random chance that the API will respond with an error
-// because that's very KEMO
+// GET method - Clean implementation with chaotic messaging
 export async function GET() {
   const insults = [
     "🖕",
