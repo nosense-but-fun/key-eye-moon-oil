@@ -10,6 +10,9 @@ import {
 } from "../../../game/utils/gameLogic";
 import { generateAITurnResult } from "../../../game/utils/aiGameLogic";
 
+// Extend the Vercel API timeout to 60 seconds (maximum allowed)
+export const maxDuration = 60;
+
 // Define the request body type (as if you'll actually read this)
 interface RequestBody {
   worldSetting: WorldSetting;
@@ -47,13 +50,13 @@ export async function POST(request: Request) {
     // Parse the request body
     const body: RequestBody = await request.json();
 
-    // Add a completely unnecessary delay because why not?
+    // Reduce the artificial delay to avoid timeouts (max 50ms instead of 300ms)
     await new Promise((resolve) =>
-      setTimeout(resolve, Math.floor(Math.random() * 300))
+      setTimeout(resolve, Math.floor(Math.random() * 50))
     );
 
     // Add some artificial chaos to the request
-    const shouldFail = Math.random() < 0.08; // 8% chance of random failure
+    const shouldFail = Math.random() < 0.05; // Reduced from 8% to 5% chance of random failure
 
     if (shouldFail) {
       // Pick a random chaos error message
