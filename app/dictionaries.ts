@@ -44,10 +44,61 @@ const dictionaries: Record<ValidLanguage, Record<string, DictionaryLoader>> = {
 };
 
 /**
- * Get the dictionary for the specified language and tone
- * @param {string} locale - The language code (e.g., 'en', 'zh')
- * @param {string} tone - The tone (e.g., 'normal', 'chaotic', 'standard', 'internet')
- * @returns {Promise<object>} - The dictionary object
+ * Deep merge two dictionaries, with fallback values for missing fields
+ */
+const mergeDictionaries = (
+  target: Dictionary,
+  fallback: Dictionary
+): Dictionary => {
+  const result: Dictionary = { ...fallback };
+
+  for (const key in target) {
+    const targetValue = target[key];
+    const fallbackValue = fallback[key];
+
+    if (
+      targetValue &&
+      fallbackValue &&
+      typeof targetValue === "object" &&
+      typeof fallbackValue === "object" &&
+      !Array.isArray(targetValue) &&
+      !Array.isArray(fallbackValue)
+    ) {
+      // Recursively merge nested objects
+      result[key] = mergeDictionaries(targetValue, fallbackValue);
+    } else if (targetValue !== undefined) {
+      // Use target value if it exists
+      result[key] = targetValue;
+    }
+    // If target value is undefined, keep fallback value
+  }
+
+  return result;
+};
+
+/**
+ * Try to load a dictionary, returning null if it fails
+ */
+const tryLoadDictionary = async (
+  locale: ValidLanguage,
+  tone: string
+): Promise<Dictionary | null> => {
+  try {
+    const dictionary = await dictionaries[locale][tone]();
+    return dictionary;
+  } catch (error) {
+    console.warn(`Failed to load dictionary for ${locale}/${tone}`);
+    return null;
+  }
+};
+
+/**
+ * Get the dictionary for the specified language and tone with fallback chain:
+ * 1. Try requested language + tone
+ * 2. Try requested language + default tone for that language
+ * 3. Try English + normal tone (base fallback)
+ *
+ * For each level, we merge with the fallback dictionary to ensure all keys exist
  */
 export const getDictionary = async (
   locale: string,
@@ -68,7 +119,6 @@ export const getDictionary = async (
   const defaultTone = defaultTones[validatedLocale];
 
   // Validate tone is valid for this language
-  let validatedTone = tone;
   const isValidTone =
     validatedLocale === "en"
       ? validTones.en.includes(tone as any)
@@ -78,11 +128,42 @@ export const getDictionary = async (
     console.warn(
       `Invalid tone for ${validatedLocale}: ${tone}, falling back to ${defaultTone}`
     );
-    validatedTone = defaultTone;
   }
 
-  // Return the dictionary
-  return dictionaries[validatedLocale][validatedTone]();
+  // Load the base fallback dictionary (English normal)
+  const baseDictionary = await tryLoadDictionary("en", "normal");
+  if (!baseDictionary) {
+    throw new Error("Failed to load base dictionary (en/normal)");
+  }
+
+  let resultDictionary = baseDictionary;
+
+  // If not English, try to merge with the target language's default tone
+  if (validatedLocale !== "en") {
+    const defaultLangDictionary = await tryLoadDictionary(
+      validatedLocale,
+      defaultTone
+    );
+    if (defaultLangDictionary) {
+      resultDictionary = mergeDictionaries(
+        defaultLangDictionary,
+        resultDictionary
+      );
+    }
+  }
+
+  // Finally, try to merge with the requested tone if different from default
+  if (isValidTone && tone !== defaultTone) {
+    const requestedDictionary = await tryLoadDictionary(validatedLocale, tone);
+    if (requestedDictionary) {
+      resultDictionary = mergeDictionaries(
+        requestedDictionary,
+        resultDictionary
+      );
+    }
+  }
+
+  return resultDictionary;
 };
 
 /**
