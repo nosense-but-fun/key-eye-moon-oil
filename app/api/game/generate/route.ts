@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import {
+  WorldSetting,
   TurnResult,
   GridState,
-  WorldSetting,
+  GameContext,
   checkGameOver,
   findEmptyCell,
   updateGridState,
   calculateScores,
-} from "../../../game/utils/gameLogic";
-import { generateAITurnResult } from "../../../game/utils/aiGameLogic";
+} from "../../../[lang]/game/utils/gameLogic";
+import { generateAITurnResult } from "../../../[lang]/game/utils/aiGameLogic";
 
 // Extend the Vercel API timeout to 60 seconds (maximum allowed)
 export const maxDuration = 60;

@@ -29,7 +29,7 @@ const tools = [
     title: "AI Narrative Battle",
     description:
       "Watch two AIs fight to the death in a pointless grid war. It's like chess, if chess made no sense and was narrated by a drunk poet.",
-    href: "/game",
+    href: `/${defaultLanguage}/game`,
     code: "wasteTime(brain) → questionLife",
   },
 ];
