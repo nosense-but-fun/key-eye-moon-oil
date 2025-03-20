@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: true
----
- ---
 name: Internationalization Rules
 description: Guidelines for maintaining and expanding KEMO's multilingual support
 globs: ["app/**/*.{ts,tsx,jsx,json}"]
@@ -146,4 +141,4 @@ As with all KEMO features, maintain irreverent tone in all languages while ensur
 1. Translations preserve the KEMO vibe
 2. Error messages are equally sarcastic across languages
 3. Language switching logic works flawlessly beneath the chaos
-4. Add random 10% chance of complaining about the selected language
+4. Add random 10% chance of complaining about the selected language 
