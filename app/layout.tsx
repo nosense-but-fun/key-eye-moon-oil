@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import LanguageDetectorInitializer from "./components/LanguageDetectorInitializer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,5 +16,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <html data-next-lang-support="true">{children}</html>;
+  return (
+    <html data-next-lang-support="true">
+      {/* Initialize language detector */}
+      <LanguageDetectorInitializer />
+      {children}
+    </html>
+  );
 }

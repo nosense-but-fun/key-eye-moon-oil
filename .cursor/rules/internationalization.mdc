@@ -1,0 +1,149 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+ ---
+name: Internationalization Rules
+description: Guidelines for maintaining and expanding KEMO's multilingual support
+globs: ["app/**/*.{ts,tsx,jsx,json}"]
+alwaysApply: true
+---
+
+# KEMO Internationalization Guidelines
+
+## Core Principles
+
+The KEMO application supports multiple languages with different tones, following these principles:
+
+1. **Server-First Rendering**: Language content is primarily determined server-side
+2. **Client Hydration**: Client-side language switching without full page reloads
+3. **Chaotic but Functional**: Multiple language/tone combinations with KEMO's signature irreverence
+
+## HTML Lang Attribute Handling
+
+### The Next.js 14+ Hydration Pattern
+
+```tsx
+// 1. Root layout should use data-attribute instead of fixed lang
+// app/layout.tsx
+export default function RootLayout({ children }) {
+  return (
+    <html data-next-lang-support="true">
+      {children}
+    </html>
+  );
+}
+
+// 2. Language-specific layout should set lang client-side
+// app/[lang]/layout.tsx
+import Script from "next/script";
+
+export default async function LanguageLayout({ children, params }) {
+  const { lang } = await params; // MUST await params in Next.js 14+
+  const dictionary = await getDictionary(lang, tone);
+  const htmlLang = dictionary.layout.html_lang;
+
+  return (
+    <>
+      <Script id="set-html-lang" strategy="afterInteractive">
+        {`
+          if (document && document.documentElement) {
+            document.documentElement.lang = "${htmlLang}";
+          }
+        `}
+      </Script>
+      <body>
+        <LanguageProvider initialLanguage={lang} initialTone={tone}>
+          {children}
+        </LanguageProvider>
+      </body>
+    </>
+  );
+}
+```
+
+## Dictionary Structure
+
+Dictionaries should maintain consistent structure across languages:
+
+```json
+{
+  "layout": {
+    "html_lang": "en", // ISO language code
+    "title": "Page Title",
+    "description": "Page Description"
+  },
+  "section": {
+    "key": "Value",
+    // Add nested structures as needed
+  }
+}
+```
+
+## Server Component Requirements
+
+In Next.js 14+, always await dynamic route parameters:
+
+```tsx
+// CORRECT: Await params before using
+export default async function Page({ 
+  params 
+}: { 
+  params: Promise<{ lang: string }> 
+}) {
+  const { lang } = await params;
+  // Now use lang
+}
+
+// WRONG: Not awaiting params
+export default function Page({ 
+  params 
+}: { 
+  params: { lang: string } 
+}) {
+  const { lang } = params; // Will cause hydration errors
+}
+```
+
+## Client-Side Language Switching
+
+Use the LanguageContext for client-side switches:
+
+```tsx
+// In client components
+"use client";
+import { useLanguage } from "@/app/contexts/LanguageContext";
+
+export function LanguageSelector() {
+  const { language, setLanguage } = useLanguage();
+  // Implement language switching
+}
+```
+
+## Adding New Languages
+
+To add a new language:
+
+1. Add language code to `validLanguages` in `app/dictionaries.ts`
+2. Create dictionary files in `app/dictionaries/[lang]/[tone].json`
+3. Add language display name to `getLanguages()` function
+4. Define valid tones in `validTones` object
+
+## Testing Language Switching
+
+Always test for these hydration issues:
+
+1. Initial page load in different languages
+2. Switching languages client-side
+3. Direct navigation to language routes
+4. Refresh after language change
+
+## Middle Finger Rule 🖕
+
+As with all KEMO features, maintain irreverent tone in all languages while ensuring:
+
+1. Translations preserve the KEMO vibe
+2. Error messages are equally sarcastic across languages
+3. Language switching logic works flawlessly beneath the chaos
+4. Add random 10% chance of complaining about the selected language
