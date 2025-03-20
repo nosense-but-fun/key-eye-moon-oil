@@ -4,8 +4,60 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "@/app/contexts/LanguageContext";
 
 export default function RandomPicker() {
+  console.log("[RandomPicker] Component rendering");
+
   const { dictionary } = useLanguage();
-  const dict = dictionary.random_picker_tool;
+  console.log("[RandomPicker] Received dictionary:", {
+    exists: !!dictionary,
+    keys: dictionary ? Object.keys(dictionary) : [],
+    randomPickerTool: dictionary?.random_picker_tool
+      ? Object.keys(dictionary.random_picker_tool)
+      : "undefined",
+  });
+
+  // Validate dictionary structure and provide fallbacks
+  const dict = {
+    title: dictionary?.random_picker_tool?.title || "Random Picker",
+    description:
+      dictionary?.random_picker_tool?.description ||
+      "Pick a random option from your list",
+    input: {
+      title: dictionary?.random_picker_tool?.input?.title || "Options",
+      option_placeholder:
+        dictionary?.random_picker_tool?.input?.option_placeholder ||
+        "Enter an option",
+      add_button:
+        dictionary?.random_picker_tool?.input?.add_button || "Add Option",
+      remove_button:
+        dictionary?.random_picker_tool?.input?.remove_button || "Remove",
+    },
+    button: {
+      default: dictionary?.random_picker_tool?.button?.default || "Pick Random",
+      loading: dictionary?.random_picker_tool?.button?.loading || "Picking...",
+    },
+    validation: {
+      min_options:
+        dictionary?.random_picker_tool?.validation?.min_options ||
+        "Please add at least 2 options",
+      max_options:
+        dictionary?.random_picker_tool?.validation?.max_options ||
+        "Maximum 100 options allowed",
+      duplicate_options:
+        dictionary?.random_picker_tool?.validation?.duplicate_options ||
+        "Duplicate options are not allowed",
+    },
+    output: {
+      title: dictionary?.random_picker_tool?.output?.title || "Result",
+      copy_button: {
+        default:
+          dictionary?.random_picker_tool?.output?.copy_button?.default ||
+          "Copy",
+        copied:
+          dictionary?.random_picker_tool?.output?.copy_button?.copied ||
+          "Copied!",
+      },
+    },
+  };
 
   const [options, setOptions] = useState<string[]>([""]);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);

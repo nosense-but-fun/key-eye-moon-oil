@@ -5,6 +5,7 @@ import KemoHeader from "../components/KemoHeader";
 import KemoFooter from "../components/KemoFooter";
 import { LanguageProvider } from "../contexts/LanguageContext";
 import Script from "next/script";
+import LanguageDetectorInitializer from "../components/LanguageDetectorInitializer";
 import {
   getDictionary,
   defaultTones,
@@ -68,7 +69,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function RootLayout({
+export default async function LanguageLayout({
   children,
   params,
 }: Readonly<{
@@ -92,6 +93,9 @@ export default async function RootLayout({
 
   return (
     <>
+      {/* Initialize language detector */}
+      <LanguageDetectorInitializer />
+
       {/* Inline script to set HTML lang attribute on client side */}
       <Script id="set-html-lang" strategy="afterInteractive">
         {`
@@ -101,7 +105,7 @@ export default async function RootLayout({
         `}
       </Script>
 
-      <body
+      <div
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <LanguageProvider
@@ -113,7 +117,7 @@ export default async function RootLayout({
           <main className="flex-grow">{children}</main>
           <KemoFooter dictionary={dictionary} />
         </LanguageProvider>
-      </body>
+      </div>
     </>
   );
 }

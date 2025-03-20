@@ -100,6 +100,15 @@ export function LanguageProvider({
   initialTone,
   initialDictionary,
 }: LanguageProviderProps) {
+  console.log("[LanguageProvider] Initializing with:", {
+    initialLanguage,
+    initialTone,
+    initialDictionaryExists: !!initialDictionary,
+    initialDictionaryKeys: initialDictionary
+      ? Object.keys(initialDictionary)
+      : [],
+  });
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -154,12 +163,37 @@ export function LanguageProvider({
   });
 
   const [dictionary, setDictionary] = useState<any>(initialDictionary || {});
+  const [error, setError] = useState<Error | null>(null);
+
+  // Update dictionary when language or tone changes
+  const updateDictionary = async (lang: string, newTone: string) => {
+    console.log(
+      `[LanguageProvider] Updating dictionary for ${lang}/${newTone}`
+    );
+    try {
+      const newDictionary = await getDictionary(lang, newTone);
+      console.log(
+        "[LanguageProvider] Got new dictionary with keys:",
+        Object.keys(newDictionary)
+      );
+      setDictionary(newDictionary);
+      setError(null);
+    } catch (err) {
+      console.error("[LanguageProvider] Error updating dictionary:", err);
+      setError(
+        err instanceof Error ? err : new Error("Failed to load dictionary")
+      );
+      // Keep the previous dictionary to prevent complete UI failure
+    }
+  };
 
   // Handle language change
   const setLanguage = async (newLang: string) => {
+    console.log(`[LanguageProvider] Setting language to ${newLang}`);
+
     // Check if the language is valid
     if (newLang !== "en" && newLang !== "zh") {
-      console.warn(`Invalid language: ${newLang}`);
+      console.warn(`[LanguageProvider] Invalid language: ${newLang}`);
       return;
     }
 
@@ -181,13 +215,15 @@ export function LanguageProvider({
       : defaultTones.zh;
 
     if (!isValidTone) {
+      console.log(
+        `[LanguageProvider] Tone ${tone} not valid for ${newLang}, using ${newTone}`
+      );
       setToneState(newTone);
       setStorageItem(STORAGE_KEYS.TONE, newTone);
     }
 
     // Update dictionary
-    const newDictionary = await getDictionary(newLang, newTone);
-    setDictionary(newDictionary);
+    await updateDictionary(newLang, newTone);
 
     // Extract the current path without the language prefix
     const pathSegments = pathname.split("/").filter(Boolean);
@@ -211,11 +247,16 @@ export function LanguageProvider({
     newParams.set("tone", newTone);
 
     // Navigate to the new URL
+    console.log(
+      `[LanguageProvider] Navigating to ${newPath}?${newParams.toString()}`
+    );
     router.push(`${newPath}?${newParams.toString()}`);
   };
 
   // Handle tone change
   const setTone = async (newTone: string) => {
+    console.log(`[LanguageProvider] Setting tone to ${newTone}`);
+
     // Check if tone is valid for current language
     const isValidTone =
       language === "en"
@@ -223,7 +264,9 @@ export function LanguageProvider({
         : newTone === "standard" || newTone === "internet";
 
     if (!isValidTone) {
-      console.warn(`Invalid tone for ${language}: ${newTone}`);
+      console.warn(
+        `[LanguageProvider] Invalid tone for ${language}: ${newTone}`
+      );
       return;
     }
 
@@ -232,8 +275,7 @@ export function LanguageProvider({
     setStorageItem(STORAGE_KEYS.TONE, newTone);
 
     // Update dictionary
-    const newDictionary = await getDictionary(language, newTone);
-    setDictionary(newDictionary);
+    await updateDictionary(language, newTone);
 
     // Update URL query parameter
     const newParams = new URLSearchParams(searchParams.toString());
@@ -243,51 +285,66 @@ export function LanguageProvider({
 
   // Sync state with URL on navigation
   useEffect(() => {
-    // Extract language from path
-    const pathSegments = pathname.split("/").filter(Boolean);
-    const pathLang = pathSegments[0];
+    const updateFromURL = async () => {
+      console.log("[LanguageProvider] Updating from URL navigation");
 
-    // If valid language in path and different from current, update it
-    if ((pathLang === "en" || pathLang === "zh") && pathLang !== language) {
-      setLanguageState(pathLang);
-      setStorageItem(STORAGE_KEYS.LANGUAGE, pathLang);
-    }
+      // Extract language from path
+      const pathSegments = pathname.split("/").filter(Boolean);
+      const pathLang = pathSegments[0];
 
-    // Extract tone from query parameter
-    const urlTone = searchParams.get("tone");
-
-    // If valid tone for the current language, and different from current, update it
-    if (urlTone) {
-      const isValidTone =
-        language === "en"
-          ? urlTone === "normal" || urlTone === "chaotic"
-          : urlTone === "standard" || urlTone === "internet";
-
-      if (isValidTone && urlTone !== tone) {
-        setToneState(urlTone);
-        setStorageItem(STORAGE_KEYS.TONE, urlTone);
+      // If valid language in path and different from current, update it
+      if ((pathLang === "en" || pathLang === "zh") && pathLang !== language) {
+        console.log(`[LanguageProvider] URL language changed to ${pathLang}`);
+        setLanguageState(pathLang);
+        setStorageItem(STORAGE_KEYS.LANGUAGE, pathLang);
       }
-    }
 
-    // Update dictionary when language or tone changes
-    const updateDictionary = async () => {
-      const newDictionary = await getDictionary(language, tone);
-      setDictionary(newDictionary);
+      // Extract tone from query parameter
+      const urlTone = searchParams.get("tone");
+
+      // If valid tone for the current language, and different from current, update it
+      if (urlTone) {
+        const isValidTone =
+          language === "en"
+            ? urlTone === "normal" || urlTone === "chaotic"
+            : urlTone === "standard" || urlTone === "internet";
+
+        if (isValidTone && urlTone !== tone) {
+          console.log(`[LanguageProvider] URL tone changed to ${urlTone}`);
+          setToneState(urlTone);
+          setStorageItem(STORAGE_KEYS.TONE, urlTone);
+          await updateDictionary(language, urlTone);
+        }
+      }
     };
-    updateDictionary();
-  }, [pathname, searchParams, language, tone]);
 
-  const contextValue: LanguageContextType = {
-    language,
-    tone,
-    dictionary,
-    setLanguage,
-    setTone,
-  };
+    updateFromURL();
+  }, [pathname, searchParams]);
 
   return (
-    <LanguageContext.Provider value={contextValue}>
-      {children}
+    <LanguageContext.Provider
+      value={{
+        language,
+        tone,
+        dictionary,
+        setLanguage,
+        setTone,
+      }}
+    >
+      {error ? (
+        <div className="max-w-4xl mx-auto p-8">
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <h1 className="text-xl font-bold">Error Loading Language</h1>
+            <p>
+              Sorry, we encountered an error while loading the language
+              settings.
+            </p>
+            <p className="text-sm mt-2">Error: {error.message}</p>
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </LanguageContext.Provider>
   );
 }
