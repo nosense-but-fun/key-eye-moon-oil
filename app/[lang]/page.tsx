@@ -5,6 +5,7 @@ import {
   validLanguages,
   defaultLanguage,
 } from "../dictionaries";
+import GlitchyTitle from "../components/GlitchyTitle";
 
 // Define the dictionary type
 interface Dictionary {
@@ -82,13 +83,15 @@ export default async function Home({
       {/* ASCII Art Header - because we're too lazy for a real logo */}
       <div className="font-mono text-xs whitespace-pre my-8 hidden md:block">
         <pre>{`
-  _  __  _____ __  __  ___
- | |/ / | ____| \\/ | / _ \\ 
- | ' /  |  _| | |\\/| | | | |
- | . \\  | |___| |  | | |_| |
- |_|\\_\\ |_____|_|  |_|\\___/  
+  _____ _   _  ____    ___  
+ | ____| \\ / || __ \\  / _ \\ 
+ |  _|  \\ V / |  __/ | | | |
+ | |___  | |  | |\\ \\ | |_| |
+ |_____|_|_|  |_| \\_\\ \\___/ 
         `}</pre>
       </div>
+
+      {lang === "zh" && <GlitchyTitle />}
 
       <h1 className="text-3xl font-bold mb-8 text-center">
         {dictionary.home.welcome}

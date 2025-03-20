@@ -1,0 +1,213 @@
+/* Common styles */
+.glitchContainer {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.glitchText {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.char {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+
+/* Standard tone styles - elegant but glitchy */
+.standard .glitchText {
+  font-size: 2.25rem;
+  animation: glitch 0.3s infinite steps(2, jump-none);
+}
+
+.red {
+  color: #ef4444;
+}
+.red:hover {
+  transform: rotate(3deg) scale(1.1);
+}
+
+.blue {
+  color: #3b82f6;
+}
+.blue:hover {
+  transform: rotate(-6deg) scale(1.25);
+}
+
+.purple {
+  color: #8b5cf6;
+}
+.purple:hover {
+  transform: rotate(6deg) scale(1.1);
+}
+
+.green {
+  color: #10b981;
+}
+.green:hover {
+  transform: rotate(-3deg) scale(1.25);
+}
+
+.yellow {
+  color: #f59e0b;
+}
+.yellow:hover {
+  transform: rotate(3deg) scale(1.1);
+}
+
+.dot {
+  margin: 0 1rem;
+  animation: pulse 2s infinite;
+}
+
+/* Internet tone styles - more chaotic and colorful */
+.internet .glitchText {
+  font-size: 2.5rem;
+  animation: crazyGlitch 0.2s infinite steps(3, jump-none);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.redInternet {
+  color: #ff0000;
+}
+.redInternet:hover {
+  transform: rotate(15deg) scale(1.3);
+  animation: shake 0.5s infinite;
+}
+
+.blueInternet {
+  color: #00ff00;
+}
+.blueInternet:hover {
+  transform: rotate(-15deg) scale(1.4);
+  animation: bounce 0.5s infinite;
+}
+
+.purpleInternet {
+  color: #ff00ff;
+}
+.purpleInternet:hover {
+  transform: rotate(20deg) scale(1.3);
+  animation: spin 1s infinite;
+}
+
+.greenInternet {
+  color: #00ffff;
+}
+.greenInternet:hover {
+  transform: rotate(-20deg) scale(1.4);
+  animation: bounce 0.5s infinite;
+}
+
+.yellowInternet {
+  color: #ffff00;
+}
+.yellowInternet:hover {
+  transform: rotate(25deg) scale(1.3);
+  animation: shake 0.5s infinite;
+}
+
+.dotInternet {
+  display: inline-block;
+  margin: 0 0.5rem;
+  animation: jump 0.5s infinite;
+  font-size: 1.8rem;
+}
+
+/* Standard animations */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Internet tone animations */
+@keyframes crazyGlitch {
+  0% {
+    transform: translate(0) skew(0deg);
+  }
+  20% {
+    transform: translate(-4px, 4px) skew(5deg);
+  }
+  40% {
+    transform: translate(-4px, -4px) skew(-5deg);
+  }
+  60% {
+    transform: translate(4px, 4px) skew(-5deg);
+  }
+  80% {
+    transform: translate(4px, -4px) skew(5deg);
+  }
+  100% {
+    transform: translate(0) skew(0deg);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px) rotate(-5deg);
+  }
+  75% {
+    transform: translateX(5px) rotate(5deg);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes jump {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.2);
+  }
+}

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import LanguageSelector from "./LanguageSelector";
 import ToneSelector from "./ToneSelector";
+import { useLanguage } from "../contexts/LanguageContext";
 
 // The most unnecessary header component you'll ever see
 export default function EyroHeader({ dictionary }: { dictionary: any }) {
@@ -11,6 +12,7 @@ export default function EyroHeader({ dictionary }: { dictionary: any }) {
   const [middleFingerVisible, setMiddleFingerVisible] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const { language, tone } = useLanguage();
 
   const quotes = dictionary.header.quotes;
 
@@ -45,7 +47,7 @@ export default function EyroHeader({ dictionary }: { dictionary: any }) {
     <header className="w-full bg-black text-white p-4 flex flex-col md:flex-row justify-between items-center shadow-lg">
       <div className="flex items-center">
         <Link
-          href="/"
+          href={`/${language}?tone=${tone}`}
           className="text-2xl font-bold tracking-tight hover:text-gray-300 transition-colors"
           onMouseEnter={() => setMiddleFingerVisible(true)}
           onMouseLeave={() => setMiddleFingerVisible(false)}
@@ -68,11 +70,14 @@ export default function EyroHeader({ dictionary }: { dictionary: any }) {
         </span>
       </div>
 
-      <div className="flex items-center mt-4 md:mt-0">
+      <div className="flex items-center justify-between flex-1 md:flex-none">
         <nav className="mr-4">
           <ul className="flex space-x-4">
             <li>
-              <Link href="/" className="hover:text-gray-300 transition-colors">
+              <Link
+                href={`/${language}?tone=${tone}`}
+                className="hover:text-gray-300 transition-colors"
+              >
                 {dictionary.header.home}
               </Link>
             </li>

@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * KEMO Language Detector
+ * EYRO Language Detector
  *
  * A purposefully over-engineered utility that watches for language changes
  * and updates the HTML lang attribute accordingly. Also logs sarcastic messages
- * to the console because... KEMO.
+ * to the console because... EYRO.
  */
 
 interface LanguageDetectorOptions {

@@ -20,8 +20,8 @@ import Cookies from "js-cookie";
 
 // Storage keys
 const STORAGE_KEYS = {
-  LANGUAGE: "kemo-language",
-  TONE: "kemo-tone",
+  LANGUAGE: "EYRO-language",
+  TONE: "EYRO-tone",
 };
 
 // Cookie configuration

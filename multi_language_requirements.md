@@ -2,7 +2,7 @@
 
 ## Overview
 
-The KEMO Collection requires a two-level language system that allows users to experience content in different languages and tones.
+The EYRO Collection requires a two-level language system that allows users to experience content in different languages and tones.
 
 ## Level 1: Language Support
 
@@ -20,7 +20,7 @@ The KEMO Collection requires a two-level language system that allows users to ex
 ### English Tones
 
 1. **Normal** - Standard, straightforward communication
-2. **Chaotic** - Irreverent, nihilistic, and absurd language with KEMO's signature middle-finger attitude
+2. **Chaotic** - Irreverent, nihilistic, and absurd language with EYRO's signature middle-finger attitude
 
 ### Chinese Tones
 
