@@ -6,22 +6,43 @@ import LanguageSelector from "./LanguageSelector";
 import ToneSelector from "./ToneSelector";
 import { useLanguage } from "../contexts/LanguageContext";
 
+interface Dictionary {
+  header: {
+    home: string;
+    github: string;
+    loading: string;
+    quotes: string[];
+  };
+  language_selector: {
+    label: string;
+  };
+  tone_selector: {
+    label: string;
+  };
+}
+
 // The most unnecessary header component you'll ever see
-export default function EyroHeader({ dictionary }: { dictionary: any }) {
-  const [randomQuote, setRandomQuote] = useState("");
-  const [middleFingerVisible, setMiddleFingerVisible] = useState(false);
-  const [rotation, setRotation] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+export default function EyroHeader({ dictionary }: { dictionary: Dictionary }) {
+  const [randomQuote, setRandomQuote] = useState<string>("");
+  const [middleFingerVisible, setMiddleFingerVisible] =
+    useState<boolean>(false);
+  const [rotation, setRotation] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { language, tone } = useLanguage();
 
-  const quotes = dictionary.header.quotes;
+  const quotes = dictionary.header.quotes || [];
 
   useEffect(() => {
+    if (quotes.length === 0) return;
+
     // Get a random quote on mount and every 8 seconds
     const getRandomQuote = () => {
       const randomIndex = Math.floor(Math.random() * quotes.length);
       setRandomQuote(quotes[randomIndex]);
     };
+
+    // Initial quote
+    getRandomQuote();
 
     // Useless loading state that never ends
     const loadingInterval = setInterval(() => {
@@ -33,9 +54,10 @@ export default function EyroHeader({ dictionary }: { dictionary: any }) {
       setRotation((prev) => (prev + 1) % 360);
     }, 50);
 
-    getRandomQuote();
+    // Quote update interval
     const quoteInterval = setInterval(getRandomQuote, 8000);
 
+    // Cleanup intervals on unmount
     return () => {
       clearInterval(quoteInterval);
       clearInterval(loadingInterval);

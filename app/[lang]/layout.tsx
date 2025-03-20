@@ -30,6 +30,21 @@ interface Dictionary {
     title: string;
     description: string;
   };
+  header: {
+    home: string;
+    github: string;
+    loading: string;
+    quotes: string[];
+  };
+  language_selector: {
+    label: string;
+  };
+  tone_selector: {
+    label: string;
+  };
+  footer: {
+    copyright: string;
+  };
   [key: string]: any;
 }
 
