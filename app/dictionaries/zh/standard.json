@@ -1,0 +1,80 @@
+{
+  "layout": {
+    "html_lang": "zh",
+    "title": "KEMO 收藏 | 毫无意义却又精彩",
+    "description": "一个完全不相关且可能毫无用处的工具集合。进入需谨慎。"
+  },
+  "header": {
+    "home": "首页",
+    "github": "GitHub",
+    "loading": "加载中...",
+    "quotes": [
+      "使用此应用可能导致存在性焦虑",
+      "您的理智已离开聊天",
+      "警告：可能含有实际功能的痕迹",
+      "由应该更清醒的开发者构建",
+      "KEMO：因为总得有人做这个怪物",
+      "进入者，请放弃所有希望",
+      "这个页眉被故意过度设计",
+      "您的代码太干净了，试着让它变得更糟",
+      "错误：检测到过多的逻辑性",
+      "警告：您的界面太常规了"
+    ]
+  },
+  "footer": {
+    "copyright": "© {{year}} KEMO 收藏。保留所有错误。",
+    "built_with": "使用可疑决策和零实用目的构建。",
+    "messages": [
+      "为什么要点击页脚？说真的？",
+      "停止。这毫无用处。",
+      "好吧。继续点击。看我是否在乎。",
+      "🖕",
+      "我打赌你是那种会为了乐趣阅读用户协议的人。",
+      "再点击{{count}}次直到有事情发生...",
+      "开玩笑的。什么都不会发生。永远不会。"
+    ]
+  },
+  "home": {
+    "welcome": "欢迎来到垃圾火堆",
+    "intro": "这是一个精心策划的完全无用工具集合，这些工具不知怎么逃过了回收站。浏览需谨慎。副作用可能包括困惑、笑声以及质疑为什么你在这里浪费时间。",
+    "disclaimer_title": "⚠️ 免责声明",
+    "disclaimer": "这些工具都没有经过测试或有任何实际目的。如果你发现它们有任何实际用途，请立即联系医生，因为你可能正在经历幻觉。",
+    "tools": {
+      "random_picker": {
+        "title": "随机选择器",
+        "description": "无法在糟糕的选项中做决定？让我们为您决定！（剧透：所有选项都很糟糕。）",
+        "code": "randomChoice(badOptions) → evenWorse",
+        "link": "做出糟糕决定 →"
+      },
+      "cryptic_generator": {
+        "title": "神秘生成器",
+        "description": "生成连你自己都看不懂的神秘文本。非常适合假装你比实际更聪明。",
+        "code": "generateNonsense(level) → confusion",
+        "link": "让自己迷惑 →"
+      },
+      "youtube_summarizer": {
+        "title": "YouTube 摘要器",
+        "description": "因为谁有时间真正看视频？让 AI 告诉你在触碰草地时错过了什么。",
+        "code": "summarizeChannel(url) → existentialDread",
+        "link": "跳过视频 →"
+      },
+      "ai_narrative_battle": {
+        "title": "AI 叙事战争",
+        "description": "观看两个 AI 在毫无意义的网格战争中决一死战。就像国际象棋，如果国际象棋毫无意义且由醉酒诗人解说。",
+        "code": "wasteTime(brain) → questionLife",
+        "link": "开始无意义战斗 →",
+        "new": "新功能！"
+      }
+    }
+  },
+  "language_selector": {
+    "label": "语言",
+    "english": "English",
+    "chinese": "中文"
+  },
+  "tone_selector": {
+    "label": "语调",
+    "normal": "标准",
+    "chaotic": "混沌"
+  }
+}

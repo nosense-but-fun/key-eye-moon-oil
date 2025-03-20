@@ -1,0 +1,80 @@
+{
+  "layout": {
+    "html_lang": "en",
+    "title": "K3M0 C0LL3CTI0N | 🖕 Pointlessly AWESOME!",
+    "description": "A trash heap of digital garbage that somehow became a website. Enter if you hate yourself! 🖕"
+  },
+  "header": {
+    "home": "H0ME 🖕",
+    "github": "G1THUB",
+    "loading": "BR34KING...",
+    "quotes": [
+      "Using this app will DESTROY your brain cells 🖕",
+      "Your sanity just DIED horribly",
+      "WARNING: Contains actual functionality (by accident)",
+      "Built by developers who HATE themselves",
+      "KEMO: Because someone needed to create digital HELL 🖕",
+      "ABANDON ALL HOPE, this site is TRASH",
+      "This header took more work than the actual site",
+      "Your code should be WORSE - embrace CHAOS 🖕",
+      "ERROR: You're expecting this to make SENSE?!",
+      "WARNING: This UI violates all known laws of design 🖕"
+    ]
+  },
+  "footer": {
+    "copyright": "© {{year}} KEMO TRASH-HEAP. All rights INTENTIONALLY VIOLATED. 🖕",
+    "built_with": "Built with PURE HATRED and ABSOLUTE CONTEMPT for good practices.",
+    "messages": [
+      "WHY are you clicking a FOOTER?! Are you INSANE?! 🖕",
+      "STOP IT! This does NOTHING, just like your EXISTENCE!",
+      "FINE. Keep clicking. Your life is MEANINGLESS anyway. 🖕",
+      "🖕🖕🖕",
+      "You probably read phone books for FUN, don't you? WEIRDO!",
+      "{{count}} more POINTLESS clicks until NOTHING happens! 🖕",
+      "SURPRISE! It's all MEANINGLESS, just like EVERYTHING! 🖕"
+    ]
+  },
+  "home": {
+    "welcome": "WELCOME TO THE DUMPSTER FIRE 🔥🖕",
+    "intro": "This is a DELIBERATELY TERRIBLE collection of USELESS digital TRASH that somehow escaped deletion. Browse at your own RISK. Side effects include BRAIN DAMAGE, existential DREAD, and questioning your LIFE CHOICES! 🖕",
+    "disclaimer_title": "⚠️ DANGEROUS WARNING ⚠️",
+    "disclaimer": "NONE of this GARBAGE was tested because we DON'T CARE! If you find ANY actual value here, seek IMMEDIATE psychiatric help because you're BROKEN INSIDE! 🖕",
+    "tools": {
+      "random_picker": {
+        "title": "RANDOM TRASH-PICKER 🖕",
+        "description": "Can't decide between AWFUL options? Let us DESTROY your decision-making process! (SPOILER: Everything is TERRIBLE)",
+        "code": "randomTrash(awfulChoices) → evenMoreAwful 🖕",
+        "link": "MAKE TERRIBLE DECISIONS! 🖕"
+      },
+      "cryptic_generator": {
+        "title": "CRYPTIC NONSENSE MACHINE 🖕",
+        "description": "Generate INCOMPREHENSIBLE text that NOBODY understands. Perfect for pretending you're not as DUMB as you actually ARE!",
+        "code": "generateGarbage(stupidityLevel) → totalConfusion 🖕",
+        "link": "CONFUSE YOURSELF HORRIBLY! 🖕"
+      },
+      "youtube_summarizer": {
+        "title": "YOUTUBE TIME-WASTER 🖕",
+        "description": "Because watching videos is TOO HARD for your BROKEN brain! Let AI summarize what you MISSED while PRETENDING to have a LIFE!",
+        "code": "summarizeGarbage(url) → existentialCrisis 🖕",
+        "link": "AVOID REAL CONTENT! 🖕"
+      },
+      "ai_narrative_battle": {
+        "title": "AI NONSENSE BATTLE 🖕",
+        "description": "Watch two AIs FIGHT TO THE DEATH in a POINTLESS digital WAR. It's like chess, if chess was DESIGNED by DRUNK MONKEYS and NARRATED by a ROBOT having a BREAKDOWN!",
+        "code": "wasteYourLife(brokenBrain) → questionExistence 🖕",
+        "link": "START POINTLESS BATTLE! 🖕",
+        "new": "NEW GARBAGE! 🖕"
+      }
+    }
+  },
+  "language_selector": {
+    "label": "LANGUAGE 🖕",
+    "english": "ENGLISH 🖕",
+    "chinese": "中文 🖕"
+  },
+  "tone_selector": {
+    "label": "TONE 🖕",
+    "normal": "BORING",
+    "chaotic": "CHAOTIC 🖕"
+  }
+}

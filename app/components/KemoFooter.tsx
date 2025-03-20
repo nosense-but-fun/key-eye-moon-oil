@@ -2,33 +2,46 @@
 
 import { useState } from "react";
 
-export default function KemoFooter() {
+export default function KemoFooter({ dictionary }: { dictionary: any }) {
   const [clickCount, setClickCount] = useState(0);
   const [message, setMessage] = useState(
-    `© ${new Date().getFullYear()} KEMO Collection. All wrongs reserved.`
+    dictionary.footer.copyright.replace(
+      "{{year}}",
+      new Date().getFullYear().toString()
+    )
   );
 
   const handleClick = () => {
     setClickCount((prevCount) => prevCount + 1);
 
     if (clickCount === 0) {
-      setMessage("Why are you clicking on a footer? Seriously?");
+      setMessage(dictionary.footer.messages[0]);
     } else if (clickCount === 1) {
-      setMessage("Stop it. This does nothing.");
+      setMessage(dictionary.footer.messages[1]);
     } else if (clickCount === 2) {
-      setMessage("Fine. Keep clicking. See if I care.");
+      setMessage(dictionary.footer.messages[2]);
     } else if (clickCount === 3) {
-      setMessage("🖕");
+      setMessage(dictionary.footer.messages[3]);
     } else if (clickCount === 4) {
-      setMessage("I bet you're the type who reads EULAs for fun.");
+      setMessage(dictionary.footer.messages[4]);
     } else if (clickCount >= 5 && clickCount < 10) {
-      setMessage(`${10 - clickCount} more clicks until something happens...`);
+      setMessage(
+        dictionary.footer.messages[5].replace(
+          "{{count}}",
+          (10 - clickCount).toString()
+        )
+      );
     } else if (clickCount === 10) {
-      setMessage("Just kidding. Nothing happens. Ever.");
+      setMessage(dictionary.footer.messages[6]);
       // Reset after the joke is done
       setTimeout(() => {
         setClickCount(0);
-        setMessage("© 2023 KEMO Collection. All wrongs reserved.");
+        setMessage(
+          dictionary.footer.copyright.replace(
+            "{{year}}",
+            new Date().getFullYear().toString()
+          )
+        );
       }, 3000);
     }
   };
@@ -42,7 +55,7 @@ export default function KemoFooter() {
         {message}
       </p>
       <p className="mt-2 text-xs text-gray-500">
-        Built with questionable decisions and zero practical purpose.
+        {dictionary.footer.built_with}
       </p>
     </footer>
   );

@@ -2,26 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import LanguageSelector from "./LanguageSelector";
+import ToneSelector from "./ToneSelector";
 
 // The most unnecessary header component you'll ever see
-export default function KemoHeader() {
+export default function KemoHeader({ dictionary }: { dictionary: any }) {
   const [randomQuote, setRandomQuote] = useState("");
   const [middleFingerVisible, setMiddleFingerVisible] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  const quotes = [
-    "Using this app may cause existential dread",
-    "Your sanity left the chat",
-    "Warning: May contain traces of actual functionality",
-    "Built by developers who should know better",
-    "KEMO: Because someone had to make this monstrosity",
-    "Abandon hope, all ye who enter here",
-    "This header is intentionally over-engineered",
-    "Your code is too clean, try making it worse",
-    "Error: Too much sense detected",
-    "Warning: Your UI is too conventional",
-  ];
+  const quotes = dictionary.header.quotes;
 
   useEffect(() => {
     // Get a random quote on mount and every 8 seconds
@@ -48,7 +39,7 @@ export default function KemoHeader() {
       clearInterval(loadingInterval);
       clearInterval(rotationInterval);
     };
-  }, []);
+  }, [quotes]);
 
   return (
     <header className="w-full bg-black text-white p-4 flex flex-col md:flex-row justify-between items-center">
@@ -77,30 +68,39 @@ export default function KemoHeader() {
         </span>
       </div>
 
-      <nav className="mt-4 md:mt-0">
-        <ul className="flex space-x-4">
-          <li>
-            <Link href="/" className="hover:text-gray-300 transition-colors">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://github.com/nosense-but-fun/key-eye-moon-oil"
-              className="hover:text-gray-300 transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span
-                title="View source code on GitHub"
-                className="animate-pulse"
+      <div className="flex items-center mt-4 md:mt-0">
+        <nav className="mr-4">
+          <ul className="flex space-x-4">
+            <li>
+              <Link href="/" className="hover:text-gray-300 transition-colors">
+                {dictionary.header.home}
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://github.com/nosense-but-fun/key-eye-moon-oil"
+                className="hover:text-gray-300 transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {isLoading ? "Loading..." : "GitHub"}
-              </span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+                <span
+                  title="View source code on GitHub"
+                  className="animate-pulse"
+                >
+                  {isLoading
+                    ? dictionary.header.loading
+                    : dictionary.header.github}
+                </span>
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="flex items-center">
+          <LanguageSelector dictionary={dictionary} />
+          <ToneSelector dictionary={dictionary} />
+        </div>
+      </div>
     </header>
   );
 }

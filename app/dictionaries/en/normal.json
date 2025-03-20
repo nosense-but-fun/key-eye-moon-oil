@@ -1,0 +1,80 @@
+{
+  "layout": {
+    "html_lang": "en",
+    "title": "KEMO Collection | Pointlessly Awesome",
+    "description": "A collection of completely unrelated and possibly useless tools. Enter at your own risk."
+  },
+  "header": {
+    "home": "Home",
+    "github": "GitHub",
+    "loading": "Loading...",
+    "quotes": [
+      "Using this app may cause existential dread",
+      "Your sanity left the chat",
+      "Warning: May contain traces of actual functionality",
+      "Built by developers who should know better",
+      "KEMO: Because someone had to make this monstrosity",
+      "Abandon hope, all ye who enter here",
+      "This header is intentionally over-engineered",
+      "Your code is too clean, try making it worse",
+      "Error: Too much sense detected",
+      "Warning: Your UI is too conventional"
+    ]
+  },
+  "footer": {
+    "copyright": "© {{year}} KEMO Collection. All wrongs reserved.",
+    "built_with": "Built with questionable decisions and zero practical purpose.",
+    "messages": [
+      "Why are you clicking on a footer? Seriously?",
+      "Stop it. This does nothing.",
+      "Fine. Keep clicking. See if I care.",
+      "🖕",
+      "I bet you're the type who reads EULAs for fun.",
+      "{{count}} more clicks until something happens...",
+      "Just kidding. Nothing happens. Ever."
+    ]
+  },
+  "home": {
+    "welcome": "Welcome to the Dumpster Fire",
+    "intro": "This is a carefully curated collection of completely useless tools that somehow managed to escape the recycle bin. Browse at your own risk. Side effects may include confusion, laughter, and questioning why you're wasting your time here.",
+    "disclaimer_title": "⚠️ Disclaimer",
+    "disclaimer": "None of these tools were tested or built with any purpose in mind. If you find any actual utility in them, please contact a doctor immediately as you may be experiencing delusions.",
+    "tools": {
+      "random_picker": {
+        "title": "Random Picker",
+        "description": "Can't decide between terrible options? Let us decide for you! (Spoiler: All options are terrible.)",
+        "code": "randomChoice(badOptions) → evenWorse",
+        "link": "Make Bad Decisions →"
+      },
+      "cryptic_generator": {
+        "title": "Cryptic Generator",
+        "description": "Generate mysterious texts that even you won't understand. Perfect for pretending you're smarter than you are.",
+        "code": "generateNonsense(level) → confusion",
+        "link": "Confuse Yourself →"
+      },
+      "youtube_summarizer": {
+        "title": "YouTube Summarizer",
+        "description": "Because who has time to actually watch videos? Let AI tell you what you missed while you were touching grass.",
+        "code": "summarizeChannel(url) → existentialDread",
+        "link": "Skip the Videos →"
+      },
+      "ai_narrative_battle": {
+        "title": "AI Narrative Battle",
+        "description": "Watch two AIs fight to the death in a pointless grid war. It's like chess, if chess made no sense and was narrated by a drunk poet.",
+        "code": "wasteTime(brain) → questionLife",
+        "link": "Start Pointless Battle →",
+        "new": "NEW!"
+      }
+    }
+  },
+  "language_selector": {
+    "label": "Language",
+    "english": "English",
+    "chinese": "中文"
+  },
+  "tone_selector": {
+    "label": "Tone",
+    "normal": "Normal",
+    "chaotic": "Chaotic"
+  }
+}
