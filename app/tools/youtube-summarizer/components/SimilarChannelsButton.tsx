@@ -4,10 +4,12 @@ import SimilarChannelsDisplay from "./SimilarChannelsDisplay";
 
 interface SimilarChannelsButtonProps {
   channelData: ChannelData;
+  dictionary: any; // TODO: Type this properly
 }
 
 export default function SimilarChannelsButton({
   channelData,
+  dictionary: dict,
 }: SimilarChannelsButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -16,29 +18,18 @@ export default function SimilarChannelsButton({
   const [showResults, setShowResults] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
-  const loadingMessages = [
-    "Stalking similar creators... 👀",
-    "Measuring content overlap with questionable methods... 📏",
-    "Running DNA tests on video metadata... 🧬",
-    "Investigating who stole whose ideas first... 🕵️",
-    "Calculating algorithm manipulation scores... 🤖",
-    "Testing audience loyalty with fictional metrics... 🔍",
-    "Determining who's the original and who's the cheap knockoff... 🏷️",
-    "Running plagiarism detection on video titles... 📋",
-    "Checking who has the most annoying intro music... 🎵",
-    "Measuring clickbait intensity across the platform... 🎯",
-  ];
-
   const updateLoadingMessage = () => {
-    const randomIndex = Math.floor(Math.random() * loadingMessages.length);
-    setLoadingMessage(loadingMessages[randomIndex]);
+    const randomIndex = Math.floor(
+      Math.random() * dict.loading_messages.length
+    );
+    setLoadingMessage(dict.loading_messages[randomIndex]);
   };
 
   const findSimilarChannels = async () => {
+    setShowResults(true);
     setLoading(true);
     setError("");
     setSimilarChannels(null);
-    setShowResults(true);
     updateLoadingMessage();
 
     const messageInterval = setInterval(updateLoadingMessage, 3000);
@@ -61,9 +52,7 @@ export default function SimilarChannelsButton({
       setSimilarChannels(data);
     } catch (err) {
       console.error("Error:", err);
-      setError(
-        err instanceof Error ? err.message : "An existential error occurred"
-      );
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       clearInterval(messageInterval);
       setLoading(false);
@@ -79,7 +68,7 @@ export default function SimilarChannelsButton({
             onClick={findSimilarChannels}
             className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors transform hover:scale-105 shadow-lg"
           >
-            Find Content Thieves & Copycats
+            {dict.button}
           </button>
         </div>
       ) : (
@@ -100,12 +89,14 @@ export default function SimilarChannelsButton({
                 onClick={() => setShowResults(false)}
                 className="mt-3 px-4 py-2 bg-red-200 dark:bg-red-800 rounded-lg hover:bg-red-300 dark:hover:bg-red-700 transition-colors"
               >
-                Try Again (Why Though?)
+                {dict.start_over}
               </button>
             </div>
           )}
 
-          {similarChannels && <SimilarChannelsDisplay data={similarChannels} />}
+          {similarChannels && (
+            <SimilarChannelsDisplay data={similarChannels} dictionary={dict} />
+          )}
 
           {(similarChannels || error) && (
             <div className="mt-4 text-center">
@@ -113,7 +104,7 @@ export default function SimilarChannelsButton({
                 onClick={() => setShowResults(false)}
                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >
-                {similarChannels ? "Hide This Mess" : "Start Over"}
+                {similarChannels ? dict.hide_button : dict.start_over}
               </button>
             </div>
           )}

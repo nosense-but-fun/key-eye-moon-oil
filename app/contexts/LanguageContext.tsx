@@ -14,12 +14,14 @@ import {
   validLanguages,
   validTones,
   ValidLanguage,
+  getDictionary,
 } from "../dictionaries";
 
 // Define the context type
 interface LanguageContextType {
   language: string;
   tone: string;
+  dictionary: any; // TODO: Type this properly
   setLanguage: (newLang: string) => void;
   setTone: (newTone: string) => void;
 }
@@ -29,12 +31,14 @@ interface LanguageProviderProps {
   children: ReactNode;
   initialLanguage?: string;
   initialTone?: string;
+  initialDictionary?: any; // TODO: Type this properly
 }
 
 // Context for language and tone state
 const LanguageContext = createContext<LanguageContextType>({
   language: defaultLanguage,
   tone: defaultTones[defaultLanguage],
+  dictionary: {},
   setLanguage: () => {},
   setTone: () => {},
 });
@@ -46,6 +50,7 @@ export function LanguageProvider({
   children,
   initialLanguage,
   initialTone,
+  initialDictionary,
 }: LanguageProviderProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -67,8 +72,10 @@ export function LanguageProvider({
     return initialTone;
   });
 
+  const [dictionary, setDictionary] = useState<any>(initialDictionary || {});
+
   // Handle language change
-  const setLanguage = (newLang: string) => {
+  const setLanguage = async (newLang: string) => {
     // Check if the language is valid
     if (newLang !== "en" && newLang !== "zh") {
       console.warn(`Invalid language: ${newLang}`);
@@ -94,6 +101,10 @@ export function LanguageProvider({
     if (!isValidTone) {
       setToneState(newTone);
     }
+
+    // Update dictionary
+    const newDictionary = await getDictionary(newLang, newTone);
+    setDictionary(newDictionary);
 
     // Extract the current path without the language prefix
     const pathSegments = pathname.split("/").filter(Boolean);
@@ -121,7 +132,7 @@ export function LanguageProvider({
   };
 
   // Handle tone change
-  const setTone = (newTone: string) => {
+  const setTone = async (newTone: string) => {
     // Check if tone is valid for current language
     const isValidTone =
       language === "en"
@@ -135,6 +146,10 @@ export function LanguageProvider({
 
     // Update state
     setToneState(newTone);
+
+    // Update dictionary
+    const newDictionary = await getDictionary(language, newTone);
+    setDictionary(newDictionary);
 
     // Update URL query parameter
     const newParams = new URLSearchParams(searchParams.toString());
@@ -167,11 +182,19 @@ export function LanguageProvider({
         setToneState(urlTone);
       }
     }
+
+    // Update dictionary when language or tone changes
+    const updateDictionary = async () => {
+      const newDictionary = await getDictionary(language, tone);
+      setDictionary(newDictionary);
+    };
+    updateDictionary();
   }, [pathname, searchParams, language, tone]);
 
   const contextValue: LanguageContextType = {
     language,
     tone,
+    dictionary,
     setLanguage,
     setTone,
   };

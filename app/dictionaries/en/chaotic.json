@@ -76,5 +76,64 @@
     "label": "TONE 🖕",
     "normal": "BORING",
     "chaotic": "CHAOTIC 🖕"
+  },
+  "youtube_summarizer_tool": {
+    "title": "YOUTUBE CHANNEL ANALYZER 🖕 (WHY ARE YOU EVEN HERE?!)",
+    "description": "WHO NEEDS ACTUAL CONTENT when you can STALK CHANNELS and JUDGE THEIR NUMBERS?! Drop a URL and watch me DESTROY their self-esteem! 🖕",
+    "input": {
+      "placeholder": "PASTE THAT YOUTUBE URL HERE, YOU STALKER! 🖕",
+      "button": {
+        "default": "ANALYZE THIS GARBAGE! 🖕",
+        "loading": "DESTROYING SOMEONE'S DREAMS... 🖕"
+      }
+    },
+    "loading_messages": [
+      "STALKING THEIR CHANNEL LIKE A CREEP... 👀🖕",
+      "COUNTING SUBSCRIBERS (ONE BY ONE BECAUSE I HATE YOU)... 🔢🖕",
+      "WATCHING THEIR VIDEOS AT 10x SPEED BECAUSE LIFE IS SHORT... ⚡🖕",
+      "ASKING THE ALGORITHM FOR THE JUICY GOSSIP... ☕🖕",
+      "CALCULATING HOW MUCH THEY SOLD THEIR SOUL FOR... 📊🖕",
+      "MEASURING THEIR CONTENT QUALITY (SPOILER: IT'S TRASH)... 🎯🖕",
+      "CHECKING IF THEY'RE BETTER THAN PEWDIEPIE (THEY'RE NOT)... 🤔🖕",
+      "JUDGING THEIR THUMBNAIL GAME (IT'S TERRIBLE)... 🎨🖕",
+      "CALCULATING THEIR ENGAGEMENT RATE (IT'S FAKE)... 📈🖕",
+      "MEASURING THEIR MEME POTENTIAL (ABSOLUTELY ZERO)... 🐸🖕"
+    ],
+    "stats": {
+      "title": "CHANNEL STATISTICS (PREPARE TO BE DISAPPOINTED) 🖕",
+      "channel_name": "CHANNEL NAME (PROBABLY UNORIGINAL)",
+      "subscribers": "SUBSCRIBERS (DEFINITELY BOUGHT) 🖕",
+      "total_videos": "TOTAL VIDEOS (QUANTITY OVER QUALITY) 🖕",
+      "total_views": "TOTAL VIEWS (90% FROM BOTS) 🖕",
+      "recent_videos": "RECENT VIDEOS (STILL TERRIBLE) 🖕",
+      "top_videos": "TOP VIDEOS (ALGORITHM'S MISTAKES) 🖕"
+    },
+    "similar_channels": {
+      "button": "FIND THE COPYCATS & SELLOUTS! 🖕",
+      "title": "CONTENT THEFT ANALYSIS 🖕",
+      "metrics_title": "COMPLETELY MADE-UP METRICS 🖕",
+      "metrics_subtitle": "(WE LITERALLY JUST GENERATED RANDOM NUMBERS) 🖕",
+      "channels_analyzed": "CHANNELS WASTED OUR TIME 🖕",
+      "content_overlap": "PLAGIARISM SCORE 🖕",
+      "audience_stealing": "SELLOUT INDEX™ 🖕",
+      "high_overlap": "BASICALLY A CLONE 🖕",
+      "low_overlap": "STILL NOT ORIGINAL 🖕",
+      "high_stealing": "EVERYONE'S STEALING YOUR VIEWERS (BUT WHO CARES?) 🖕",
+      "low_stealing": "NOBODY WANTS YOUR AUDIENCE (SHOCKING!) 🖕",
+      "hide_button": "HIDE THIS TRAINWRECK 🖕",
+      "start_over": "DESTROY ANOTHER CHANNEL 🖕",
+      "loading_messages": [
+        "STALKING MORE CREATORS (BECAUSE WE'RE CREEPY)... 👀🖕",
+        "MEASURING CONTENT THEFT WITH BROKEN TOOLS... 📏🖕",
+        "RUNNING DNA TESTS ON STOLEN CONTENT... 🧬🖕",
+        "INVESTIGATING WHO STOLE FROM WHO FIRST... 🕵️🖕",
+        "CALCULATING WHO'S THE BIGGER SELLOUT... 🤖🖕",
+        "TESTING AUDIENCE LOYALTY (IT'S ZERO)... 🔍🖕",
+        "DETERMINING WHO'S THE ORIGINAL COPYCAT... 🏷️🖕",
+        "CHECKING WHO STOLE THE MOST TITLES... 📋🖕",
+        "RATING ANNOYING INTRO MUSIC... 🎵🖕",
+        "MEASURING CLICKBAIT LEVELS (THEY'RE ALL 100%)... 🎯🖕"
+      ]
+    }
   }
 }

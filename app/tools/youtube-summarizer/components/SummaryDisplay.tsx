@@ -8,6 +8,7 @@ interface SummaryDisplayProps {
   summary: string;
   analysis: AIResponse["analysis"];
   channelData: ChannelData;
+  dictionary: any; // TODO: Type this properly
 }
 
 type MarkdownComponentProps = {
@@ -21,6 +22,7 @@ export default function SummaryDisplay({
   summary,
   analysis,
   channelData,
+  dictionary: dict,
 }: SummaryDisplayProps) {
   const [showJson, setShowJson] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -128,12 +130,12 @@ export default function SummaryDisplay({
 
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
-          Channel Statistics (The Boring Numbers)
+          {dict.stats.title}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-              Channel Name
+              {dict.stats.channel_name}
             </h4>
             <p className="text-gray-700 dark:text-gray-300">
               {analysis.channelName}
@@ -141,7 +143,7 @@ export default function SummaryDisplay({
           </div>
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-              Subscribers (The Fan Club)
+              {dict.stats.subscribers}
             </h4>
             <p className="text-gray-700 dark:text-gray-300">
               {analysis.subscriberCount.toLocaleString()}
@@ -149,7 +151,7 @@ export default function SummaryDisplay({
           </div>
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-              Total Videos (Content Factory)
+              {dict.stats.total_videos}
             </h4>
             <p className="text-gray-700 dark:text-gray-300">
               {analysis.totalVideos.toLocaleString()}
@@ -157,7 +159,7 @@ export default function SummaryDisplay({
           </div>
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-              Total Views (Eyeball Collection)
+              {dict.stats.total_views}
             </h4>
             <p className="text-gray-700 dark:text-gray-300">
               {analysis.totalViews.toLocaleString()}
@@ -165,7 +167,7 @@ export default function SummaryDisplay({
           </div>
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-              Recent Videos (Fresh Content)
+              {dict.stats.recent_videos}
             </h4>
             <p className="text-gray-700 dark:text-gray-300">
               {analysis.recentVideos.toLocaleString()}
@@ -173,7 +175,7 @@ export default function SummaryDisplay({
           </div>
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-              Top Videos (The Algorithm's Favorites)
+              {dict.stats.top_videos}
             </h4>
             <p className="text-gray-700 dark:text-gray-300">
               {analysis.topVideos.toLocaleString()}
@@ -182,7 +184,10 @@ export default function SummaryDisplay({
         </div>
       </div>
 
-      <SimilarChannelsButton channelData={channelData} />
+      <SimilarChannelsButton
+        channelData={channelData}
+        dictionary={dict.similar_channels}
+      />
     </div>
   );
 }

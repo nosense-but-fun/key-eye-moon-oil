@@ -3,10 +3,12 @@ import { useState } from "react";
 
 interface SimilarChannelsDisplayProps {
   data: SimilarChannelsResponse;
+  dictionary: any; // TODO: Type this properly
 }
 
 export default function SimilarChannelsDisplay({
   data,
+  dictionary: dict,
 }: SimilarChannelsDisplayProps) {
   const [selectedChannel, setSelectedChannel] = useState<SimilarChannel | null>(
     null
@@ -60,29 +62,29 @@ export default function SimilarChannelsDisplay({
   return (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
       <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
-        Content Ripoff Analysis
+        {dict.title}
       </h3>
 
       <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
         <div className="flex flex-wrap justify-between items-center mb-4">
           <div>
             <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-              Totally Scientific Metrics
+              {dict.metrics_title}
             </h4>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
-              (We definitely didn't make these up)
+              {dict.metrics_subtitle}
             </p>
           </div>
           <div className="bg-gray-200 dark:bg-gray-600 px-3 py-1 rounded-lg text-sm">
-            {(data.totalChannelsAnalyzed || 0).toLocaleString()} channels
-            analyzed (allegedly)
+            {(data.totalChannelsAnalyzed || 0).toLocaleString()}{" "}
+            {dict.channels_analyzed}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-200 dark:bg-gray-600 p-3 rounded-lg">
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              Content Overlap
+              {dict.content_overlap}
             </div>
             <div className="flex items-center">
               <div className="text-xl font-bold mr-2">
@@ -90,14 +92,14 @@ export default function SimilarChannelsDisplay({
               </div>
               <div className="text-sm">
                 {(data.contentOverlapPercentage || 0) > 50
-                  ? "Suspiciously similar"
-                  : "Barely original"}
+                  ? dict.high_overlap
+                  : dict.low_overlap}
               </div>
             </div>
           </div>
           <div className="bg-gray-200 dark:bg-gray-600 p-3 rounded-lg">
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              Audience Stealing Index™
+              {dict.audience_stealing}
             </div>
             <div className="flex items-center">
               <div className="text-xl font-bold mr-2">
@@ -105,8 +107,8 @@ export default function SimilarChannelsDisplay({
               </div>
               <div className="text-sm">
                 {(data.audienceStealingIndex || 0) > 50
-                  ? "Everyone's stealing your viewers"
-                  : "Nobody wants your audience"}
+                  ? dict.high_stealing
+                  : dict.low_stealing}
               </div>
             </div>
           </div>

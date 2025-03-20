@@ -53,10 +53,10 @@
         "link": "让自己迷惑 →"
       },
       "youtube_summarizer": {
-        "title": "YouTube 摘要器",
-        "description": "因为谁有时间真正看视频？让 AI 告诉你在触碰草地时错过了什么。",
-        "code": "summarizeChannel(url) → existentialDread",
-        "link": "跳过视频 →"
+        "title": "YouTube 频道分析器",
+        "description": "为什么要花时间看每个视频？让 AI 分析整个 YouTube 频道，告诉你创作者在做什么。",
+        "code": "summarizeChannel(url) → channelInsights",
+        "link": "分析频道 →"
       },
       "ai_narrative_battle": {
         "title": "AI 叙事战争",
@@ -76,5 +76,116 @@
     "label": "语调",
     "normal": "标准",
     "chaotic": "混沌"
+  },
+  "cryptic_generator_tool": {
+    "title": "神秘文本生成器（把简单的事情复杂化）",
+    "description": "把你的无聊文本变成连你自己都看不懂的东西。非常适合假装你比实际更聪明。",
+    "input": {
+      "text_placeholder": "在这里输入你的平凡文本...",
+      "level_label": "神秘等级",
+      "levels": {
+        "mild": "轻度迷惑",
+        "medium": "适度混乱",
+        "extreme": "完全不可理解"
+      },
+      "button": {
+        "default": "神秘化",
+        "loading": "召唤混沌中..."
+      }
+    },
+    "output": {
+      "title": "你的文本，但更糟",
+      "copy_button": {
+        "default": "复制胡言乱语",
+        "copied": "胡言乱语已复制！"
+      },
+      "regenerate": "让它更糟",
+      "placeholder": "你的神秘文本将在这里出现，假设宇宙力量正确对齐..."
+    }
+  },
+  "random_picker_tool": {
+    "title": "随机决策器（因为你无法决定）",
+    "description": "无法下定决心？让我们完全有偏见的算法为你决定！警告：我们对后果不负任何责任。",
+    "input": {
+      "option_placeholder": "添加一个选项...",
+      "add_button": "添加到混沌中",
+      "options_label": "你的可疑选择：",
+      "empty_message": "先添加一些选项（是的，需要多个）",
+      "pick_button": {
+        "default": "随机选择",
+        "loading": "正在问星星..."
+      },
+      "clear_button": "重新开始"
+    },
+    "result": {
+      "title": "算法已经发话",
+      "prefix": "你可能应该选择：",
+      "try_again": "不喜欢？再试一次",
+      "disclaimer": "记住：这个决定是由一个不关心你生活选择的计算机做出的。"
+    },
+    "validation": {
+      "duplicate": "这个选项已经存在（请更有创意）",
+      "empty": "空选项毫无帮助",
+      "max_reached": "选项够多了。你只是让这更难了。"
+    }
+  },
+  "youtube_summarizer_tool": {
+    "title": "YouTube 频道分析器（我甚至不应该在这里）",
+    "description": "谁需要真正的内容，当你可以盯着数字看？放个链接，我来告诉你为什么他们的订阅数很可疑。🧐",
+    "input": {
+      "placeholder": "在这里粘贴 YouTube 频道链接...",
+      "button": {
+        "default": "分析这团乱",
+        "loading": "正在爆料..."
+      }
+    },
+    "loading_messages": [
+      "正在偷窥他们的频道... 👀",
+      "正在一个一个数订阅者... 🔢",
+      "正在2倍速观看视频... ⚡",
+      "正在向算法打听八卦... ☕",
+      "正在计算成功率... 📊",
+      "正在测量内容质量... 🎯",
+      "正在检查是否比PewDiePie更好... 🤔",
+      "正在分析缩略图水平... 🎨",
+      "正在计算互动率... 📈",
+      "正在测量梗的潜力... 🐸"
+    ],
+    "stats": {
+      "title": "频道统计（无聊的数字）",
+      "channel_name": "频道名称",
+      "subscribers": "订阅者（粉丝团）",
+      "total_videos": "视频总数（内容工厂）",
+      "total_views": "总观看量（眼球收集）",
+      "recent_videos": "最近视频（新鲜内容）",
+      "top_videos": "热门视频（算法的宠儿）"
+    },
+    "similar_channels": {
+      "button": "寻找内容窃贼和模仿者",
+      "title": "内容抄袭分析",
+      "metrics_title": "完全科学的指标",
+      "metrics_subtitle": "（我们绝对没有编造这些）",
+      "channels_analyzed": "个频道已分析（据说）",
+      "content_overlap": "内容重叠度",
+      "audience_stealing": "观众窃取指数™",
+      "high_overlap": "可疑地相似",
+      "low_overlap": "勉强原创",
+      "high_stealing": "所有人都在偷你的观众",
+      "low_stealing": "没人想要你的观众",
+      "hide_button": "隐藏这团乱",
+      "start_over": "重新开始",
+      "loading_messages": [
+        "正在跟踪相似创作者... 👀",
+        "用可疑方法测量内容重叠... 📏",
+        "正在对视频元数据进行DNA测试... 🧬",
+        "调查谁先偷了谁的创意... 🕵️",
+        "计算算法操纵分数... 🤖",
+        "用虚构指标测试观众忠诚度... 🔍",
+        "判断谁是原创谁是山寨... 🏷️",
+        "对视频标题进行抄袭检测... 📋",
+        "检查谁的片头音乐最烦人... 🎵",
+        "测量平台上的标题党强度... 🎯"
+      ]
+    }
   }
 }

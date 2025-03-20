@@ -104,7 +104,11 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <LanguageProvider initialLanguage={lang} initialTone={tone}>
+        <LanguageProvider
+          initialLanguage={lang}
+          initialTone={tone}
+          initialDictionary={dictionary}
+        >
           <KemoHeader dictionary={dictionary} />
           <main className="flex-grow">{children}</main>
           <KemoFooter dictionary={dictionary} />

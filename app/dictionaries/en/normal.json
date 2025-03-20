@@ -53,10 +53,10 @@
         "link": "Confuse Yourself →"
       },
       "youtube_summarizer": {
-        "title": "YouTube Summarizer",
-        "description": "Because who has time to actually watch videos? Let AI tell you what you missed while you were touching grass.",
-        "code": "summarizeChannel(url) → existentialDread",
-        "link": "Skip the Videos →"
+        "title": "YouTube Channel Summarizer",
+        "description": "Why waste time watching every video? Let AI analyze entire YouTube channels and tell you what content creators are up to.",
+        "code": "summarizeChannel(url) → channelInsights",
+        "link": "Analyze Channels →"
       },
       "ai_narrative_battle": {
         "title": "AI Narrative Battle",
@@ -76,5 +76,116 @@
     "label": "Tone",
     "normal": "Normal",
     "chaotic": "Chaotic"
+  },
+  "cryptic_generator_tool": {
+    "title": "Cryptic Text Generator (Making Simple Things Complicated)",
+    "description": "Turn your boring text into something so cryptic even you won't understand it. Perfect for pretending you're smarter than you actually are.",
+    "input": {
+      "text_placeholder": "Enter your mundane text here...",
+      "level_label": "Cryptic Level",
+      "levels": {
+        "mild": "Mildly Confusing",
+        "medium": "Properly Perplexing",
+        "extreme": "Utterly Incomprehensible"
+      },
+      "button": {
+        "default": "Cryptify This",
+        "loading": "Summoning Chaos..."
+      }
+    },
+    "output": {
+      "title": "Your Text, But Worse",
+      "copy_button": {
+        "default": "Copy Nonsense",
+        "copied": "Nonsense Copied!"
+      },
+      "regenerate": "Make It Worse",
+      "placeholder": "Your cryptic text will appear here, assuming the cosmic forces align properly..."
+    }
+  },
+  "random_picker_tool": {
+    "title": "Random Decision Maker (Because You Can't Decide)",
+    "description": "Can't make up your mind? Let our completely biased algorithm decide for you! Warning: We take no responsibility for the consequences.",
+    "input": {
+      "option_placeholder": "Add an option...",
+      "add_button": "Add to the Chaos",
+      "options_label": "Your Questionable Choices:",
+      "empty_message": "Add some options first (yes, more than one)",
+      "pick_button": {
+        "default": "Pick Something Random",
+        "loading": "Consulting the Stars..."
+      },
+      "clear_button": "Start Over"
+    },
+    "result": {
+      "title": "The Algorithm Has Spoken",
+      "prefix": "You should probably go with:",
+      "try_again": "Don't Like It? Try Again",
+      "disclaimer": "Remember: This decision was made by a computer that doesn't care about your life choices."
+    },
+    "validation": {
+      "duplicate": "This option already exists (be more creative)",
+      "empty": "Empty options are not very helpful",
+      "max_reached": "That's enough options. You're just making this harder."
+    }
+  },
+  "youtube_summarizer_tool": {
+    "title": "YouTube Channel Analyzer (I'm Not Even Supposed to Be Here)",
+    "description": "Who needs actual content when you can stare at numbers? Drop a URL and I'll tell you why their subscriber count is sus. 🧐",
+    "input": {
+      "placeholder": "Paste that YouTube channel URL here...",
+      "button": {
+        "default": "Analyze This Mess",
+        "loading": "Spilling the Tea..."
+      }
+    },
+    "loading_messages": [
+      "Stalking their channel... 👀",
+      "Counting their subscribers (one by one)... 🔢",
+      "Watching their videos at 2x speed... ⚡",
+      "Asking the algorithm for tea... ☕",
+      "Calculating their success rate... 📊",
+      "Measuring their content quality... 🎯",
+      "Checking if they're better than PewDiePie... 🤔",
+      "Analyzing their thumbnail game... 🎨",
+      "Calculating their engagement rate... 📈",
+      "Measuring their meme potential... 🐸"
+    ],
+    "stats": {
+      "title": "Channel Statistics (The Boring Numbers)",
+      "channel_name": "Channel Name",
+      "subscribers": "Subscribers (The Fan Club)",
+      "total_videos": "Total Videos (Content Factory)",
+      "total_views": "Total Views (Eyeball Collection)",
+      "recent_videos": "Recent Videos (Fresh Content)",
+      "top_videos": "Top Videos (The Algorithm's Favorites)"
+    },
+    "similar_channels": {
+      "button": "Find Content Thieves & Copycats",
+      "title": "Content Ripoff Analysis",
+      "metrics_title": "Totally Scientific Metrics",
+      "metrics_subtitle": "(We definitely didn't make these up)",
+      "channels_analyzed": "channels analyzed (allegedly)",
+      "content_overlap": "Content Overlap",
+      "audience_stealing": "Audience Stealing Index™",
+      "high_overlap": "Suspiciously similar",
+      "low_overlap": "Barely original",
+      "high_stealing": "Everyone's stealing your viewers",
+      "low_stealing": "Nobody wants your audience",
+      "hide_button": "Hide This Mess",
+      "start_over": "Start Over",
+      "loading_messages": [
+        "Stalking similar creators... 👀",
+        "Measuring content overlap with questionable methods... 📏",
+        "Running DNA tests on video metadata... 🧬",
+        "Investigating who stole whose ideas first... 🕵️",
+        "Calculating algorithm manipulation scores... 🤖",
+        "Testing audience loyalty with fictional metrics... 🔍",
+        "Determining who's the original and who's the cheap knockoff... 🏷️",
+        "Running plagiarism detection on video titles... 📋",
+        "Checking who has the most annoying intro music... 🎵",
+        "Measuring clickbait intensity across the platform... 🎯"
+      ]
+    }
   }
 }

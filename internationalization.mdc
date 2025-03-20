@@ -1,0 +1,26 @@
+# KEMO Internationalization Guidelines
+
+## Core Principles
+
+The KEMO application supports multiple languages with different tones, following these principles:
+
+1. **Server-First Rendering**: Language content is primarily determined server-side
+2. **Client Hydration**: Client-side language switching without full page reloads
+3. **Chaotic but Functional**: Multiple language/tone combinations with KEMO's signature irreverence
+4. **Complete Tone Coverage**: All dictionary updates must be reflected across ALL tone variants
+
+## Dictionary Update Requirements
+
+When updating any dictionary file:
+
+1. **Update ALL tone variants**:
+   - English: both `normal.json` and `chaotic.json`
+   - Chinese: both `standard.json` and `internet.json`
+2. **Maintain Tone Consistency**:
+   - `normal.json` / `standard.json`: Professional but slightly irreverent
+   - `chaotic.json`: Extreme chaos with lots of 🖕
+   - `internet.json`: Internet slang and meme-speak (网络用语)
+3. **Verify Structure**:
+   - All tone variants must have identical structure
+   - Only the tone/style of the content should differ
+   - Keys must match exactly across all files 
