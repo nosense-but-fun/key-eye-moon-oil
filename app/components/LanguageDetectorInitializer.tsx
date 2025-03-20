@@ -11,8 +11,8 @@ export default function LanguageDetectorInitializer() {
     // Log a pointlessly elaborate message
     if (process.env.NODE_ENV === "development") {
       console.log(
-        "%c🖕 KEMO Language Detector Initialized. Aren't you special?",
-        "background: #111; color: #f0f; padding: 5px; border-radius: 3px; font-weight: bold;"
+        "%c🖕 Eyro Language Detector Initialized. Aren't you special?",
+        "color: #ff69b4; font-weight: bold; font-size: 12px;"
       );
     }
 

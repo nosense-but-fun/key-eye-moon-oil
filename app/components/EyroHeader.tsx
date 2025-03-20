@@ -6,7 +6,7 @@ import LanguageSelector from "./LanguageSelector";
 import ToneSelector from "./ToneSelector";
 
 // The most unnecessary header component you'll ever see
-export default function KemoHeader({ dictionary }: { dictionary: any }) {
+export default function EyroHeader({ dictionary }: { dictionary: any }) {
   const [randomQuote, setRandomQuote] = useState("");
   const [middleFingerVisible, setMiddleFingerVisible] = useState(false);
   const [rotation, setRotation] = useState(0);
@@ -42,7 +42,7 @@ export default function KemoHeader({ dictionary }: { dictionary: any }) {
   }, [quotes]);
 
   return (
-    <header className="w-full bg-black text-white p-4 flex flex-col md:flex-row justify-between items-center">
+    <header className="w-full bg-black text-white p-4 flex flex-col md:flex-row justify-between items-center shadow-lg">
       <div className="flex items-center">
         <Link
           href="/"
@@ -56,7 +56,7 @@ export default function KemoHeader({ dictionary }: { dictionary: any }) {
               display: "inline-block",
             }}
           >
-            KEMO
+            EYRO
           </span>
           {middleFingerVisible && (
             <span className="ml-1 animate-bounce">🖕</span>

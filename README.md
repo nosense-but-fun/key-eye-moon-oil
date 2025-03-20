@@ -1,4 +1,4 @@
-# KEMO Collection
+# Eyro Collection
 
 ```ascii
   _  __  _____ __  __  ___

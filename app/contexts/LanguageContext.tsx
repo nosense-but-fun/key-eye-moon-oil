@@ -31,6 +31,12 @@ const COOKIE_OPTIONS = {
   sameSite: "lax",
 } as const;
 
+// Cookie names
+const COOKIE_NAMES = {
+  LANGUAGE: "eyro-language",
+  TONE: "eyro-tone",
+} as const;
+
 // Define the context type
 interface LanguageContextType {
   language: string;

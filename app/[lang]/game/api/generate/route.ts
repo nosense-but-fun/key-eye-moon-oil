@@ -73,7 +73,7 @@ function createChaosErrorResponse(error: unknown, startTime: number | null) {
       ? error.message
       : "Failed to generate turn narrative";
 
-  // Return error with KEMO attitude in user-facing messages only
+  // Return error with Eyro attitude in user-facing messages only
   return NextResponse.json(
     {
       error: errorMessage,

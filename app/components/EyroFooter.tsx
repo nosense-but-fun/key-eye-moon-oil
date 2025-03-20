@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function KemoFooter({ dictionary }: { dictionary: any }) {
+export default function EyroFooter({ dictionary }: { dictionary: any }) {
   const [clickCount, setClickCount] = useState(0);
   const [message, setMessage] = useState(
     dictionary.footer.copyright.replace(

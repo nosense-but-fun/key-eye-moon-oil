@@ -1,17 +1,17 @@
-# KEMO Collection: A Developer's Descent into Madness
+# Eyro Collection: A Developer's Descent into Madness
 
-## What the Hell is This?
+## Overview
 
-Welcome to KEMO Collection, the digital equivalent of that drawer in your kitchen where you throw random stuff that doesn't belong anywhere else. This Next.js monstrosity exists solely to house a growing collection of completely unrelated tools, pages, and experiments that make absolutely no sense when viewed as a collective.
+Welcome to Eyro Collection, the digital equivalent of that drawer in your kitchen where you throw random stuff that doesn't belong anywhere else. This Next.js monstrosity exists solely to house a growing collection of completely unrelated and possibly useless tools.
 
-## Project Philosophy
+## Philosophy
 
 ```ascii
 "It seemed like a good idea at the time."
                       - Every developer ever
 ```
 
-The KEMO Collection embraces the chaotic energy of late-night coding sessions fueled by questionable energy drinks and existential dread. Our philosophy is simple: if it's weird enough to make you question the developer's sanity, it belongs here.
+The Eyro Collection embraces the chaotic energy of late-night coding sessions fueled by questionable energy drinks and existential dread. Our philosophy is simple: if it's weird enough to make you question its existence, it belongs here.
 
 ## Technical Specifications
 
@@ -50,10 +50,8 @@ There is no structure. There is only chaos. But if you insist:
 2. Will your code pass a code review? We don't care, we don't do those.
 3. Is your feature useful? It better not be.
 
-## In Conclusion
+## Conclusion
 
-If you've read this far, you're already taking this too seriously. Stop that.
+Eyro Collection: Because sometimes you just need a place to put that weird code experiment that doesn't deserve its own repo.
 
-KEMO Collection: Because sometimes you just need a place to put that weird code experiment that doesn't deserve its own repo.
-
-_Remember: Every time you expect this project to make sense, the KEMO middle finger points at you._
+_Remember: Every time you expect this project to make sense, the Eyro middle finger points at you._

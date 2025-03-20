@@ -40,9 +40,9 @@ export async function POST(request: NextRequest) {
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          "HTTP-Referer":
-            request.headers.get("referer") || "https://kemo-collection.com",
-          "X-Title": "KEMO Collection",
+          Referer:
+            request.headers.get("referer") || "https://eyro-collection.com",
+          "X-Title": "Eyro Collection",
         },
         body: JSON.stringify({
           model: "deepseek/deepseek-r1:free",

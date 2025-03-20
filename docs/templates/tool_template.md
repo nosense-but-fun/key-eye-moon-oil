@@ -51,7 +51,7 @@ Great question! We ask ourselves that every day. The leading theories are:
 
 1. Someone lost a bet
 2. It seemed like a good idea at 3 AM
-3. We needed another useless tool for the KEMO Collection
+3. We needed another useless tool for the Eyro Collection
 
 ## Testimonials
 

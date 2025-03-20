@@ -56,8 +56,8 @@ export function middleware(request: NextRequest) {
   }
 
   // Get stored language from cookies (localStorage isn't available in middleware)
-  const storedLang = request.cookies.get("kemo-language")?.value;
-  const storedTone = request.cookies.get("kemo-tone")?.value;
+  const storedLang = request.cookies.get("eyro-language")?.value;
+  const storedTone = request.cookies.get("eyro-tone")?.value;
 
   // Use stored language if valid, otherwise use default
   const lang =

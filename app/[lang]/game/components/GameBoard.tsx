@@ -96,7 +96,7 @@ export default function GameBoard({ gridState, turnHistory }: GameBoardProps) {
         </div>
       )}
 
-      {/* Weird decorative elements because KEMO */}
+      {/* Weird decorative elements because Eyro */}
       <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 dark:bg-yellow-600 rounded-full flex items-center justify-center transform rotate-12">
         🖕
       </div>

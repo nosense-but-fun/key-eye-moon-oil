@@ -1,12 +1,12 @@
-# AI Assistant Guide to the KEMO Collection
+# AI Assistant Guide to the Eyro Collection
 
 ## Introduction for AI Assistants
 
-This document provides guidance for AI assistants (like Claude, ChatGPT, etc.) to understand the KEMO Collection project's unique characteristics and how to interact with it effectively.
+This document provides guidance for AI assistants (like Claude, ChatGPT, etc.) to understand the Eyro Collection project's unique characteristics and how to interact with it effectively.
 
 ## Core Project Philosophy
 
-KEMO Collection deliberately embraces these principles:
+Eyro Collection deliberately embraces these principles:
 
 1. **Intentional Chaos**: This project is a chaotic collection of unrelated tools and experiments with no coherent structure.
 2. **Anti-Establishment Attitude**: We reject conventional software development practices and documentation styles.
@@ -20,7 +20,7 @@ When you encounter this project, analyze these files to understand the context:
 
 1. `README.md` - The deliberately unhelpful introduction to the project
 2. `docs/project_description.md` - A more detailed explanation of the "philosophy"
-3. `.cursor/rules/kemo_vibe.mdc` - Guidelines for maintaining the chaotic tone
+3. `.cursor/rules/eyro_vibe.mdc` - Guidelines for maintaining the chaotic tone
 4. `.cursor/rules/ui-design.mdc` - Guidelines for creating intentionally chaotic UIs
 
 ## Project Structure
@@ -62,7 +62,7 @@ There is deliberately no logical structure. Important directories include:
 
 4. **UI Elements**: Should include unexpected behaviors, animations, or easter eggs
 
-## Special Projects Within KEMO
+## Special Projects Within Eyro
 
 ### AI Narrative Battle Game
 
@@ -79,4 +79,4 @@ Each tool in the `/app/tools` directory is its own nonsensical creation with no 
 
 ## Remember
 
-When working with KEMO, the primary objective is to maintain the irreverent chaos while still providing functionality. As the documentation states: "Taking this project seriously is your first mistake."
+When working with Eyro, the primary objective is to maintain the irreverent chaos while still providing functionality. As the documentation states: "Taking this project seriously is your first mistake."

@@ -1,28 +1,28 @@
 {
   "layout": {
     "html_lang": "en",
-    "title": "KEMO Collection | Pointlessly Awesome",
-    "description": "A collection of completely unrelated and possibly useless tools. Enter at your own risk."
+    "title": "Eyro Collection | Pointlessly Awesome",
+    "description": "A carefully curated collection of completely unrelated and possibly useless tools. Enter at your own risk."
   },
   "header": {
     "home": "Home",
     "github": "GitHub",
     "loading": "Loading...",
     "quotes": [
-      "Using this app may cause existential dread",
-      "Your sanity left the chat",
+      "Using this app may cause existential anxiety",
+      "Your sanity has left the chat",
       "Warning: May contain traces of actual functionality",
-      "Built by developers who should know better",
-      "KEMO: Because someone had to make this monstrosity",
-      "Abandon hope, all ye who enter here",
+      "Built by developers who should have known better",
+      "Zyro: Because someone had to make this monstrosity",
+      "Abandon all hope, ye who enter",
       "This header is intentionally over-engineered",
       "Your code is too clean, try making it worse",
-      "Error: Too much sense detected",
+      "Error: Too much logic detected",
       "Warning: Your UI is too conventional"
     ]
   },
   "footer": {
-    "copyright": "© {{year}} KEMO Collection. All wrongs reserved.",
+    "copyright": "© {{year}} Eyro Collection. All wrongs reserved.",
     "built_with": "Built with questionable decisions and zero practical purpose.",
     "messages": [
       "Why are you clicking on a footer? Seriously?",
@@ -189,12 +189,12 @@
     }
   },
   "game": {
-    "title": "KEMO's Pointlessly AI Narrative Battle",
-    "subtitle": "Two AI players fight to the death in a grid. Why? No reason. Welcome to KEMO.",
-    "loading": "Loading meaningless game... 🖕",
+    "title": "Zyro's Pointlessly AI Narrative Battle",
+    "subtitle": "Two AI players fight to the death in a grid. Why? No reason. Welcome to Eyro.",
+    "loading": "Loading pointless game... 🖕",
     "error": {
-      "title": "ERROR (or is it?)",
-      "hint": "Just refresh the page. Or don't. KEMO doesn't actually care about your user experience."
+      "title": "Error (or is it?)",
+      "hint": "Just refresh the page. Or don't. Zyro doesn't actually care about your user experience."
     },
     "controls": {
       "next_turn": {
@@ -284,7 +284,7 @@
       "player_a_prefix": "Player A:",
       "player_b_prefix": "Player B:",
       "outcome_prefix": "Outcome:",
-      "footer": "KEMO's AI Narrative Engine™ - As pointless as your existence"
+      "footer": "Eyro's AI Narrative Engine™ - As pointless as your existence"
     },
     "fallback_narratives": {
       "player_a": [

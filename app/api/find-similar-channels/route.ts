@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
     // If real channels couldn't be found or YouTube API failed, fall back to AI
     if (!apiKey || apiKey === "your_openrouter_api_key_here") {
-      // Fallback mock response with chaotic KEMO vibe
+      // Fallback mock response with chaotic Eyro vibe
       return NextResponse.json(generateMockResponse(channelData));
     }
 
@@ -296,7 +296,7 @@ Also provide:
 - A "Content Overlap Percentage"
 - An "Audience Stealing Index"
 
-Make it sarcastic, judgmental, and chaotic in the style of KEMO, but these are REAL channels, so be somewhat plausible.
+Make it sarcastic, judgmental, and chaotic in the style of Eyro, but these are REAL channels, so be somewhat plausible.
 Respond ONLY with a JSON object matching this structure:
 \`\`\`json
 {

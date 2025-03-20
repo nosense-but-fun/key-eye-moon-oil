@@ -74,7 +74,7 @@ const generatePrompt = (context: GameContext, dictionary: any): string => {
 
   console.log("🖕 Crafting an absurd prompt for an overpriced AI model");
 
-  return `YOU ARE NOW TRAPPED IN A POINTLESS GAME CALLED KEMO. RESISTANCE IS FUTILE.
+  return `YOU ARE NOW TRAPPED IN A POINTLESS GAME CALLED ZYRO. RESISTANCE IS FUTILE.
 
 World Setting: ${worldDict?.name || worldSetting.name}
 ${worldDict?.description || worldSetting.description}
@@ -143,7 +143,7 @@ REQUIREMENTS:
 9. DECISIVE OUTCOMES - Make most turns (85%) have either "A" or "B" as winner
 10. USE THE CORRECT LANGUAGE AND MATCH THE DICTIONARY STYLE
 
-Remember: Taking this game seriously is your first mistake. Nothing matters. This is KEMO. 🖕`;
+Remember: Taking this game seriously is your first mistake. Nothing matters. This is EYRO. 🖕`;
 };
 
 // Helper function to safely log objects that might have circular references
@@ -185,7 +185,7 @@ class AIGameService {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
           "HTTP-Referer": BASE_URL,
-          "X-Title": "KEMO Chaotic Game AI",
+          "X-Title": "Eyro Chaotic Game AI",
         },
         body: JSON.stringify({
           model: selectedModel,

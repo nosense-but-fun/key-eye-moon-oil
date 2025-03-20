@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "KEMO Collection",
+  title: "Eyro Collection",
   description:
     "A collection of completely unrelated and possibly useless tools.",
 };

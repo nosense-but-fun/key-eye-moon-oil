@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
-import KemoHeader from "../components/KemoHeader";
-import KemoFooter from "../components/KemoFooter";
+import EyroHeader from "../components/EyroHeader";
+import EyroFooter from "../components/EyroFooter";
 import { LanguageProvider } from "../contexts/LanguageContext";
 import Script from "next/script";
 import LanguageDetectorInitializer from "../components/LanguageDetectorInitializer";
@@ -113,9 +113,9 @@ export default async function LanguageLayout({
           initialTone={tone}
           initialDictionary={dictionary}
         >
-          <KemoHeader dictionary={dictionary} />
+          <EyroHeader dictionary={dictionary} />
           <main className="flex-grow">{children}</main>
-          <KemoFooter dictionary={dictionary} />
+          <EyroFooter dictionary={dictionary} />
         </LanguageProvider>
       </div>
     </>

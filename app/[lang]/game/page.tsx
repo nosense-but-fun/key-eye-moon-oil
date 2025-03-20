@@ -120,7 +120,7 @@ export default function ChaoticBattleGame() {
       // Validate that we have the necessary data to update the game state
       if (!data.turnResult || !data.newGridState || !data.newScores) {
         console.error("Invalid game data returned:", data);
-        throw new Error("🖕 The game data was incomplete. KEMO strikes again!");
+        throw new Error("🖕 The game data was incomplete. Zyro strikes again!");
       }
 
       setGameState((prevState) => ({
