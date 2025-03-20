@@ -16,6 +16,20 @@ import {
   ValidLanguage,
   getDictionary,
 } from "../dictionaries";
+import Cookies from "js-cookie";
+
+// Storage keys
+const STORAGE_KEYS = {
+  LANGUAGE: "kemo-language",
+  TONE: "kemo-tone",
+};
+
+// Cookie configuration
+const COOKIE_OPTIONS = {
+  expires: 365, // 1 year
+  path: "/",
+  sameSite: "lax",
+} as const;
 
 // Define the context type
 interface LanguageContextType {
@@ -43,6 +57,40 @@ const LanguageContext = createContext<LanguageContextType>({
   setTone: () => {},
 });
 
+// Helper function to safely interact with storage (both localStorage and cookies)
+const getStorageItem = (key: string, fallback: string): string => {
+  if (typeof window === "undefined") return fallback;
+  try {
+    // Try cookies first (for middleware compatibility)
+    const cookieValue = Cookies.get(key);
+    if (cookieValue) return cookieValue;
+
+    // Then try localStorage
+    const localValue = localStorage.getItem(key);
+    if (localValue) {
+      // If found in localStorage but not in cookies, sync to cookies
+      Cookies.set(key, localValue, COOKIE_OPTIONS);
+      return localValue;
+    }
+
+    return fallback;
+  } catch (error) {
+    console.warn("Error accessing storage:", error);
+    return fallback;
+  }
+};
+
+const setStorageItem = (key: string, value: string): void => {
+  if (typeof window === "undefined") return;
+  try {
+    // Set both localStorage and cookies
+    localStorage.setItem(key, value);
+    Cookies.set(key, value, COOKIE_OPTIONS);
+  } catch (error) {
+    console.warn("Error writing to storage:", error);
+  }
+};
+
 /**
  * Provider for language and tone state
  */
@@ -56,20 +104,53 @@ export function LanguageProvider({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Initialize state with provided values or defaults
-  const [language, setLanguageState] = useState<string>(
-    initialLanguage || defaultLanguage
-  );
+  // Initialize state with storage values or defaults
+  const [language, setLanguageState] = useState<string>(() => {
+    // Priority: 1. URL param, 2. storage, 3. default
+    if (
+      initialLanguage &&
+      (initialLanguage === "en" || initialLanguage === "zh")
+    ) {
+      // If URL has valid language, save it to storage
+      setStorageItem(STORAGE_KEYS.LANGUAGE, initialLanguage);
+      return initialLanguage;
+    }
+    return getStorageItem(STORAGE_KEYS.LANGUAGE, defaultLanguage);
+  });
 
   const [tone, setToneState] = useState<string>(() => {
-    // Get the initial tone value based on language
-    if (!initialTone) {
-      // If no initialTone is provided, use the default for the language
-      if (language === "en") return defaultTones.en;
-      if (language === "zh") return defaultTones.zh;
-      return defaultTones.en; // Fallback
+    // Priority: 1. URL param (if valid), 2. storage (if valid), 3. default for language
+    if (initialTone) {
+      const isValidTone =
+        (language === "en" &&
+          (initialTone === "normal" || initialTone === "chaotic")) ||
+        (language === "zh" &&
+          (initialTone === "standard" || initialTone === "internet"));
+
+      if (isValidTone) {
+        setStorageItem(STORAGE_KEYS.TONE, initialTone);
+        return initialTone;
+      }
     }
-    return initialTone;
+
+    // Try storage
+    const storedTone = getStorageItem(STORAGE_KEYS.TONE, "");
+
+    // Validate stored tone for current language
+    const isStoredToneValid =
+      (language === "en" &&
+        (storedTone === "normal" || storedTone === "chaotic")) ||
+      (language === "zh" &&
+        (storedTone === "standard" || storedTone === "internet"));
+
+    if (storedTone && isStoredToneValid) {
+      return storedTone;
+    }
+
+    // Fallback to default for language
+    const defaultTone = language === "en" ? defaultTones.en : defaultTones.zh;
+    setStorageItem(STORAGE_KEYS.TONE, defaultTone);
+    return defaultTone;
   });
 
   const [dictionary, setDictionary] = useState<any>(initialDictionary || {});
@@ -82,8 +163,9 @@ export function LanguageProvider({
       return;
     }
 
-    // Update state
+    // Update state and storage
     setLanguageState(newLang);
+    setStorageItem(STORAGE_KEYS.LANGUAGE, newLang);
 
     // Check if the current tone is valid for the new language
     const isValidTone =
@@ -100,6 +182,7 @@ export function LanguageProvider({
 
     if (!isValidTone) {
       setToneState(newTone);
+      setStorageItem(STORAGE_KEYS.TONE, newTone);
     }
 
     // Update dictionary
@@ -144,8 +227,9 @@ export function LanguageProvider({
       return;
     }
 
-    // Update state
+    // Update state and storage
     setToneState(newTone);
+    setStorageItem(STORAGE_KEYS.TONE, newTone);
 
     // Update dictionary
     const newDictionary = await getDictionary(language, newTone);
@@ -166,6 +250,7 @@ export function LanguageProvider({
     // If valid language in path and different from current, update it
     if ((pathLang === "en" || pathLang === "zh") && pathLang !== language) {
       setLanguageState(pathLang);
+      setStorageItem(STORAGE_KEYS.LANGUAGE, pathLang);
     }
 
     // Extract tone from query parameter
@@ -180,6 +265,7 @@ export function LanguageProvider({
 
       if (isValidTone && urlTone !== tone) {
         setToneState(urlTone);
+        setStorageItem(STORAGE_KEYS.TONE, urlTone);
       }
     }
 

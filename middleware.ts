@@ -48,50 +48,49 @@ function getLocale(request: NextRequest): string {
 }
 
 export function middleware(request: NextRequest) {
-  try {
-    const { pathname } = request.nextUrl;
+  const pathname = request.nextUrl.pathname;
 
-    // Ignore files and API routes
-    if (
-      pathname.startsWith("/_next") ||
-      pathname.includes("/api/") ||
-      pathname.match(/\.(jpg|png|svg|css|js)$/)
-    ) {
-      return NextResponse.next();
-    }
-
-    // Check if the pathname starts with a locale
-    const pathnameHasLocale = validLanguages.some(
-      (locale) =>
-        pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-    );
-
-    // If there's already a locale in the pathname, we're good
-    if (pathnameHasLocale) {
-      return NextResponse.next();
-    }
-
-    // Otherwise, get the preferred locale and redirect
-    const locale = getLocale(request);
-
-    // Redirect to the new URL with locale
-    // Add the default tone for this language as a query param
-    const newPathname = `/${locale}${pathname === "/" ? "" : pathname}`;
-    request.nextUrl.pathname = newPathname;
-
-    // Get tone based on language
-    const tone = locale === "en" ? defaultTones.en : defaultTones.zh;
-    request.nextUrl.searchParams.set("tone", tone);
-
-    return NextResponse.redirect(request.nextUrl);
-  } catch (error) {
-    console.error("Error in middleware:", error);
-    // Fallback to default language if middleware fails
-    const newUrl = new URL(`/${defaultLanguage}`, request.url);
-    return NextResponse.redirect(newUrl);
+  // If the path already includes a language prefix, let it pass through
+  if (pathname.match(/^\/[a-z]{2}(?:\/|$)/)) {
+    return NextResponse.next();
   }
+
+  // Get stored language from cookies (localStorage isn't available in middleware)
+  const storedLang = request.cookies.get("kemo-language")?.value;
+  const storedTone = request.cookies.get("kemo-tone")?.value;
+
+  // Use stored language if valid, otherwise use default
+  const lang =
+    storedLang === "en" || storedLang === "zh" ? storedLang : defaultLanguage;
+
+  // Use stored tone if valid for the language, otherwise use default
+  let tone = storedTone;
+  if (lang === "en" && tone !== "normal" && tone !== "chaotic") {
+    tone = defaultTones.en;
+  } else if (lang === "zh" && tone !== "standard" && tone !== "internet") {
+    tone = defaultTones.zh;
+  }
+
+  // Construct the new URL with language prefix and tone
+  const newUrl = new URL(`/${lang}${pathname}`, request.url);
+  if (tone) {
+    newUrl.searchParams.set("tone", tone);
+  }
+
+  // Redirect to the new URL
+  return NextResponse.redirect(newUrl);
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|.*\\..*).*)"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder files
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
+  ],
 };

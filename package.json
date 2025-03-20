@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.6.0",
+    "@types/js-cookie": "^3.0.6",
     "googleapis": "^146.0.0",
+    "js-cookie": "^3.0.5",
     "negotiator": "^1.0.0",
     "next": "15.2.2",
     "openai": "^4.87.4",
