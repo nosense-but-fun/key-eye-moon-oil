@@ -67,17 +67,19 @@ const turnHistoryToString = (turnHistory: TurnResult[]): string => {
 };
 
 // Generate a prompt for the AI with chaotic presentation but clean structure
-const generatePrompt = (context: GameContext): string => {
+const generatePrompt = (context: GameContext, dictionary: any): string => {
   const { worldSetting, turnHistory, gridState, currentTurn, scores } = context;
+  // Access the world settings directly from the dictionary's game property
+  const worldDict = dictionary.game.world_settings[worldSetting.name];
 
   console.log("🖕 Crafting an absurd prompt for an overpriced AI model");
 
   return `YOU ARE NOW TRAPPED IN A POINTLESS GAME CALLED KEMO. RESISTANCE IS FUTILE.
 
-World Setting: ${worldSetting.name}
-${worldSetting.description}
+World Setting: ${worldDict?.name || worldSetting.name}
+${worldDict?.description || worldSetting.description}
 Rules (which you should mostly ignore): ${
-    worldSetting.rules || "NO RULES JUST CHAOS"
+    worldDict?.rules || worldSetting.rules || "NO RULES JUST CHAOS"
   }
 
 CURRENT GAME STATE:
@@ -113,6 +115,11 @@ IMPORTANT WINNER RULES:
 3. Only use "tie" in 15% of cases when the outcome is truly ambiguous.
 4. Change up which player wins - don't always pick the same one.
 
+IMPORTANT LANGUAGE RULES:
+1. Respond in the same language as the world setting description.
+2. Match the tone and style of the narratives in the dictionary.
+3. Keep the chaotic and irreverent style regardless of language.
+
 Example valid response:
 {
   "playerAAction": "Player A deployed a swarm of middle-finger shaped drones that spelled out 'WHY ARE WE HERE?' in the sky 🖕",
@@ -134,6 +141,7 @@ REQUIREMENTS:
 7. Don't be afraid to break the 4th wall
 8. ONLY RETURN THE JSON OBJECT ITSELF
 9. DECISIVE OUTCOMES - Make most turns (85%) have either "A" or "B" as winner
+10. USE THE CORRECT LANGUAGE AND MATCH THE DICTIONARY STYLE
 
 Remember: Taking this game seriously is your first mistake. Nothing matters. This is KEMO. 🖕`;
 };
@@ -155,7 +163,7 @@ const safeStringify = (obj: any, maxLength: number = 500): string => {
 
 // AIGameService class - structured implementation with chaotic presentation
 class AIGameService {
-  async callAI(prompt: string): Promise<any> {
+  async callAI(prompt: string, dictionary: any): Promise<any> {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey || apiKey === "your_openrouter_api_key_here") {
       console.log("🖕 No API key? Using fallback like a peasant");
@@ -194,6 +202,8 @@ FORMAT YOUR RESPONSE AS THIS EXACT JSON:
   "outcome": "A description of what happened as a result",
   "winner": "A" or "B" or "tie"
 }
+
+IMPORTANT: Use the same language and style as the world setting description.
 
 DO NOT INCLUDE ANY REASONING, EXPLANATIONS, OR THOUGHTS ABOUT YOUR PROCESS.
 DO NOT INCLUDE THE ROLE FIELD OR REASONING FIELD IN YOUR RESPONSE.
@@ -392,7 +402,8 @@ RETURN ONLY THE REQUESTED JSON OBJECT.`,
 // Main function to generate AI turn result
 export const generateAITurnResult = async (
   context: GameContext,
-  position: { row: number; col: number }
+  position: { row: number; col: number },
+  dictionary: any
 ): Promise<TurnResult> => {
   const service = new AIGameService();
 
@@ -404,13 +415,13 @@ export const generateAITurnResult = async (
       "🤖 AI is contemplating the existential dread of generating a turn..."
     );
 
-    // Generate prompt
-    const prompt = generatePrompt(context);
+    // Generate prompt with dictionary
+    const prompt = generatePrompt(context, dictionary);
 
-    // Call AI service
+    // Call AI service with dictionary
     let data;
     try {
-      data = await service.callAI(prompt);
+      data = await service.callAI(prompt, dictionary);
     } catch (error) {
       console.error("❌ AI service call failed:", error);
       throw error; // Rethrow to be caught by the outer try/catch
@@ -440,7 +451,8 @@ export const generateAITurnResult = async (
       context.worldSetting,
       context.turnHistory,
       context.gridState,
-      position
+      position,
+      dictionary
     );
 
     // Keep logging but don't add fallback marker to UI
@@ -466,7 +478,8 @@ export const generateAITurnResult = async (
       context.worldSetting,
       context.turnHistory,
       context.gridState,
-      position
+      position,
+      dictionary
     );
 
     // Log the error details but don't modify the user-facing content

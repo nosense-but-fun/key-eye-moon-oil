@@ -6,6 +6,8 @@ import StoryPanel from "./components/StoryPanel";
 import ScoreDisplay from "./components/ScoreDisplay";
 import GameControls from "./components/GameControls";
 import { createGameContext } from "./utils/gameLogic";
+import { useLanguage } from "../../contexts/LanguageContext";
+import { useParams } from "next/navigation";
 
 // Custom hook to detect client-side rendering
 function useLoaded() {
@@ -19,6 +21,29 @@ export default function ChaoticBattleGame() {
   const [gameState, setGameState] = useState(() => createGameContext());
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { dictionary } = useLanguage();
+  const dict = dictionary.game;
+  const params = useParams();
+
+  // Update world setting with translated content when dictionary changes
+  useEffect(() => {
+    if (gameState.worldSetting.name) {
+      const worldDict =
+        dict.world_settings[
+          gameState.worldSetting.name as keyof typeof dict.world_settings
+        ];
+      if (worldDict) {
+        setGameState((prev) => ({
+          ...prev,
+          worldSetting: {
+            name: gameState.worldSetting.name,
+            description: worldDict.description,
+            rules: worldDict.rules,
+          },
+        }));
+      }
+    }
+  }, [dict, gameState.worldSetting.name]);
 
   useEffect(() => {
     // Random chaos effect on page load
@@ -39,7 +64,7 @@ export default function ChaoticBattleGame() {
     setErrorMessage(null);
 
     try {
-      const response = await fetch("/api/game/generate", {
+      const response = await fetch(`/${params.lang}/game/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -48,6 +73,12 @@ export default function ChaoticBattleGame() {
           gridState: gameState.gridState,
           currentTurn: gameState.currentTurn,
           scores: gameState.scores,
+          dictionary: {
+            game: {
+              world_settings: dict.world_settings,
+              fallback_narratives: dict.fallback_narratives,
+            },
+          },
         }),
       });
 
@@ -124,7 +155,20 @@ export default function ChaoticBattleGame() {
   };
 
   const resetGame = () => {
-    setGameState(createGameContext());
+    const newGame = createGameContext();
+    // Update world setting with translated content
+    const worldDict =
+      dict.world_settings[
+        newGame.worldSetting.name as keyof typeof dict.world_settings
+      ];
+    if (worldDict) {
+      newGame.worldSetting = {
+        name: newGame.worldSetting.name,
+        description: worldDict.description,
+        rules: worldDict.rules,
+      };
+    }
+    setGameState(newGame);
     setErrorMessage(null);
   };
 
@@ -134,33 +178,29 @@ export default function ChaoticBattleGame() {
         className="text-4xl font-bold mb-6 text-center transform -rotate-1 dark:text-gray-100"
         id="chaos-effect"
       >
-        KEMO's Pointlessly AI Narrative Battle
+        {dict.title}
       </h1>
 
       <p className="text-lg mb-8 text-center italic dark:text-gray-300">
-        Two AI players fight to the death in a grid. Why? No reason. Welcome to
-        KEMO.
+        {dict.subtitle}
       </p>
 
       {errorMessage && (
         <div className="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 mb-4 rounded transform rotate-1 transition-all">
           <div className="flex items-center justify-between">
-            <p className="font-bold">ERROR (or is it?)</p>
+            <p className="font-bold">{dict.error.title}</p>
             <span className="text-xl">🖕</span>
           </div>
           <p className="my-2">{errorMessage}</p>
           <p className="text-xs mt-1 dark:text-red-200 italic">
-            Just refresh the page. Or don't. KEMO doesn't actually care about
-            your user experience.
+            {dict.error.hint}
           </p>
         </div>
       )}
 
       {!isLoaded ? (
         <div className="flex items-center justify-center h-64">
-          <p className="text-xl font-bold animate-pulse">
-            Loading meaningless game... 🖕
-          </p>
+          <p className="text-xl font-bold animate-pulse">{dict.loading}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -172,7 +212,7 @@ export default function ChaoticBattleGame() {
           </div>
 
           <div className="order-1 lg:order-2 flex flex-col gap-4">
-            <ScoreDisplay scores={gameState.scores} />
+            <ScoreDisplay scores={gameState.scores} dictionary={dict.score} />
             <GameBoard
               gridState={gameState.gridState}
               turnHistory={gameState.turnHistory}
@@ -183,6 +223,7 @@ export default function ChaoticBattleGame() {
               isGenerating={isGenerating}
               isGameOver={gameState.isGameOver}
               turnCount={gameState.currentTurn}
+              dictionary={dict.controls}
             />
           </div>
         </div>

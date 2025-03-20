@@ -132,8 +132,58 @@
         "DETERMINING WHO'S THE ORIGINAL COPYCAT... 🏷️🖕",
         "CHECKING WHO STOLE THE MOST TITLES... 📋🖕",
         "RATING ANNOYING INTRO MUSIC... 🎵🖕",
-        "MEASURING CLICKBAIT LEVELS (THEY'RE ALL 100%)... 🎯🖕"
+        "MEASURING CLICKBAIT LEVELS (THEY'RE ALL 100%)... ��🖕"
       ]
+    }
+  },
+  "game": {
+    "title": "K3M0'z BR0K3N AI BATT13 R0YAL3!! 🖕",
+    "subtitle": "TWO STUPID AIs FIGHT 2 THE DEATH IN A GRID OF PURE CHAOS! WHY?! BECAUSE WE HATE LOGIC! 🖕",
+    "loading": "L0AD1NG Y0UR D00M... 🖕🖕🖕",
+    "error": {
+      "title": "ERR0R_404: SANITY_NOT_FOUND 🖕",
+      "hint": "REFRESH IF U DARE! OR DON'T! KEMO ACTIVELY HOPES UR EXPERIENCE SUX! 🖕"
+    },
+    "controls": {
+      "next_turn": {
+        "default": [
+          "NEXT STUPID TURN 🖕",
+          "M0AR DIGITAL TRASH!!1!",
+          "CONTINUE THE STUPID!!1!",
+          "ANOTHER WASTE OF LIFE!!",
+          "TIME 2 BREAK REALITY!!"
+        ],
+        "generating": "AI.exe has stopped working... LOL! 🖕",
+        "game_over": "GAME OVER... U WASTED UR LIFE! 🖕"
+      },
+      "reset": "RESET THIS DIGITAL GARBAGE!! 🖕",
+      "tips": [
+        "TIP: THIS GAME IS PURE TRASH BY DESIGN!! 🖕",
+        "PRO-TIP: ALT+F4 IS THE BEST MOVE!!1!",
+        "FACT: THIS AI IS PROBABLY SMARTER THAN U! 🖕",
+        "TIP: SMASH BUTTONS = WIN GAME (NOT RLY)",
+        "WARNING: UR BRAIN CELLS R DYING RN!!1!",
+        "NOTE: EXISTENCE IS PAIN, THIS GAME PROVES IT! 🖕",
+        "TIP: THE REAL L0SER IS U 4 PLAYING THIS! 🖕"
+      ]
+    },
+    "score": {
+      "title": "P01NTL3SS SC0R3 TRACK3R 🖕",
+      "player_a": {
+        "name": "PLAYER A (THE DUMB 1)",
+        "description": "RED = DEAD"
+      },
+      "player_b": {
+        "name": "PLAYER B (THE DUMBER 1)",
+        "description": "BLUE = LOSER"
+      },
+      "versus": "VS (BUT WHO CARES?!)",
+      "turn_score": "MEANINGLESS SCORE: {{a}} - {{b}} 🖕",
+      "status": {
+        "a_winning": "A IS WINNING (STILL STUPID THO)",
+        "b_winning": "B IS WINNING (WHAT A JOKE)",
+        "tie": "IT'S A TIE (EVERYONE LOSES) 🖕"
+      }
     }
   }
 }

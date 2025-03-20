@@ -7,9 +7,30 @@ interface ScoreDisplayProps {
     A: number;
     B: number;
   };
+  dictionary: {
+    title: string;
+    player_a: {
+      name: string;
+      description: string;
+    };
+    player_b: {
+      name: string;
+      description: string;
+    };
+    versus: string;
+    turn_score: string;
+    status: {
+      a_winning: string;
+      b_winning: string;
+      tie: string;
+    };
+  };
 }
 
-export default function ScoreDisplay({ scores }: ScoreDisplayProps) {
+export default function ScoreDisplay({
+  scores,
+  dictionary,
+}: ScoreDisplayProps) {
   const [rotationA, setRotationA] = useState(0);
   const [rotationB, setRotationB] = useState(0);
 
@@ -31,15 +52,15 @@ export default function ScoreDisplay({ scores }: ScoreDisplayProps) {
 
   // Calculate who's winning for additional flair
   const getWinningText = () => {
-    if (scores.A > scores.B) return "A is obviously superior";
-    if (scores.B > scores.A) return "B is clearly winning, duh";
-    return "It's a tie, how boring";
+    if (scores.A > scores.B) return dictionary.status.a_winning;
+    if (scores.B > scores.A) return dictionary.status.b_winning;
+    return dictionary.status.tie;
   };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/30 p-4 dark:text-white">
       <h2 className="text-xl font-bold mb-3 transform -rotate-1">
-        Pointless Score Tracker
+        {dictionary.title}
       </h2>
 
       <div className="flex justify-around items-center">
@@ -50,20 +71,24 @@ export default function ScoreDisplay({ scores }: ScoreDisplayProps) {
           <div className="w-16 h-16 bg-red-500 dark:bg-red-600 rounded-full mb-2 flex items-center justify-center text-white text-2xl font-bold mx-auto shadow-lg dark:shadow-red-900/40">
             {scores.A}
           </div>
-          <p className="font-bold text-red-800 dark:text-red-400">Player A</p>
+          <p className="font-bold text-red-800 dark:text-red-400">
+            {dictionary.player_a.name}
+          </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            The Red One
+            {dictionary.player_a.description}
           </p>
         </div>
 
         <div className="text-center">
-          <div className="text-2xl font-bold mb-2">VS</div>
+          <div className="text-2xl font-bold mb-2">{dictionary.versus}</div>
           <div className="bg-gray-200 dark:bg-gray-700 rounded-lg p-2 text-xs">
             {getWinningText()}
           </div>
           <div className="mt-2 text-center">
             <span className="inline-block px-3 py-1 bg-black text-white dark:bg-gray-900 text-xs rounded-full transform -rotate-2">
-              Turn Score: {scores.A} - {scores.B}
+              {dictionary.turn_score
+                .replace("{{a}}", String(scores.A))
+                .replace("{{b}}", String(scores.B))}
             </span>
           </div>
         </div>
@@ -75,9 +100,11 @@ export default function ScoreDisplay({ scores }: ScoreDisplayProps) {
           <div className="w-16 h-16 bg-blue-500 dark:bg-blue-600 rounded-full mb-2 flex items-center justify-center text-white text-2xl font-bold mx-auto shadow-lg dark:shadow-blue-900/40">
             {scores.B}
           </div>
-          <p className="font-bold text-blue-800 dark:text-blue-400">Player B</p>
+          <p className="font-bold text-blue-800 dark:text-blue-400">
+            {dictionary.player_b.name}
+          </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            The Blue One
+            {dictionary.player_b.description}
           </p>
         </div>
       </div>

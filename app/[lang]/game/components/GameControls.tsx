@@ -8,6 +8,15 @@ interface GameControlsProps {
   isGenerating: boolean;
   isGameOver: boolean;
   turnCount: number;
+  dictionary: {
+    next_turn: {
+      default: string[];
+      generating: string;
+      game_over: string;
+    };
+    reset: string;
+    tips: string[];
+  };
 }
 
 export default function GameControls({
@@ -16,6 +25,7 @@ export default function GameControls({
   isGenerating,
   isGameOver,
   turnCount,
+  dictionary,
 }: GameControlsProps) {
   const [buttonOffset, setButtonOffset] = useState({ x: 0, y: 0 });
   const [buttonScale, setButtonScale] = useState(1);
@@ -37,42 +47,25 @@ export default function GameControls({
     return () => clearInterval(interval);
   }, [isGenerating]);
 
-  // Random unhelpful tips
-  const randomTips = [
-    "Tip: This game makes no sense by design",
-    "Pro-tip: Don't play this game",
-    "Fact: This game was created by an AI to confuse humans",
-    "Tip: Clicking buttons randomly is a valid strategy",
-    "Warning: Playing this game may cause existential crisis",
-    "Note: All decisions are meaningless, just like life",
-    "Tip: The real game is convincing yourself this has value",
-  ];
-
-  const [tip, setTip] = useState(randomTips[0]);
+  const [tip, setTip] = useState(dictionary.tips[0]);
 
   useEffect(() => {
     // Change tip randomly
     const tipInterval = setInterval(() => {
-      const newTip = randomTips[Math.floor(Math.random() * randomTips.length)];
+      const newTip =
+        dictionary.tips[Math.floor(Math.random() * dictionary.tips.length)];
       setTip(newTip);
     }, 5000);
 
     return () => clearInterval(tipInterval);
-  }, []);
+  }, [dictionary.tips]);
 
   const getButtonText = () => {
-    if (isGameOver) return "Game Finished";
-    if (isGenerating) return "AI is thinking...";
-
-    const options = [
-      "Next Pointless Turn",
-      "Generate More Chaos",
-      "Continue This Nonsense",
-      "One More Useless Action",
-      "Waste More Time",
+    if (isGameOver) return dictionary.next_turn.game_over;
+    if (isGenerating) return dictionary.next_turn.generating;
+    return dictionary.next_turn.default[
+      turnCount % dictionary.next_turn.default.length
     ];
-
-    return options[turnCount % options.length];
   };
 
   return (
@@ -100,7 +93,7 @@ export default function GameControls({
           onClick={onReset}
           className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 font-bold transition-all"
         >
-          Reset This Pointless Game
+          {dictionary.reset}
         </button>
       </div>
 

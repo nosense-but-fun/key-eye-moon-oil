@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { TurnResult, WorldSetting } from "../utils/gameLogic";
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 interface StoryPanelProps {
   turnHistory: TurnResult[];
@@ -13,6 +14,12 @@ export default function StoryPanel({
   worldSetting,
 }: StoryPanelProps) {
   const storyEndRef = useRef<HTMLDivElement>(null);
+  const { dictionary } = useLanguage();
+  const dict = dictionary.game.story_panel;
+  const worldDict =
+    dictionary.game.world_settings[
+      worldSetting.name as keyof typeof dictionary.game.world_settings
+    ];
 
   // Scroll to the bottom when new story content is added
   useEffect(() => {
@@ -61,17 +68,15 @@ export default function StoryPanel({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/30 p-4 h-[600px] overflow-hidden flex flex-col dark:text-gray-100">
       <h2 className="text-2xl font-bold mb-3 transform rotate-1">
-        The Pointlessly Epic Tale of A vs B
+        {dict.title}
       </h2>
 
-      {worldSetting && (
+      {worldDict && (
         <div className="bg-gradient-to-r from-purple-200 to-blue-200 dark:from-purple-900 dark:to-blue-900 p-3 rounded-md mb-4">
           <h3 className="text-lg font-semibold mb-2">
-            World Setting: {worldSetting.name}
+            {dict.world_setting_prefix} {worldDict.name}
           </h3>
-          <p className="text-sm dark:text-gray-300">
-            {worldSetting.description}
-          </p>
+          <p className="text-sm dark:text-gray-300">{worldDict.description}</p>
         </div>
       )}
 
@@ -79,7 +84,7 @@ export default function StoryPanel({
         {turnHistory.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-gray-500 dark:text-gray-400 italic">
-              No story yet. Click "Next Turn" to start this pointless narrative.
+              {dict.empty_story}
             </p>
           </div>
         ) : (
@@ -88,7 +93,7 @@ export default function StoryPanel({
               <div key={index} className="mb-6">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs text-gray-500 dark:text-gray-400">
-                    Turn {index + 1}
+                    {dict.turn_prefix} {index + 1}
                   </span>
                   <span
                     className={`text-xs font-bold px-2 py-1 rounded ${
@@ -99,27 +104,31 @@ export default function StoryPanel({
                         : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                     }`}
                   >
-                    {turn.winner === "tie" ? "Tie" : `${turn.winner} wins`}
+                    {turn.winner === "tie"
+                      ? dict.tie
+                      : `${turn.winner} ${dict.wins}`}
                   </span>
                 </div>
 
                 <div>
                   <div className="bg-red-50 dark:bg-red-900/30 p-2 rounded-t border-l-2 border-red-500">
                     <span className="text-xs font-bold text-red-800 dark:text-red-300">
-                      Player A:
+                      {dict.player_a_prefix}
                     </span>
                     {applyChaos(turn.playerAAction, index * 2)}
                   </div>
 
                   <div className="bg-blue-50 dark:bg-blue-900/30 p-2 rounded-b border-l-2 border-blue-500 mb-2">
                     <span className="text-xs font-bold text-blue-800 dark:text-blue-300">
-                      Player B:
+                      {dict.player_b_prefix}
                     </span>
                     {applyChaos(turn.playerBAction, index * 2 + 1)}
                   </div>
 
                   <div className="bg-gray-50 dark:bg-gray-800 p-2 rounded border-l-2 border-gray-500">
-                    <span className="text-xs font-bold">Outcome:</span>
+                    <span className="text-xs font-bold">
+                      {dict.outcome_prefix}
+                    </span>
                     {applyChaos(turn.outcome, index + turnHistory.length)}
                   </div>
                 </div>
@@ -135,7 +144,7 @@ export default function StoryPanel({
       </div>
 
       <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 border-t border-gray-200 dark:border-gray-700 pt-2">
-        KEMO's AI Narrative Engine™ - As pointless as your existence
+        {dict.footer}
       </div>
     </div>
   );

@@ -187,5 +187,144 @@
         "Measuring clickbait intensity across the platform... 🎯"
       ]
     }
+  },
+  "game": {
+    "title": "KEMO's Pointlessly AI Narrative Battle",
+    "subtitle": "Two AI players fight to the death in a grid. Why? No reason. Welcome to KEMO.",
+    "loading": "Loading meaningless game... 🖕",
+    "error": {
+      "title": "ERROR (or is it?)",
+      "hint": "Just refresh the page. Or don't. KEMO doesn't actually care about your user experience."
+    },
+    "controls": {
+      "next_turn": {
+        "default": [
+          "Next Pointless Turn",
+          "Generate More Chaos",
+          "Continue This Nonsense",
+          "One More Useless Action",
+          "Waste More Time"
+        ],
+        "generating": "AI is thinking...",
+        "game_over": "Game Finished"
+      },
+      "reset": "Reset This Pointless Game",
+      "tips": [
+        "Tip: This game makes no sense by design",
+        "Pro-tip: Don't play this game",
+        "Fact: This game was created by an AI to confuse humans",
+        "Tip: Clicking buttons randomly is a valid strategy",
+        "Warning: Playing this game may cause existential crisis",
+        "Note: All decisions are meaningless, just like life",
+        "Tip: The real game is convincing yourself this has value"
+      ]
+    },
+    "score": {
+      "title": "Pointless Score Tracker",
+      "player_a": {
+        "name": "Player A",
+        "description": "The Red One"
+      },
+      "player_b": {
+        "name": "Player B",
+        "description": "The Blue One"
+      },
+      "versus": "VS",
+      "turn_score": "Turn Score: {{a}} - {{b}}",
+      "status": {
+        "a_winning": "A is obviously superior",
+        "b_winning": "B is clearly winning, duh",
+        "tie": "It's a tie, how boring"
+      }
+    },
+    "world_settings": {
+      "cyberpunk": {
+        "name": "Cyberpunk Dystopia",
+        "description": "A neon-soaked urban hellscape where megacorps rule and hackers are the new rockstars. Player A is a rogue AI, Player B is a human hacker.",
+        "rules": "Technology rules the world, players compete for digital territories."
+      },
+      "wasteland": {
+        "name": "Post-Apocalyptic Wasteland",
+        "description": "Nuclear fallout has left the world a barren wasteland. Player A is a mutant warlord, Player B is the leader of the last human settlement.",
+        "rules": "Resource scarcity drives conflict, survival is the ultimate goal."
+      },
+      "fantasy": {
+        "name": "Fantasy Kingdom",
+        "description": "A realm of magic and monsters. Player A is a dark sorcerer, Player B is a noble paladin. They battle for the soul of the kingdom.",
+        "rules": "Magic is real, ancient prophecies guide destiny."
+      },
+      "space": {
+        "name": "Space Opera",
+        "description": "The far future among the stars. Player A is an alien hive mind, Player B is the galactic federation's finest captain.",
+        "rules": "Advanced technology, strange new worlds, and the vastness of space."
+      },
+      "underwater": {
+        "name": "Underwater Civilization",
+        "description": "Beneath the waves, two factions fight for dominance. Player A leads the deep sea creatures, Player B commands the advanced human submarine fleet.",
+        "rules": "Water pressure, oxygen limitations, and aquatic terrain affect all actions."
+      },
+      "microscopic": {
+        "name": "Microscopic Universe",
+        "description": "Inside a human body, a war rages. Player A is a virus, Player B is the immune system.",
+        "rules": "Tiny scale, massive consequences, complex biological systems."
+      },
+      "office": {
+        "name": "Corporate Office",
+        "description": "The most mundane and yet cutthroat battlefield: a corporate office. Player A is middle management, Player B is a new startup employee.",
+        "rules": "Passive-aggressive emails, coffee theft, and the battle for the good chair."
+      }
+    },
+    "story_panel": {
+      "title": "The Pointlessly Epic Tale of A vs B",
+      "world_setting_prefix": "World Setting:",
+      "empty_story": "No story yet. Click \"Next Turn\" to start this pointless narrative.",
+      "turn_prefix": "Turn",
+      "tie": "Tie",
+      "wins": "wins",
+      "player_a_prefix": "Player A:",
+      "player_b_prefix": "Player B:",
+      "outcome_prefix": "Outcome:",
+      "footer": "KEMO's AI Narrative Engine™ - As pointless as your existence"
+    },
+    "fallback_narratives": {
+      "player_a": [
+        "Player A deployed advanced tech to claim territory.",
+        "Player A launched a surprise attack from the shadows.",
+        "Player A executed a brilliant strategy with precision.",
+        "Player A utilized forbidden knowledge to gain advantage.",
+        "Player A called upon ancient powers in a desperate gambit.",
+        "Player A hacked the system to change the rules.",
+        "Player A built a secret fortress in disputed territory."
+      ],
+      "player_b": [
+        "Player B countered with superior numbers and firepower.",
+        "Player B orchestrated a clever trap that nearly worked.",
+        "Player B rallied allies to defend against the onslaught.",
+        "Player B used technology and wisdom in equal measure.",
+        "Player B unleashed a devastating counterattack.",
+        "Player B deployed defensive measures with surgical precision.",
+        "Player B revealed a hidden weapon that changed everything."
+      ],
+      "outcomes": {
+        "a_wins": [
+          "Player A's superior strategy won the day.",
+          "Player A claimed victory through sheer determination.",
+          "Player A's resources proved too much for Player B to handle.",
+          "Player A exploited a weakness in Player B's defenses."
+        ],
+        "b_wins": [
+          "Player B turned the tables at the last moment.",
+          "Player B's persistence paid off with a decisive victory.",
+          "Player B outmaneuvered Player A in a brilliant tactical move.",
+          "Player B's defensive strategy proved impenetrable."
+        ],
+        "tie": [
+          "Neither player could gain the upper hand in a tense standoff.",
+          "Both players exhausted their resources, ending in stalemate.",
+          "A surprise intervention forced both players to retreat.",
+          "Mutual destruction was narrowly avoided through reluctant compromise."
+        ]
+      }
+    }
   }
 }
